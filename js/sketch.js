@@ -6,7 +6,6 @@ function setup() {
   chessBoard = new ChessBoard(width > height ? height * 0.8 : width * 0.8);
   JS.require('JS.Set', function(Set) {
     function davisPutnam(clauses, literals = new Set()) {
-      chessBoard.setQueens(getQueens(clauses));
       clauses = saturate(clauses);
       if (clauses.contains(new Set())) {
           return new Set([new Set()]); // unsolvable
@@ -32,6 +31,7 @@ function setup() {
       return davisPutnam(tmpClauses, tmpLiterals);
     }
     function saturate(set) {
+        chessBoard.setQueens(getQueens(set));
         var units = new Set(set).keepIf(s => s.size == 1);
         var used = new Set();
         while (!units.isEmpty()) {
