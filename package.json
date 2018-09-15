@@ -1,0 +1,7 @@
+{
+    "name": "animation-n-queens",
+    "version": "1.0.0",
+    "description": "Animation N Queens Problem",
+    "main": "index.html",
+    "author": "Koen Loogman"
+}
