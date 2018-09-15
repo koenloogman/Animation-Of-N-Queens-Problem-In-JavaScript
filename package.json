@@ -3,5 +3,8 @@
     "version": "1.0.0",
     "description": "Animation N Queens Problem",
     "main": "index.html",
-    "author": "Koen Loogman"
+    "author": "Koen Loogman",
+    "dependencies": {
+        "immutable": "^3.8.2"
+    }
 }

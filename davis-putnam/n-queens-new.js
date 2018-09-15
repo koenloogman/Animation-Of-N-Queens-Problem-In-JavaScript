@@ -14,22 +14,22 @@ function davisPutnam(clauses, literals = new Set()) {
         return clauses;
     }
     var literal = selectLiteral(clauses, literals);
-        var notLiteral = negateLiteral(literal);
+    var notLiteral = negateLiteral(literal);
 
-        var tmpClauses = new Set(clauses);
-        var tmpLiterals = new Set(literals);
-        tmpClauses.add(new Set([literal]));
-        tmpLiterals.add(literal);
+    var tmpClauses = new Set(clauses);
+    var tmpLiterals = new Set(literals);
+    tmpClauses.add(new Set([literal]));
+    tmpLiterals.add(literal);
 
-        var set = davisPutnam(tmpClauses, tmpLiterals);
-        // solution found
-        if (!set.contains(new Set())) {
-            return set;
-        }
+    var set = davisPutnam(tmpClauses, tmpLiterals);
+    // solution found
+    if (!set.contains(new Set())) {
+        return set;
+    }
 
-        (tmpClauses = new Set(clauses)).add(new Set([notLiteral]));
-        (tmpLiterals = new Set(literals)).add(notLiteral);
-        return davisPutnam(tmpClauses, tmpLiterals);
+    (tmpClauses = new Set(clauses)).add(new Set([notLiteral]));
+    (tmpLiterals = new Set(literals)).add(notLiteral);
+    return davisPutnam(tmpClauses, tmpLiterals);
 }
 
 /**
