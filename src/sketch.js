@@ -5,11 +5,11 @@ const QueensClauses = require('./qeensClauses');
 
 const Sketch = (p5) => {
     var chessBoard = null;
-    var davisPutnam = new DavisPutnam(QueensClauses(4));
+    var davisPutnam = new DavisPutnam(QueensClauses(8));
 
     p5.setup = () => {
         p5.createCanvas(p5.windowWidth, p5.windowHeight);
-        chessBoard = new ChessBoard(p5.width > p5.height ? p5.height * 0.8 : p5.width * 0.8, 4);
+        chessBoard = new ChessBoard(p5.width > p5.height ? p5.height * 0.8 : p5.width * 0.8, 8);
     };
     p5.draw = () => {
         davisPutnam.davisPutnam(1);
