@@ -1,0 +1,9 @@
+{
+    "modules": false,
+    "plugins": {
+    "autoprefixer": {},
+        "css-mqpacker": {
+            "sort": true
+        }
+    }
+}
