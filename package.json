@@ -1,0 +1,23 @@
+{
+  "name": "animation-n-queens-problem",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "./node_modules/.bin/parcel --no-cache index.html",
+    "build": "./node_modules/.bin/parcel build index.html",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "css-mqpacker": "^6.0.2",
+    "node-sass": "^4.9.3",
+    "parcel-bundler": "^1.9.7"
+  },
+  "dependencies": {
+    "immutable": "^3.8.2"
+  }
+}
