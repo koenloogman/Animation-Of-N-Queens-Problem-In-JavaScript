@@ -50,7 +50,8 @@ class DavisPutnam {
             // unsolvable
             if (this._clauses.has(new Set())) {
                 if (this._clausesStack.isEmpty()) {
-                    return new Set([new Set()]);
+                    this._clauses = new Set([new Set()]);
+                    return -1;
                 }
                 this._clauses = this._clausesStack.peek();
                 this._clausesStack.pop();
@@ -60,7 +61,7 @@ class DavisPutnam {
             }
             // solution found
             if (this._clauses.map(clause => clause.size == 1).filter(bool => !bool).isEmpty()) {
-                return this.clauses;
+                return 1;
             }
 
             // add clauses and literals to the stack
@@ -76,7 +77,7 @@ class DavisPutnam {
             step--;
         } while (!this._clausesStack.isEmpty() && step != 0)
 
-        return "ERROR";
+        return 0;
     }
 
     /**
