@@ -12,7 +12,7 @@ function negateLiteral(literal) {
  * @param {Number} end
  */
 function range(start, end) {
-    return new Set(Array(end - start + 1).fill().map((_, idx) => start + idx));
+    return new Set(Array(Math.abs(end - start) + 1).fill().map((_, idx) => start + (start > end ? -1 : 1) * idx));
 }
 
 /**
@@ -73,6 +73,8 @@ function atMostOneInLowerDiagonal(k, n) {
  * @param {Number} n
  */
 const QueensClauses = (n) => {
+    console.log(range(1, 1).toJS());
+    console.log(range(1, 2).toJS());
     var clauses = new Set();
     range(1, n).forEach(a => {
         clauses = clauses.union(atMostOneInRow(a, n));
