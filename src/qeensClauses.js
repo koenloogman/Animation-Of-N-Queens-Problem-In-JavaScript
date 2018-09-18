@@ -73,8 +73,6 @@ function atMostOneInLowerDiagonal(k, n) {
  * @param {Number} n
  */
 const QueensClauses = (n) => {
-    console.log(range(1, 1).toJS());
-    console.log(range(1, 2).toJS());
     var clauses = new Set();
     range(1, n).forEach(a => {
         clauses = clauses.union(atMostOneInRow(a, n));
