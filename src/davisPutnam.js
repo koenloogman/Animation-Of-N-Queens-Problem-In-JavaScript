@@ -43,7 +43,7 @@ class DavisPutnam {
         return this._literals.toJS();
     }
 
-    davisPutnam(step = -1) {
+    solve(step = -1) {
         do {
             this.saturate();
 
