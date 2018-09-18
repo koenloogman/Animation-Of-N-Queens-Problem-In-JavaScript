@@ -21,7 +21,7 @@ const Sketch = (p5) => {
         p5.translate((p5.width - chessBoard.size.width) / 2, (p5.height - chessBoard.size.height) / 2);
         chessBoard.draw(p5);
 
-        p5.frameRate(60);
+        p5.frameRate(1);
     };
     p5.windowResized = () => {
         p5.resizeCanvas(p5.windowWidth, p5.windowHeight);

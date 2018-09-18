@@ -1,6 +1,22 @@
 'use strict';
 const Tile = require('./tile');
 
+function toAlphabet(i, alphabet, size = 1) {
+    var alphabet = alphabet.split('');
+    var base = alphabet.length;
+
+    var result = "";
+    while (i >= base) {
+        result = alphabet[i % base] + result;
+        i = Math.floor(i / base);
+    }
+    result = alphabet[i % base] + result;
+    while (result.length < size) {
+        result = alphabet[0] + result;
+    }
+    return result;
+}
+
 class ChessBoard {
     constructor(size, n = 8) {
         /**
@@ -35,6 +51,16 @@ class ChessBoard {
         for (var i = 0; i < this.cols * this.rows; i++) {
             this.tiles.push(new Tile(this));
         }
+
+        /**
+         * @type {Array<String>}
+         */
+        this.letters = new Array();
+        let base = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        let length = Math.log(n) / Math.log(base.length);
+        for (var i = 0; i < n; i++) {
+            this.letters.push(toAlphabet(i, base, length));
+        }
     }
 
     /**
@@ -67,12 +93,15 @@ class ChessBoard {
         var queens = units.filter(a => a.substr(0, 1) != '!').map(a => a.split(',').map(b => Number.parseInt(b) - 1));
         var notQueens = units.filter(a => a.substr(0, 1) == '!').map(a => a.substr(1).split(',').map(b => Number.parseInt(b) - 1));
 
-        this.tiles.forEach(tile => tile.contains = null);
+        this.tiles.forEach(tile => {
+            tile.queen = false;
+            tile.mark = false;
+        });
         queens.forEach(queen => {
-            this.getTileByPosition(queen[0], queen[1]).contains = "queen";
+            this.getTileByPosition(queen[0], queen[1]).queen = true;
         });
         notQueens.forEach(notQueen => {
-            this.getTileByPosition(notQueen[0], notQueen[1]).contains = "notQueen";
+            this.getTileByPosition(notQueen[0], notQueen[1]).mark = true;
         });
     }
 
@@ -85,7 +114,6 @@ class ChessBoard {
         p5.rect(-this.border.size, -this.border.size, this.size.width + 2 * this.border.size, this.size.height + 2 * this.border.size);
         
         // letters
-        var letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
         p5.fill(255);
         p5.textSize(this.border.size * 0.6);
         p5.textAlign(p5.CENTER, p5.CENTER);
@@ -95,8 +123,8 @@ class ChessBoard {
         p5.push();
         p5.translate(w / 2, -b);
         for (var i = 0; i < this.cols; i++) {
-            p5.text(letters[i], 0, 0);
-            p5.text(letters[i], 0, this.size.height + this.border.size);
+            p5.text(this.letters[i], 0, 0);
+            p5.text(this.letters[i], 0, this.size.height + this.border.size);
             p5.translate(w, 0);
         }
         p5.pop();

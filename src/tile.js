@@ -6,7 +6,8 @@ class Tile {
          * @type {ChessBoard}
          */
         this.chessBoard = chessBoard;
-        this.contains = null;
+        this.queen = false;
+        this.mark = false;
 
         /**
          * @type {{x: Number, y: Number}}
@@ -57,14 +58,18 @@ class Tile {
             p5.fill(0);
         }
         p5.rect(0, 0, this.size.width, this.size.height);
-        if (this.contains != null) {
-            if (this.contains == "queen") {
-                p5.fill(0, 255, 0);
-            } else {
-                p5.fill(255, 0, 0);
-            }
+
+        if (this.queen) {
+            p5.fill(0, 255, 0);
             p5.ellipse(this.size.width / 2, this.size.height / 2, this.size.width / 2, this.size.height / 2);
         }
+
+        if (this.mark) {
+            p5.stroke(255, 0, 0);
+            p5.line(this.size.width * 2 / 10, this.size.height * 2 / 10, this.size.width * 8 / 10,  this.size.height * 8 / 10);
+            p5.line(this.size.width * 8 / 10, this.size.height * 2 / 10, this.size.width * 2 / 10,  this.size.height * 8 / 10);
+        }
+
         p5.pop();
     }
 }
