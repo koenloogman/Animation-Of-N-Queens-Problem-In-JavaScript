@@ -4,9 +4,9 @@ const DavisPutnam = require('./davisPutnam');
 const QueensClauses = require('./qeensClauses');
 
 const Sketch = (p5) => {
-    var n = 8;
-    var chessBoard = null;
-    var davisPutnam = new DavisPutnam(QueensClauses(n));
+    let n = 8;
+    let chessBoard = null;
+    let davisPutnam = new DavisPutnam(QueensClauses(n));
 
     p5.setup = () => {
         p5.createCanvas(p5.windowWidth, p5.windowHeight);
