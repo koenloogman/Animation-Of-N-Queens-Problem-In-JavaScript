@@ -1,6 +1,7 @@
 const { Set, Stack } = require('immutable');
 
 /**
+ * Returns a random element of a set
  * @param {Set<T>} set
  * @returns {T} 
  */
@@ -9,6 +10,7 @@ function randomElement(set) {
 }
 
 /**
+ * Negates the literal with an !
  * @param {String} literal
  */
 function negateLiteral(literal) {
@@ -48,6 +50,15 @@ class DavisPutnam {
      */
     set clauses(clauses) {
         this._clauses = new Set(clauses.map(clause => new Set(clause)));
+    }
+
+    /**
+     * Returns a set of all unit clauses of the current clauses
+     * @param {Set<Set<String>>} clauses
+     * @returns {Set<Set<String>>}
+     */
+    get units(clauses = new Set()) {
+        return this._clauses.filter(clause => clause.size == 1 && !clauses.has(clause));
     }
 
     /**
