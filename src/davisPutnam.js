@@ -34,6 +34,10 @@ class DavisPutnam {
          * @type {Array<Array<String>>}
          */
         this.clauses = clauses;
+        /**
+         * @type {Set<Set<String>>}
+         */
+        this.used = new Set().asMutable();
 
         /**
          * @type {Stack<Set<String>>}
@@ -57,8 +61,8 @@ class DavisPutnam {
      * @param {Set<Set<String>>} clauses
      * @returns {Set<Set<String>>}
      */
-    get units(clauses = new Set()) {
-        return this._clauses.filter(clause => clause.size == 1 && !clauses.has(clause));
+    get units() {
+        return this._clauses.filter(clause => clause.size == 1 && !this.used.has(clause));
     }
 
     /**
@@ -79,10 +83,21 @@ class DavisPutnam {
      * @param {Number} step if the step is a negative number it will run till it's solved
      * @returns {Boolean} true if the set of clauses was solved or can't be solved and false if the algorythm didn't finish yet.
      */
-    solve(step = -1) {
+    solve(step = -1, largeSteps = false) {
         step = Math.round(step);
         do {
-            this.saturate();
+            while (!this.units.isEmpty() && step != 0) {
+                var unit = randomElement(this.units);
+                this.used.add(unit);
+    
+                var literal = randomElement(unit);
+                this.reduce(literal);
+                if (!largeSteps) step--;
+            }
+            // exit if steps was reached
+            if (step == 0) {
+                continue;
+            }
 
             // unsolvable
             if (this._clauses.has(new Set())) {
@@ -90,10 +105,12 @@ class DavisPutnam {
                     this._clauses = new Set([new Set()]);
                     return true;
                 }
+                // pop from stack to do the next
                 this._clauses = this._clausesStack.peek();
                 this._clausesStack.pop();
                 this._literals = this._literalsStack.peek();
                 this._literalsStack.pop();
+                this.used.clear();
                 continue;
             }
             // solution found
@@ -115,33 +132,6 @@ class DavisPutnam {
         } while (!this._clausesStack.isEmpty() && step != 0)
 
         return false;
-    }
-
-    /**
-     * @returns {DavisPutnam}
-     */
-    saturate() {
-        /**
-         * @type {Set<Set<String>>}
-         */
-        var units = this._clauses.filter(clause => clause.size == 1);
-        /**
-         * @type {Set<String>}
-         */
-        var used = new Set().asMutable();
-
-        // saturate
-        while (!units.isEmpty()) {
-            var unit = randomElement(units);
-            used.add(unit);
-
-            var literal = randomElement(unit);
-            this.reduce(literal);
-
-            units = this._clauses.filter(clause => clause.size == 1 && !used.has(clause));
-        }
-
-        return this;
     }
 
     /**

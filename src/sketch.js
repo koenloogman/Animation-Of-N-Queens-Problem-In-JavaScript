@@ -13,7 +13,7 @@ const Sketch = (p5) => {
         chessBoard = new ChessBoard(p5.width > p5.height ? p5.height * 0.8 : p5.width * 0.8, n);
     };
     p5.draw = () => {
-        davisPutnam.solve(1);
+        davisPutnam.solve(1, true);
         chessBoard.setQueens(davisPutnam.clauses);
         p5.background(75);
     
