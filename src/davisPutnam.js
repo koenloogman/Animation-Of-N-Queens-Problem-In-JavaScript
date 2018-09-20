@@ -1,5 +1,20 @@
 const { Set, Stack } = require('immutable');
 
+/**
+ * @param {Set<T>} set
+ * @returns {T} 
+ */
+function randomElement(set) {
+    return set.slice(Math.round(Math.random() * (set.size - 1))).first();
+}
+
+/**
+ * @param {String} literal
+ */
+function negateLiteral(literal) {
+    return ("!" + literal).replace(/^!!/, '');
+}
+
 class DavisPutnam {
     /**
      * @param {Array<Array<String>>} clauses
@@ -66,7 +81,7 @@ class DavisPutnam {
 
             // add clauses and literals to the stack
             var literal = this.selectLiteral();
-            var notLiteral = DavisPutnam.negateLiteral(literal);
+            var notLiteral = negateLiteral(literal);
 
             this._clausesStack.push(this._clauses.add(new Set([notLiteral])));
             this._literalsStack.push(this._literals.add(notLiteral));
@@ -95,10 +110,10 @@ class DavisPutnam {
 
         // saturate
         while (!units.isEmpty()) {
-            var unit = DavisPutnam.randomElement(units);
+            var unit = randomElement(units);
             used.add(unit);
 
-            var literal = DavisPutnam.randomElement(unit);
+            var literal = randomElement(unit);
             this.reduce(literal);
 
             units = this._clauses.filter(clause => clause.size == 1 && !used.has(clause));
@@ -115,7 +130,7 @@ class DavisPutnam {
         /**
          * @type {String}
          */
-        var notLiteral = DavisPutnam.negateLiteral(literal);
+        var notLiteral = negateLiteral(literal);
 
         /**
          * @type {Set<Set<String>>}
@@ -137,22 +152,7 @@ class DavisPutnam {
      * @returns {String}
      */
     selectLiteral() {
-        return DavisPutnam.randomElement(this._clauses.flatten().filter(literal => !this._literals.has(literal)));
-    }
-
-    /**
-     * @param {String} literal
-     */
-    static negateLiteral(literal) {
-        return ("!" + literal).replace(/^!!/, '');
-    }
-
-    /**
-     * @param {Set<T>} set
-     * @returns {T}
-     */
-    static randomElement(set) {
-        return set.slice(Math.round(Math.random() * (set.size - 1))).first();
+        return randomElement(this._clauses.flatten().filter(literal => !this._literals.has(literal)));
     }
 }
 
