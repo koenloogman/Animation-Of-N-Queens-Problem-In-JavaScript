@@ -50,15 +50,26 @@ class DavisPutnam {
         this._clauses = new Set(clauses.map(clause => new Set(clause)));
     }
 
+    /**
+     * @returns {Array<Array<String>>}
+     */
     get clauses() {
         return this._clauses.toJS();
     }
 
+    /**
+     * @returns {Array<String>}
+     */
     get literals() {
         return this._literals.toJS();
     }
 
+    /**
+     * @param {Number} step if the step is a negative number it will run till it's solved
+     * @returns {Boolean} true if the set of clauses was solved or can't be solved and false if the algorythm didn't finish yet.
+     */
     solve(step = -1) {
+        step = Math.round(step);
         do {
             this.saturate();
 
@@ -66,17 +77,17 @@ class DavisPutnam {
             if (this._clauses.has(new Set())) {
                 if (this._clausesStack.isEmpty()) {
                     this._clauses = new Set([new Set()]);
-                    return -1;
+                    return true;
                 }
                 this._clauses = this._clausesStack.peek();
                 this._clausesStack.pop();
                 this._literals = this._literalsStack.peek();
-                this._literalsStack.pop()
+                this._literalsStack.pop();
                 continue;
             }
             // solution found
             if (this._clauses.map(clause => clause.size == 1).filter(bool => !bool).isEmpty()) {
-                return 1;
+                return true;
             }
 
             // add clauses and literals to the stack
@@ -92,7 +103,7 @@ class DavisPutnam {
             step--;
         } while (!this._clausesStack.isEmpty() && step != 0)
 
-        return 0;
+        return false;
     }
 
     /**
