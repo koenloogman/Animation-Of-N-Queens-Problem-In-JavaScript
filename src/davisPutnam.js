@@ -83,7 +83,7 @@ class DavisPutnam {
      * @param {Number} step if the step is a negative number it will run till it's solved
      * @returns {Boolean} true if the set of clauses was solved or can't be solved and false if the algorythm didn't finish yet.
      */
-    solve(step = -1, largeSteps = false) {
+    solve(step = -1, largeSteps = true) {
         step = Math.round(step);
         do {
             while (!this.units.isEmpty() && step != 0) {
