@@ -41,15 +41,6 @@ tilesGroup.translation.set(-(innerSize - tileSize) / 2, -(innerSize - tileSize) 
 chessBoard.translation.set(two.width / 2, two.height / 2);
 chessBoard.noStroke();
 
-two.update();
-tiles.forEach(tile => {
-    $(tile._renderer.elem)
-        .css('cursor', 'pointer')
-        .click(function(e) {
-            tile.fill = getRandomColor();
-        });
-});
-
 two.bind('update', function(frameCount) {
     chessBoard.rotation += Math.PI / 256;
 }).bind('resize', function() {
@@ -62,3 +53,13 @@ function getRandomColor() {
         + Math.round(Math.random() * 255) + ','
         + Math.round(Math.random() * 255) + ')';
 }
+
+// events
+two.update();
+tiles.forEach(tile => {
+    $(tile._renderer.elem)
+        .css('cursor', 'pointer')
+        .click(function(e) {
+            tile.fill = getRandomColor();
+        });
+});
