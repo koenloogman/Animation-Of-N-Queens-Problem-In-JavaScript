@@ -12,54 +12,87 @@ if (module.hot) {
 let two = new Two({
     fullscreen: true
 }).appendTo(document.body);
+two.scene.translation.set(two.width / 2, two.height / 2);
 
+// define sizes
 let n = 8;
 let size = Math.min(two.width, two.height) * 0.8;
-let board = two.makeRoundedRectangle(0, 0, size, size, size * 0.0125);
-board.fill = "#73563F";
-
-let chessBoard = two.makeGroup(board);
-
-let tiles = new Array();
-let tilesGroup = two.makeGroup();
-let outerMargin = size * 0.05;
-let innerMargin = size * 0.01;
+let outerMargin = size * 0.035 * 8 / n;
+let innerMargin = size * 0.01 * (n > 1 ? 8 / n : 0);
 let innerSize = size - 2 * outerMargin;
 let tileSize = (innerSize - (n - 1) * innerMargin) / n;
+console.log("size: " + size);
+console.log("outerMargin: " + outerMargin);
+console.log("innerMargin: " + innerMargin);
+console.log("innerSize: " + innerSize);
+console.log("tileSize: " + tileSize);
+
+// define colors
+let colors = {
+    'black': "#353238",
+    'white': "#DED9D4",
+    'brown': "#73563F",
+    'gray': "#888888"
+};
+
+// create board
+let board = two.makeRoundedRectangle(size / 2, size / 2, size, size, size * 0.0125);
+board.fill = colors.brown;
+
+let chessBoard = two.makeGroup(board);
+chessBoard.translation.set(- size / 2, -size / 2);
+
+// get queen
+let firstQueen = two.interpret($('#queen')[0]).center(); // 400px scale
+firstQueen.scale *= tileSize / 400;
+firstQueen.fill = colors.gray;
+$('#queen').remove();
+
 // add tiles
+let tiles = new Array();
+let queens = new Array();
 for (let i = 0; i < n * n; i++) {
     let x = i % n;
     let y = Math.floor(i / n);
+    let left = (tileSize + innerMargin) * x + tileSize * 0.5 + outerMargin;
+    let top = (tileSize + innerMargin) * y + tileSize * 0.5 + outerMargin;
 
-    let tile = two.makeRoundedRectangle((tileSize + innerMargin) * x, (tileSize + innerMargin) * y, tileSize, tileSize, tileSize * 0.05);
-    tile.fill = x % 2 == y % 2 ? "#DED9D4" : "#353238";
-    tilesGroup.add(tile);
-    tiles.push(tile);
+    let tile = two.makeRoundedRectangle(0, 0, tileSize, tileSize, tileSize * 0.05);
+    tile.fill = x % 2 == y % 2 ? colors.white : colors.black;
+
+    let group = two.makeGroup(tile);
+    group.translation.set(left, top);
+    chessBoard.add(group);
+
+    tiles.push(group);
 }
-chessBoard.add(tilesGroup);
-tilesGroup.translation.set(-(innerSize - tileSize) / 2, -(innerSize - tileSize) / 2);
-chessBoard.translation.set(two.width / 2, two.height / 2);
 chessBoard.noStroke();
 
+for (let i = 0; i < n; i++) {
+    let queen = i == 0 ? firstQueen : firstQueen.clone();
+    queens.push(queen);
+    queen.translation.set(- (size + tileSize) / 2 - innerMargin, 0);
+}
+
+
 two.bind('update', function(frameCount) {
-    chessBoard.rotation += Math.PI / 256;
+    //queens.forEach(queen => queen.rotation += Math.PI / 258);
 }).bind('resize', function() {
     chessBoard.translation.set(two.width / 2, two.height / 2);
 }).play();
 
-function getRandomColor() {
-    return 'rgb('
-        + Math.round(Math.random() * 255) + ','
-        + Math.round(Math.random() * 255) + ','
-        + Math.round(Math.random() * 255) + ')';
-}
-
 // events
 two.update();
-tiles.forEach(tile => {
+// hide queens
+tiles.forEach((tile, index) => {
     $(tile._renderer.elem)
         .css('cursor', 'pointer')
         .click(function(e) {
-            tile.fill = getRandomColor();
+            let queen = queens.shift();
+            queen.translation.set(0, 0);
+            queens.push(queen);
+            tile.add(queen);
         });
 });
+
+console.log(two);
