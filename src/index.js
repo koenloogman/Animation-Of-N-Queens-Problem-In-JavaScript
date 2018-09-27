@@ -71,7 +71,7 @@ chessBoard.noStroke();
 for (let i = 0; i < n; i++) {
     let queen = i == 0 ? firstQueen : firstQueen.clone();
     queens.push(queen);
-    queen.translation.set(- (size + tileSize) / 2 - innerMargin, 0);
+    two.remove(queen);
 }
 
 
@@ -88,10 +88,14 @@ tiles.forEach((tile, index) => {
     $(tile._renderer.elem)
         .css('cursor', 'pointer')
         .click(function(e) {
-            let queen = queens.shift();
+            let i = Math.floor(index / n);
+            let queen = queens[i];
             queen.translation.set(0, 0);
-            queens.push(queen);
-            tile.add(queen);
+            if (queen.parent == tile) {
+                tile.remove(queen);
+            } else {
+                tile.add(queen);
+            }
         });
 });
 
