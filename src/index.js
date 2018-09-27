@@ -21,11 +21,6 @@ let outerMargin = size * 0.035 * 8 / n;
 let innerMargin = size * 0.01 * (n > 1 ? 8 / n : 0);
 let innerSize = size - 2 * outerMargin;
 let tileSize = (innerSize - (n - 1) * innerMargin) / n;
-console.log("size: " + size);
-console.log("outerMargin: " + outerMargin);
-console.log("innerMargin: " + innerMargin);
-console.log("innerSize: " + innerSize);
-console.log("tileSize: " + tileSize);
 
 // define colors
 let colors = {
@@ -98,5 +93,3 @@ tiles.forEach((tile, index) => {
             }
         });
 });
-
-console.log(two);
