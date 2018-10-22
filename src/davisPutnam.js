@@ -1,5 +1,22 @@
 const { Set, Stack } = require('immutable');
 
+/**
+ * Returns a random element of a set
+ * @param {Set<T>} set
+ * @returns {T} 
+ */
+function randomElement(set) {
+    return set.slice(Math.round(Math.random() * (set.size - 1))).first();
+}
+
+/**
+ * Negates the literal with an !
+ * @param {String} literal
+ */
+function negateLiteral(literal) {
+    return ("!" + literal).replace(/^!!/, '');
+}
+
 class DavisPutnam {
     /**
      * @param {Array<Array<String>>} clauses
@@ -17,6 +34,10 @@ class DavisPutnam {
          * @type {Array<Array<String>>}
          */
         this.clauses = clauses;
+        /**
+         * @type {Set<Set<String>>}
+         */
+        this.used = new Set().asMutable();
 
         /**
          * @type {Stack<Set<String>>}
@@ -35,38 +56,71 @@ class DavisPutnam {
         this._clauses = new Set(clauses.map(clause => new Set(clause)));
     }
 
+    /**
+     * Returns a set of all unit clauses of the current clauses
+     * @param {Set<Set<String>>} clauses
+     * @returns {Set<Set<String>>}
+     */
+    get units() {
+        return this._clauses.filter(clause => clause.size == 1 && !this.used.has(clause));
+    }
+
+    /**
+     * @returns {Array<Array<String>>}
+     */
     get clauses() {
         return this._clauses.toJS();
     }
 
+    /**
+     * @returns {Array<String>}
+     */
     get literals() {
         return this._literals.toJS();
     }
 
-    solve(step = -1) {
+    /**
+     * @param {Number} step if the step is a negative number it will run till it's solved
+     * @returns {Boolean} true if the set of clauses was solved or can't be solved and false if the algorythm didn't finish yet.
+     */
+    solve(step = -1, largeSteps = true) {
+        step = Math.round(step);
         do {
-            this.saturate();
+            while (!this.units.isEmpty() && step != 0) {
+                var unit = randomElement(this.units);
+                this.used.add(unit);
+    
+                var literal = randomElement(unit);
+                this.reduce(literal);
+                if (!largeSteps) step--;
+            }
+            // exit if steps was reached
+            if (step == 0) {
+                continue;
+            }
 
             // unsolvable
             if (this._clauses.has(new Set())) {
                 if (this._clausesStack.isEmpty()) {
                     this._clauses = new Set([new Set()]);
-                    return -1;
+                    return true;
                 }
+                // pop from stack to do the next
                 this._clauses = this._clausesStack.peek();
                 this._clausesStack.pop();
                 this._literals = this._literalsStack.peek();
-                this._literalsStack.pop()
+                this._literalsStack.pop();
+                this.used.clear();
                 continue;
             }
             // solution found
             if (this._clauses.map(clause => clause.size == 1).filter(bool => !bool).isEmpty()) {
-                return 1;
+                return true;
             }
 
             // add clauses and literals to the stack
             var literal = this.selectLiteral();
-            var notLiteral = DavisPutnam.negateLiteral(literal);
+            var notLiteral = negateLiteral(literal);
 
             this._clausesStack.push(this._clauses.add(new Set([notLiteral])));
             this._literalsStack.push(this._literals.add(notLiteral));
@@ -77,34 +131,7 @@ class DavisPutnam {
             step--;
         } while (!this._clausesStack.isEmpty() && step != 0)
 
-        return 0;
-    }
-
-    /**
-     * @returns {DavisPutnam}
-     */
-    saturate() {
-        /**
-         * @type {Set<Set<String>>}
-         */
-        var units = this._clauses.filter(clause => clause.size == 1);
-        /**
-         * @type {Set<String>}
-         */
-        var used = new Set().asMutable();
-
-        // saturate
-        while (!units.isEmpty()) {
-            var unit = DavisPutnam.randomElement(units);
-            used.add(unit);
-
-            var literal = DavisPutnam.randomElement(unit);
-            this.reduce(literal);
-
-            units = this._clauses.filter(clause => clause.size == 1 && !used.has(clause));
-        }
-
-        return this;
+        return false;
     }
 
     /**
@@ -115,7 +142,7 @@ class DavisPutnam {
         /**
          * @type {String}
          */
-        var notLiteral = DavisPutnam.negateLiteral(literal);
+        var notLiteral = negateLiteral(literal);
 
         /**
          * @type {Set<Set<String>>}
@@ -137,22 +164,7 @@ class DavisPutnam {
      * @returns {String}
      */
     selectLiteral() {
-        return DavisPutnam.randomElement(this._clauses.flatten().filter(literal => !this._literals.has(literal)));
-    }
-
-    /**
-     * @param {String} literal
-     */
-    static negateLiteral(literal) {
-        return ("!" + literal).replace(/^!!/, '');
-    }
-
-    /**
-     * @param {Set<T>} set
-     * @returns {T}
-     */
-    static randomElement(set) {
-        return set.slice(Math.round(Math.random() * (set.size - 1))).first();
+        return randomElement(this._clauses.flatten().filter(literal => !this._literals.has(literal)));
     }
 }
 

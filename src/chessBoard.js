@@ -16,24 +16,8 @@ function toAlphabet(i, alphabet, size = 1) {
     }
     return result;
 }
-
 class ChessBoard {
     constructor(size, n = 8) {
-        /**
-         * @type {{size: Number}}
-         */
-        this.border = {
-            'size': size / n / 3
-        }
-
-        /**
-         * @type {{width: Number, height: Number}}
-         */
-        this.size = {
-            'width': size - this.border.size * 2,
-            'height': size - this.border.size * 2
-        };
-
         /**
          * @type {Number}
          */
@@ -103,47 +87,6 @@ class ChessBoard {
         notQueens.forEach(notQueen => {
             this.getTileByPosition(notQueen[0], notQueen[1]).mark = true;
         });
-    }
-
-    draw(p5) {
-        p5.push();
-        p5.noStroke();
-
-        // border
-        p5.fill(170, 0, 70);
-        p5.rect(-this.border.size, -this.border.size, this.size.width + 2 * this.border.size, this.size.height + 2 * this.border.size);
-        
-        // letters
-        p5.fill(255);
-        p5.textSize(this.border.size * 0.6);
-        p5.textAlign(p5.CENTER, p5.CENTER);
-        var w = this.size.width / this.cols;
-        var h = this.size.height / this.rows;
-        var b = this.border.size / 2;
-        p5.push();
-        p5.translate(w / 2, -b);
-        for (var i = 0; i < this.cols; i++) {
-            p5.text(this.letters[i], 0, 0);
-            p5.text(this.letters[i], 0, this.size.height + this.border.size);
-            p5.translate(w, 0);
-        }
-        p5.pop();
-
-        // numbers
-        p5.push();
-        p5.translate(-b, h / 2);
-        for (var i = 0; i < this.cols; i++) {
-            p5.text(this.cols - i, 0, 0);
-            p5.text(this.cols - i, this.size.width + this.border.size, 0);
-            p5.translate(0, h);
-        }
-        p5.pop();
-
-        // tiles
-        this.tiles.forEach(tile => {
-            tile.draw(p5);
-        });
-        p5.pop();
     }
 }
 
