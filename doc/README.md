@@ -1,37 +1,33 @@
 # Documentation
 
+Quick overview of what's planned for the documentation of the project.
+
 ## Structure
 
-Einleitung
+1. Introduction
+2. Scientific Basics
+   - Davis Putnam (in own words)
+3. Technical Basics
+   - Javascript and used Libraries
+4. Implementation
+5. Prospect
 
-Wissenschaftliche Grundlagen
+## Roadmap
 
-- Davis Putnam (in eigenen Worten)
+Step 1: Scientific Basics
 
-Technische Grundlagen
+Step 2: Technische Grundlagen
 
-- Javascript und verwendete Libraries
+Step 3: Implementierung
 
-Implementierung
+Step 4: Einleitung und Ausblick
 
-Ausblick
-
-## Anforderungen
+## Requirements
 
 - 2 Modi:
   - Micro Step (Subsumtion, Schnittregel),
   - Macro Step (Ohne Mirco Steps, Positive Var prefered)
-- GitHub (Mit Dokumentation in LaTeX)
-- Kapitel vereinzelnd vorzeigen für Korrektur / Vorschlägen (sobald sie fertig sind)
-- Entgültige Abgabe vor Bachelorarbeit
-- Readme Dateien für jeden Ordner
-
-## Roadmap
-
-Schritt 1: Wissenschaftliches Kapitel
-
-Schritt 2: Technische Grundlagen
-
-Schritt 3: Implementierung
-
-Schritt 4: Einleitung und Ausblick
+- GitHub (With Documentation in LaTeX)
+- Show chapters as soon as they are finished for corrections and suggestions
+- Deadline is right before the bachelorthesis
+- Readme file for every directory
