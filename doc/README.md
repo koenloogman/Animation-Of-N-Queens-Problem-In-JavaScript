@@ -25,9 +25,9 @@ Step 4: Einleitung und Ausblick
 ## Requirements
 
 - 2 Modi:
-  - Micro Step (Subsumtion, Schnittregel),
-  - Macro Step (Ohne Mirco Steps, Positive Var prefered)
-- GitHub (With Documentation in LaTeX)
+  - Micro Step (subsumption, cut-elimination theorem),
+  - Macro Step (w/o mirco steps, positive var prefered)
+- GitHub (with documentation in LaTeX)
 - Show chapters as soon as they are finished for corrections and suggestions
 - Deadline is right before the bachelorthesis
 - Readme file for every directory
