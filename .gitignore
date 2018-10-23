@@ -1,5 +1,16 @@
+# hidden folders
 .vscode/
 .cache/
+.idea/
 node_modules/
-idea/
 dist/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
