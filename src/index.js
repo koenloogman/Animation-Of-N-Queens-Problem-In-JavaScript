@@ -1,7 +1,6 @@
 'use strict';
 const $ = require('jquery');
 const Two = require('two.js');
-const queenSVG = require('../svg/queen.svg');
 
 //Force page refresh on hot reload
 if (module.hot) {
