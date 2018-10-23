@@ -18,6 +18,9 @@
     "parcel-bundler": "^1.9.7"
   },
   "dependencies": {
-    "immutable": "^3.8.2"
+    "immutable": "^3.8.2",
+    "jquery": "^3.3.1",
+    "two": "^1.0.1",
+    "two.js": "^0.7.0-alpha.1"
   }
 }

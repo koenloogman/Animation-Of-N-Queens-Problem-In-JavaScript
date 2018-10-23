@@ -1,18 +1,10 @@
-const { Set } = require('immutable');
+const { Set, Range } = require('immutable');
 
 /**
  * @param {String} literal
  */
 function negateLiteral(literal) {
     return ("!" + literal).replace(/^!!/, '');
-}
-
-/**
- * @param {Number} start
- * @param {Number} end
- */
-function range(start, end) {
-    return new Set(Array(Math.abs(end - start) + 1).fill().map((_, idx) => start + (start > end ? -1 : 1) * idx));
 }
 
 /**
@@ -32,7 +24,7 @@ function atMostOne(set) {
  * @param {Number} n
  */
 function atMostOneInRow(row, n) {
-    var set = range(1, n).map(column => row + "," + column);
+    var set = Range(1, n).map(column => row + "," + column);
     return atMostOne(set);
 }
 
@@ -41,7 +33,7 @@ function atMostOneInRow(row, n) {
  * @param {Number} n
  */
 function oneInColumn(column, n) {
-    var set = range(1, n).map(row => row + "," + column);
+    var set = Range(1, n).map(row => row + "," + column);
     return new Set([set]);
 }
 
@@ -51,8 +43,8 @@ function oneInColumn(column, n) {
  */
 function atMostOneInUpperDiagonal(k, n) {
     var result = new Set();
-    range(1, n).forEach(a => {
-        result = result.union(range(1, n).filter(b => a + b == k).map(b => a + "," + b));
+    Range(1, n).forEach(a => {
+        result = result.union(Range(1, n).filter(b => a + b == k).map(b => a + "," + b));
     });
     return atMostOne(result);
 }
@@ -63,8 +55,8 @@ function atMostOneInUpperDiagonal(k, n) {
  */
 function atMostOneInLowerDiagonal(k, n) {
     var result = new Set();
-    range(1, n).forEach(a => {
-        result = result.union(range(1, n).filter(b => a - b == k).map(b => a + "," + b));
+    Range(1, n).forEach(a => {
+        result = result.union(Range(1, n).filter(b => a - b == k).map(b => a + "," + b));
     });
     return atMostOne(result);
 }
@@ -74,14 +66,14 @@ function atMostOneInLowerDiagonal(k, n) {
  */
 const QueensClauses = (n) => {
     var clauses = new Set();
-    range(1, n).forEach(a => {
+    Range(1, n).forEach(a => {
         clauses = clauses.union(atMostOneInRow(a, n));
         clauses = clauses.union(oneInColumn(a, n));
     });
-    range(-(n - 2), n - 2).forEach(k => {
+    Range(-(n - 2), n - 2).forEach(k => {
         clauses = clauses.union(atMostOneInLowerDiagonal(k, n));
     });
-    range(3, 2 * n - 1).forEach(k => {
+    Range(3, 2 * n - 1).forEach(k => {
         clauses = clauses.union(atMostOneInUpperDiagonal(k, n));
     });
     return clauses.toJS();
