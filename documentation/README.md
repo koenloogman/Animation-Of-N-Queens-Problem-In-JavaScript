@@ -6,9 +6,13 @@ Quick overview of what's planned for the documentation of the project.
 
 1. Introduction
 2. Scientific Basics
-   - Davis Putnam (in own words)
+    - Davis Putnam (in own words)
+        - subsumption
+        - cut-elimination
+    - 8 Queens Problem
+        - Define to be solveable
 3. Technical Basics
-   - Javascript and used Libraries
+    - Javascript and used Libraries
 4. Implementation
 5. Prospect
 
@@ -25,8 +29,8 @@ Step 4: Einleitung und Ausblick
 ## Requirements
 
 - 2 Modi:
-  - Micro Step (subsumption, cut-elimination theorem),
-  - Macro Step (w/o mirco steps, positive var prefered)
+    - Micro Step (subsumption, cut-elimination theorem),
+    - Macro Step (w/o mirco steps, positive var prefered)
 - GitHub (with documentation in LaTeX)
 - Show chapters as soon as they are finished for corrections and suggestions
 - Deadline is right before the bachelorthesis
