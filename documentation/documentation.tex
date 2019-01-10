@@ -1,60 +1,167 @@
-\documentclass{report}
-\usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
-\usepackage{graphicx}
-\usepackage{a4wide}
-\usepackage{epsfig}
+% Preambel mit Einstellungen importieren
+\input{tex/preambel}
 
-\usepackage{hyperref}
-\usepackage[all]{hypcap}
-\hypersetup{
-	colorlinks = true,
-	linkcolor  = blue,
-	citecolor  = red,
-    filecolor  = gold,
-    urlcolor   = [rgb]{0.5, 0.0, 0.5},
-	pdfborder  = {0 0 0} 
-}
+% Dokumenteninfos importieren
+\input{tex/docinfo.tex}
 
-\usepackage{fancyhdr}
-\usepackage{lastpage}
-
-\renewcommand*{\familydefault}{\sfdefault}
-
-\pagestyle{fancy}
-
-\fancyfoot[C]{--- \thepage/\pageref{LastPage}\ ---}
-
-\fancypagestyle{plain}{
-    \fancyhf{}
-    \fancyfoot[C]{--- \thepage/\pageref{LastPage}\ ---}
-    \renewcommand{\headrulewidth}{0pt}
-}
-
-\renewcommand{\chaptermark}[1]{\markboth{\chaptername \ \thechapter.\ #1}{}}
-\renewcommand{\sectionmark}[1]{\markright{\thesection. \ #1}{}}
-\fancyhead[R]{\leftmark}
-\fancyhead[L]{\rightmark}
-
-\author{Koen Loogman \& Jessica Roth}
-\title{\epsfig{file=dhbw-logo.eps, scale=1.0}\\[0.3cm] 
-        Animation N Queens Problem in Javascript\\[0.3cm]
-        DHBW Mannheim}
-\date{\today}
+% Literatur-Datenbank
+\addbibresource{literatur.bib}   % BibLaTeX-Datei mit Literaturquellen einbinden
 
 \begin{document}
+\frontmatter
 
-    \maketitle
-    \tableofcontents
+% Römische Ziffern für die "Front-Matter"
+\setcounter{page}{0}
+\changefont{ptm}{m}{n}  % Times New Roman für den Fließtext
+\renewcommand{\rmdefault}{ptm}
 
-    \include{introduction}
-    \include{scientific_basics}
-    \include{technical_basics}
-    \include{implementation}
-    \include{prospect}
+% Titelblatt
+\input{tex/titelblatt}
 
-    \bibliographystyle{alpha}
+% Inhaltsverzeichnis erzeugen
+\cleardoublepage
+\pdfbookmark{\contentsname}{Contents}
+\tableofcontents
 
-    \bibliography{cs}
+% Korrigiert Nummerierung bei mehrseitigem Inhaltsverzeichnis
+\cleardoublepage
+\newcounter{frontmatterpage}
+\setcounter{frontmatterpage}{\value{page}}
+
+% Arabische Zahlen für den Hauptteil
+\mainmatter
+
+% Den Hauptteil mit vergrößertem Zeilenabstand setzen
+\onehalfspacing
+
+% ------------------------------------------------------------------
+% Hauptteil der Arbeit
+    \include{tex/introduction}
+    \include{tex/scientific_basics}
+    \include{tex/technical_basics}
+    \include{tex/implementation}
+    \include{tex/prospect}
+% ------------------------------------------------------------------
+
+\label{lastpage}
+
+% Neue Seite
+\cleardoublepage
+
+% Backmatter mit normalem Zeilenabstand setzen
+\singlespacing
+
+% Römische Ziffern für die "Back-Matter", fortlaufend mit "Front-Matter"
+\pagenumbering{roman}
+\setcounter{page}{\value{frontmatterpage}}
+
+% Abkürzungsverzeichnis
+\addchap{\dhbwabbreviations}
+\input{tex/abkuerzungen}
+
+% Tabellenverzeichnis erzeugen
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{\dhbwlistoftables}
+\listoftables
+
+% Abbildungsverzeichnis erzeugen
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{\dhbwlistoffigures}
+\listoffigures
+
+%% Listingverzeichnis erzeugen
+%\cleardoublepage
+%\phantomsection
+%\addcontentsline{toc}{chapter}{\dhbwlistings}
+%\lstlistoflistings
+
+% Literaturverzeichnis erzeugen
+\begin{flushleft}
+\printbibliography
+\end{flushleft}
+
+% Index ausgeben. Wenn Sie keinen Index haben, entfernen Sie einfach
+% diesen Teil.
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{\dhbwindex}
+\printindex
+
+% Anhang. Wenn Sie keinen Anhang haben, entfernen Sie einfach
+% diesen Teil.
+%\appendix
+%\input{tex/anhang-a}
+%\input{tex/anhang-b}
 
 \end{document}
+
+
+
+
+
+%\documentclass{report}
+%\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+%\usepackage{graphicx}
+%\usepackage{a4wide}
+%%\usepackage{epsfig}
+%
+%\usepackage{hyperref}
+%\usepackage[all]{hypcap}
+%\hypersetup{
+%	colorlinks = true,
+%	linkcolor  = blue,
+%	citecolor  = red,
+%    filecolor  = gold,
+%    urlcolor   = [rgb]{0.5, 0.0, 0.5},
+%	pdfborder  = {0 0 0} 
+%}
+%
+%\usepackage{fancyhdr}
+%\usepackage{lastpage}
+%
+%\renewcommand*{\familydefault}{\sfdefault}
+%
+%\pagestyle{fancy}
+%
+%\fancyfoot[C]{--- \thepage/\pageref{LastPage}\ ---}
+%
+%\fancypagestyle{plain}{
+%    \fancyhf{}
+%    \fancyfoot[C]{--- \thepage/\pageref{LastPage}\ ---}
+%    \renewcommand{\headrulewidth}{0pt}
+%}
+%
+%\renewcommand{\chaptermark}[1]{\markboth{\chaptername \ \thechapter.\ #1}{}}
+%\renewcommand{\sectionmark}[1]{\markright{\thesection. \ #1}{}}
+%\fancyhead[R]{\leftmark}
+%\fancyhead[L]{\rightmark}
+%
+%\author{Koen Loogman \& Jessica Roth}
+%%\title{\epsfig{file=dhbw-logo.eps, scale=1.0}\\[0.3cm]
+%\title{ 
+%        Animation N Queens Problem in Javascript\\[0.3cm]
+%        DHBW Mannheim}
+%\date{\today}
+%
+
+%
+%
+%\begin{document}
+%
+%    \maketitle
+%    \tableofcontents
+%
+%    \include{tex/introduction}
+%    \include{tex/scientific_basics}
+%    \include{tex/technical_basics}
+%    \include{tex/implementation}
+%    \include{tex/prospect}
+%
+%    \bibliographystyle{alpha}
+%
+%    \bibliography{cs}
+%
+%\end{document}
