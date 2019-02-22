@@ -14,7 +14,8 @@ class ChessBoard {
 
         // chess board
         this.board = new Two.RoundedRectangle(0, 0, 0, 0, 0);
-        this.group = new Two.Group(this.board);
+        this.group = new Two.Group();
+        this.group.add(this.board);
         this.tiles = [];
         this.size = size;
         this.n = n;
@@ -28,21 +29,15 @@ class ChessBoard {
 
     set n(n) {
         this._n = n;
-        this.group.remove(this.tiles);
-        this.group.add(this.board);
-        this.tiles = [];
+        // reduce tiles if new n is smaller than previous
+        this.group.remove(this.tiles.slice(n * n));
+        this.tiles = this.tiles.slice(0, n * n);
 
         // create tiles
-        for (var i = 0; i < n * n; i++) {
-            let x = i % n;
-            let y = Math.floor(i / n);
-
+        for (var i = this.tiles.length; i < n * n; i++) {
             let tile = new Two.RoundedRectangle(0, 0, 0, 0);
             this.tiles.push(tile);
             this.group.add(tile);
-            
-            // TODO replace colors
-            tile.fill = x % 2 == y % 2 ? this._whiteFill : this._blackFill;
         }
         // resize tiles to fit the board
         this.size = this.size;
@@ -61,9 +56,9 @@ class ChessBoard {
         this.board.radius = size * 0.0125;
 
         // define sizes
-        let innerSize = size * (1 - 0.035 * 8 / this.n);
-        let margin = size * 0.01 * (this.n > 1 ? 8 / this.n : 0);
-        let tileSize = (innerSize - (this.n - 1) * margin) / this.n;
+        let innerSize = this.innerSize;
+        let tileSpacing = this.tileSpacing;
+        let tileSize = this.tileSize;
 
         // resize tiles
         this.tiles.forEach((tile, i) => {
@@ -74,13 +69,32 @@ class ChessBoard {
             tile.width = tileSize;
             tile.radius = tileSize * 0.05;
             tile.translation.set(
-                x * (tileSize + margin) + tileSize / 2 - innerSize / 2,
-                y * (tileSize + margin) + tileSize / 2 - innerSize / 2
+                x * (tileSize + tileSpacing) + tileSize / 2 - innerSize / 2,
+                y * (tileSize + tileSpacing) + tileSize / 2 - innerSize / 2
             );
+
+            // TODO replace colors
+            tile.fill = x % 2 == y % 2 ? this._whiteFill : this._blackFill;
         });
         if (this._noStroke) {
             this.noStroke();
         }
+    }
+
+    get innerSize() {
+        return this.size * (1 - 0.035 * 8 / this.n);
+    }
+
+    get tileSpacing() {
+        return this.size * 0.01 * (this.n > 1 ? 8 / this.n : 0)
+    }
+
+    get tileSize() {
+        return (this.innerSize - (this.n - 1) * this.tileSpacing) / this.n;
+    }
+
+    get translation() {
+        return this.group.translation;
     }
 
     whiteTiles() {
@@ -89,6 +103,10 @@ class ChessBoard {
     
     blackTiles() {
         return this.tiles.filter((tile, i) => (i % this.n) % 2 != Math.floor(i / this.n) % 2);
+    }
+
+    getTile(x, y) {
+        return this.tiles[y * this.n + x];
     }
 
     get whiteFill() {

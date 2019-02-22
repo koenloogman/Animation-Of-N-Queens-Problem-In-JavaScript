@@ -26,7 +26,7 @@ let two = new Two({
 
 let chessBoard, state = startingState, n = 8, ln = 8;
 
-function startingState() {
+function startingState(td) {
     let nextState = idleState;
 
     two.clear();
@@ -42,19 +42,12 @@ function startingState() {
 }
 
 function idleState() {
-    let max = 3200;
-    n = ++n % max;
-    let nn = Math.round(Math.abs(n - max / 2) / 100);
-    if (ln != nn) {
-        chessBoard.n = nn;
-    }
-    ln = chessBoard.n;
     return idleState;
 }
 
-two.bind('update', (frame, td) => {
+two.bind('update', () => {
     state = state();
-}).bind('resize', (frame, td) => {
+}).bind('resize', () => {
     two.scene.translation.set(two.width / 2, two.height / 2);
     chessBoard.size = Math.min(two.width - 50, two.height - 50);
 });
