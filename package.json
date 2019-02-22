@@ -1,26 +1,36 @@
 {
-  "name": "animation-n-queens-problem",
+  "name": "studien-arbeit",
   "version": "1.0.0",
-  "description": "",
+  "description": "For this project you need to have nodejs, npm and parcel installed.\r Once you have those installed use the following command to get all the needed modules.",
   "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
   "scripts": {
-    "start": "./node_modules/.bin/parcel --no-cache src/index.html",
+    "dev": "parcel --no-cache src/index.html",
     "build": "parcel build src/index.html --out-dir docs --public-url ./",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koenloogman/Animation-Of-N-Queens-Problem-In-JavaScript.git"
+  },
+  "keywords": [],
+  "author": "Koen Loogman",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/koenloogman/Animation-Of-N-Queens-Problem-In-JavaScript/issues"
+  },
+  "homepage": "https://github.com/koenloogman/Animation-Of-N-Queens-Problem-In-JavaScript#readme",
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "css-mqpacker": "^6.0.2",
-    "node-sass": "^4.9.3",
-    "parcel-bundler": "^1.9.7"
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "css-mqpacker": "^7.0.0",
+    "parcel-bundler": "^1.11.0",
+    "sass": "^1.17.1"
   },
   "dependencies": {
-    "immutable": "^3.8.2",
-    "jquery": "^3.3.1",
-    "two": "^1.0.1",
-    "two.js": "^0.7.0-alpha.1"
+    "immutable": "^4.0.0-rc.12",
+    "two.js": "^0.7.0-beta.3"
   }
 }

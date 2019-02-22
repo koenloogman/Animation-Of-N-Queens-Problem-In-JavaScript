@@ -1,6 +1,5 @@
 'use strict';
 
-const $ = require('jquery');
 const fs = require('fs');
 const Two = require('two.js');
 const ChessBoard = require('./chessBoard.js');
