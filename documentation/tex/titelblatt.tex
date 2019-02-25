@@ -64,14 +64,15 @@
 \newcommand{\dhbwmasterba}{Master of Business Administration (MBA)}
 
 \newcommand{\dhbwkoerperschaftde}{DHBW Mannheim}
-\newcommand{\dhbwkoerperschaften}{University of Applied Sciences Mannheim}
+\newcommand{\dhbwkoerperschaften}{Baden-Wuerttemberg Cooperative State University Mannheim}
 
-\newcommand{\dhbwautorbib}{\dhbwautornname, \dhbwautorvname \ \& \dhbwcoautornname, \dhbwcoautorvname} % Autor Nachname, Vorname
-\newcommand{\dhbwautor}{\dhbwautorvname \ \dhbwautornname \ \& \dhbwcoautorvname \ \dhbwcoautornname} % Autor Vorname Nachname
+\newcommand{\dhbwautorbib}{\dhbwautornname, \dhbwautorvname \  \& \dhbwautorrnname, \dhbwautorrvname} % Autor Nachname, Vorname
+\newcommand{\dhbwautor}{\dhbwautorvname \ \dhbwautornname \  \& \dhbwautorrvname \ \dhbwautorrnname} % Autor Vorname Nachname
 
 \ifthenelse{\equal{\dhbwsprache}{de}}%
   {\newcommand{\dhbwtyp}{\dhbwtypde}%
-   \newcommand{\dhbwthesistype}{zur Erlangung des akademischen Grades \dhbwgrad}%
+   %\newcommand{\dhbwthesistype}{zur Erlangung des akademischen Grades \dhbwgrad}%
+   \newcommand{\dhbwthesistype}{Studienarbeit}%
    \newcommand{\dhbwkoerperschaft}{\dhbwkoerperschaftde}%
    \newcommand{\dhbwstudiengangname}{Studiengang \dhbwstudienganglangde}%
    \newcommand{\dhbwstudienganglang}{\dhbwstudienganglangde}%
@@ -86,7 +87,8 @@
    \selectlanguage{ngerman}}
    %else
   {\newcommand{\dhbwtyp}{\dhbwtypen}%
-   \newcommand{\dhbwthesistype}{for the acquisition of the academic degree \dhbwgrad}%
+   %\newcommand{\dhbwthesistype}{for the acquisition of the academic degree \dhbwgrad}%
+   \newcommand{\dhbwthesistype}{T\_3200}%
    \newcommand{\dhbwkoerperschaft}{\dhbwkoerperschaften}%
    \newcommand{\dhbwstudiengangname}{Course of Studies: \dhbwstudienganglang}%
    \newcommand{\dhbwstudienganglang}{\dhbwstudienganglangen}%
@@ -145,7 +147,8 @@
 % Thesis
 \begin{textblock*}{\seitenbreite}(\bindekorrektur,\seitenanfang + 130mm)
   \centering\large\sffamily
-  \dhbwtyp\\
+  %\dhbwtyp\\
+  Study report \\ %TODO only for this thesis
   \begin{small}\dhbwthesistype \end{small}\\
   \vspace{2mm}
   \dhbwstudiengangname
