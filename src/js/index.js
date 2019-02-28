@@ -1,8 +1,7 @@
 'use strict';
 
-const fs = require('fs');
-const Two = require('two.js');
-const ChessBoard = require('./chessBoard.js');
+const $ = require('jquery');
+const DavisPutnam = require('./davisPutnam.js');
 
 //Force page refresh on hot reload
 if (module.hot) {
@@ -11,43 +10,43 @@ if (module.hot) {
     })
 }
 
-// define colors
-let colors = {
-    'black': "#353238",
-    'white': "#DED9D4",
-    'wood': "#73563F",
-    'queen': "#888888"
-};
+const clauses = [
+    ['r','p','s'],
+    ['r','s'],
+    ['q','p','s'],
+    ['!p','!q'],
+    ['!p','s','!r'],
+    ['p','!q','r'],
+    ['!r','!s','q'],
+    ['p','q','r','s'],
+    ['r','!s','q'],
+    ['!r','s','!q'],
+    ['s','!r']
+];
 
-let two = new Two({
-    fullscreen: true,
-    autostart: true
-}).appendTo(document.body);
+let davisPutnam = new DavisPutnam(clauses);
 
-let chessBoard, state = startingState, n = 8, ln = 8;
-
-function startingState(td) {
-    let nextState = idleState;
-
-    two.clear();
-    chessBoard = new ChessBoard(two, n, Math.min(two.width - 50, two.height - 50));
-    chessBoard.board.fill = colors.wood;
-    chessBoard.whiteFill = colors.white;
-    chessBoard.blackFill = colors.black;
-    chessBoard.noStroke();
-
-    two.scene.translation.set(two.width / 2, two.height / 2);
-    console.log(chessBoard);
-    return nextState;
+const setToString = (set) => {
+    return '{' + set.join(', ') + '}';
+}
+const clausesToString = (clauses) => {
+    return setToString(clauses.map(clause => setToString(clause)));
 }
 
-function idleState() {
-    return idleState;
-}
+// create frame
+$('body').append('<div id="header"></div><div id="body"></div><div id="footer"></div>');
+const header = $('#header');
+const body = $('#body');
+const footer = $('#footer');
 
-two.bind('update', () => {
-    state = state();
-}).bind('resize', () => {
-    two.scene.translation.set(two.width / 2, two.height / 2);
-    chessBoard.size = Math.min(two.width - 50, two.height - 50);
+// add step button
+header.append('<button id="step-button">Next Step</button>');
+const stepButton = $('#step-button');
+body.append('<h2>Original set of clauses:</h2><p id="original">' + clausesToString(clauses) + '</p>');
+body.append('<h2>Current set of clauses:</h2><p id="current"></p>');
+const current = $('#current');
+
+stepButton.click((event) => {
+    current.html(clausesToString(davisPutnam.solve(1, false).clauses));
+    if (davisPutnam.done()) current.append(davisPutnam.solved() ? '<br>Done!' : '<br>Not solveable');
 });
