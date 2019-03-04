@@ -47,10 +47,6 @@ class DavisPutnam {
          * @type {Array<Array<String>>}
          */
         this.clauses = clauses;
-
-        // Init Stack
-        // this._clausesStack.push(this._clauses);
-        // this._literalsStack.push(this._literals);
     }
     /**
      * Returns a set of all unit clauses of the current clauses
@@ -135,13 +131,15 @@ class DavisPutnam {
             }
             if (this.solved()) return this;
 
-            // add clauses and literals to the stack
+            // choose a literal
             var literal = this.selectLiteral();
             var notLiteral = this.negateLiteral(literal);
 
+            // put the negated literal on stack for backtracking
             this._clausesStack.push(this._clauses.add(new Set([notLiteral])));
             this._literalsStack.push(this._literals.add(notLiteral));
 
+            // use the literal for the next
             this._clauses = this._clauses.add(new Set([literal]));
             this._literals = this._literals.add(literal);
 

@@ -2,6 +2,7 @@
 
 const $ = require('jquery');
 const DavisPutnam = require('./davisPutnam.js');
+const QueensClauses = require('./qeensClauses');
 
 //Force page refresh on hot reload
 if (module.hot) {
@@ -10,19 +11,20 @@ if (module.hot) {
     })
 }
 
-const clauses = [
-    ['r','p','s'],
-    ['r','s'],
-    ['q','p','s'],
-    ['!p','!q'],
-    ['!p','s','!r'],
-    ['p','!q','r'],
-    ['!r','!s','q'],
-    ['p','q','r','s'],
-    ['r','!s','q'],
-    ['!r','s','!q'],
-    ['s','!r']
-];
+// const clauses = [
+//     ['r','p','s'],
+//     ['r','s'],
+//     ['q','p','s'],
+//     ['!p','!q'],
+//     ['!p','s','!r'],
+//     ['p','!q','r'],
+//     ['!r','!s','q'],
+//     ['p','q','r','s'],
+//     ['r','!s','q'],
+//     ['!r','s','!q'],
+//     ['s','!r']
+// ];
+const clauses = QueensClauses(8);
 
 let davisPutnam = new DavisPutnam(clauses);
 
@@ -30,7 +32,7 @@ const setToString = (set) => {
     return '{' + set.join(', ') + '}';
 }
 const clausesToString = (clauses) => {
-    return setToString(clauses.map(clause => setToString(clause)));
+    return setToString(clauses.map(clause => setToString(clause.map(literal => '"' + literal + '"'))));
 }
 
 // create frame
@@ -47,6 +49,6 @@ body.append('<h2>Current set of clauses:</h2><p id="current"></p>');
 const current = $('#current');
 
 stepButton.click((event) => {
-    current.html(clausesToString(davisPutnam.solve(1, false).clauses));
+    current.html(clausesToString(davisPutnam.solve(1).clauses));
     if (davisPutnam.done()) current.append(davisPutnam.solved() ? '<br>Done!' : '<br>Not solveable');
 });
