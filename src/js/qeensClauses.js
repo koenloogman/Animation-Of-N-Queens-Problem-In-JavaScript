@@ -44,7 +44,7 @@ function oneInColumn(column, n) {
 function atMostOneInUpperDiagonal(k, n) {
     var result = new Set();
     Range(1, n + 1).forEach(a => {
-        result = result.union(Range(1, n).filter(b => a + b == k).map(b => a + "," + b));
+        result = result.union(Range(1, n + 1).filter(b => a + b == k).map(b => a + "," + b));
     });
     return atMostOne(result);
 }
@@ -56,7 +56,7 @@ function atMostOneInUpperDiagonal(k, n) {
 function atMostOneInLowerDiagonal(k, n) {
     var result = new Set();
     Range(1, n + 1).forEach(a => {
-        result = result.union(Range(1, n).filter(b => a - b == k).map(b => a + "," + b));
+        result = result.union(Range(1, n + 1).filter(b => a - b == k).map(b => a + "," + b));
     });
     return atMostOne(result);
 }
