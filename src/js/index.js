@@ -1,7 +1,7 @@
 'use strict';
 
 const $ = require('jquery');
-const DavisPutnam = require('./davisPutnam.js');
+const { DavisPutnam, DavisPutnamConsumer } = require('./davisPutnam.js');
 const QueensClauses = require('./qeensClauses');
 
 //Force page refresh on hot reload
@@ -9,6 +9,20 @@ if (module.hot) {
     module.hot.accept(function () {
         window.location.reload();
     })
+}
+
+class Frame extends DavisPutnamConsumer {
+    /**
+     * @param {DavisPutnam} davisPutnam 
+     */
+    constructor(davisPutnam) {
+        super();
+        if (davisPutnam) davisPutnam.addConsumer(this);
+    }
+
+    onReduce() {
+        console.log('changed reduce')
+    }
 }
 
 // const clauses = [
@@ -24,15 +38,19 @@ if (module.hot) {
 //     ['!r','s','!q'],
 //     ['s','!r']
 // ];
-const clauses = QueensClauses(8);
+const S = QueensClauses(8);
 
-let davisPutnam = new DavisPutnam(clauses);
+let davisPutnam = new DavisPutnam(S);
+let frame = new Frame(davisPutnam);
 
 const setToString = (set) => {
     return '{' + set.join(', ') + '}';
 }
+const literalsToString = (set) => {
+    return setToString(set.map(literal => '"' + literal + '"'));
+}
 const clausesToString = (clauses) => {
-    return setToString(clauses.map(clause => setToString(clause.map(literal => '"' + literal + '"'))));
+    return setToString(clauses.map(clause => literalsToString(clause)));
 }
 
 // create frame
@@ -44,11 +62,17 @@ const footer = $('#footer');
 // add step button
 header.append('<button id="step-button">Next Step</button>');
 const stepButton = $('#step-button');
-body.append('<h2>Original set of clauses:</h2><p id="original">' + clausesToString(clauses) + '</p>');
-body.append('<h2>Current set of clauses:</h2><p id="current"></p>');
-const current = $('#current');
+
+body.append('<h2>Used literals:</h2><p id="used">' + clausesToString(davisPutnam.used) + '</p>');
+body.append('<h2>Choosen literals:</h2><p id="literals">' + literalsToString(davisPutnam.literals) + '</p>');
+body.append('<h2>Set of clauses:</h2><p id="clauses">' + clausesToString(davisPutnam.clauses) + '</p>');
+const used = $('#used');
+const literals = $('#literals');
+const clauses = $('#clauses');
 
 stepButton.click((event) => {
-    current.html(clausesToString(davisPutnam.solve(1).clauses));
-    if (davisPutnam.done()) current.append(davisPutnam.solved() ? '<br>Done!' : '<br>Not solveable');
+    clauses.html(clausesToString(davisPutnam.step().clauses));
+    literals.html(literalsToString(davisPutnam.literals));
+    used.html(clausesToString(davisPutnam.used));
+    if (davisPutnam.done()) clauses.append(davisPutnam.solved() ? '<br>Done!' : '<br>Not solveable');
 });

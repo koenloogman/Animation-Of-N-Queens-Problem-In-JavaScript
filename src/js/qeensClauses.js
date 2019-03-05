@@ -1,23 +1,5 @@
 const { Set, Range } = require('immutable');
-
-/**
- * @param {String} literal
- */
-function negateLiteral(literal) {
-    return ("!" + literal).replace(/^!!/, '');
-}
-
-/**
- * @param {Set<String>} set
- */
-function atMostOne(set) {
-    var negatedSet = set.map(l => negateLiteral(l));
-    var result = new Set();
-    negatedSet.forEach(a => {
-        result = result.union(negatedSet.filter(b => a != b).map(b => new Set([a, b])));
-    });
-    return result;
-}
+const Util = require('./util');
 
 /**
  * @param {Number} row
@@ -25,7 +7,7 @@ function atMostOne(set) {
  */
 function atMostOneInRow(row, n) {
     var set = Range(1, n + 1).map(column => row + "," + column);
-    return atMostOne(set);
+    return Util.atMostOne(set);
 }
 
 /**
@@ -46,7 +28,7 @@ function atMostOneInUpperDiagonal(k, n) {
     Range(1, n + 1).forEach(a => {
         result = result.union(Range(1, n + 1).filter(b => a + b == k).map(b => a + "," + b));
     });
-    return atMostOne(result);
+    return Util.atMostOne(result);
 }
 
 /**
@@ -58,11 +40,13 @@ function atMostOneInLowerDiagonal(k, n) {
     Range(1, n + 1).forEach(a => {
         result = result.union(Range(1, n + 1).filter(b => a - b == k).map(b => a + "," + b));
     });
-    return atMostOne(result);
+    return Util.atMostOne(result);
 }
 
 /**
  * @param {Number} n
+ * 
+ * @author Koen Loogman
  */
 const QueensClauses = (n) => {
     var clauses = new Set();

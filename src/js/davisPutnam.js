@@ -1,5 +1,10 @@
 const { Set, Stack } = require('immutable');
+const Util = require('./util');
 
+/**
+ * 
+ * @author Koen Loogman
+ */
 class DavisPutnam {
     /**
      * Clauses ist eine Menge von Klauseln und literals ist eine Menge
@@ -38,15 +43,28 @@ class DavisPutnam {
          */
         this._literals = new Set();
         /**
+         * @type {Stack<Set<Set<String>>>}
+         */
+        this._usedStack = new Stack().asMutable();
+        /**
          * @type {Set<Set<String>>}
          */
-        this._used = new Set().asMutable();
+        this._used = new Set();
+        /**
+         * @type {Set<DavisPutnamConsumer>}
+         */
+        this._consumers = new Set().asMutable();
 
         // External
         /**
          * @type {Array<Array<String>>}
          */
         this.clauses = clauses;
+
+        /**
+         * @type {Boolean}
+         */
+        this.micro = false;
     }
     /**
      * Returns a set of all unit clauses of the current clauses
@@ -54,6 +72,21 @@ class DavisPutnam {
      */
     get _units() {
         return this._clauses.filter(clause => clause.size == 1 && !this._used.has(clause));
+    }
+
+    /**
+     * Adds a consumer
+     * @param {DavisPutnamConsumer} consumer 
+     */
+    addConsumer(consumer) {
+        this._consumers.add(consumer);
+    }
+    /**
+     * Removes a consumer
+     * @param {DavisPutnamConsumer} consumer 
+     */
+    removeConsumer(consumer) {
+        this._consumers.remove(consumer);
     }
 
     /**
@@ -70,11 +103,25 @@ class DavisPutnam {
         return this._clauses.toJS();
     }
     /**
-     * Returns the used literals of the current state.
+     * Returns the choosen literals of the current state.
      * @returns {Array<String>}
      */
     get literals() {
         return this._literals.toJS();
+    }
+    /**
+     * Returns the unit clauses of the current state.
+     * @returns {Array<Array<String>>}
+     */
+    get units() {
+        return this._units.toJS();
+    }
+    /**
+     * Returns the used literals of the current state.
+     * @returns {Array<Array<String>>}
+     */
+    get used() {
+        return this._used.toJS();
     }
 
     /**
@@ -91,13 +138,13 @@ class DavisPutnam {
     solved() {
         return this._clauses.filter(clause => clause.size != 1).isEmpty();
     }
-
+    
     /**
      * Runs the davis putnam for the given amount of steps.
      * 
      * @param {Number} step if the step is a negative number it will run till it's solved
      */
-    solve(step = -1, largeSteps = true) {
+    step(step = 1) {
         step = Math.round(step);
         while (!this.done() && step != 0) {
             /**
@@ -105,12 +152,17 @@ class DavisPutnam {
              * Zusätzlich werden alle Klauseln, die von Unit-Klauseln subsumiert werden, aus der Menge S entfernt.
              */
             while (!this._units.isEmpty() && step != 0) {
-                var unit = this.randomElement(this._units);
-                this._used.add(unit);
+                var unit = Util.randomElement(this._units);
+                this._used = this._used.add(unit);
     
-                var literal = this.randomElement(unit);
+                var literal = Util.randomElement(unit);
                 this.reduce(literal);
-                if (!largeSteps) step--;
+                if (this.micro) step--;
+            }
+            // check if solved
+            if (this.solved()) {
+                this._consumers.forEach(consumer => consumer.onSolved());
+                return this;
             }
             if (step == 0) continue;
 
@@ -125,19 +177,22 @@ class DavisPutnam {
                 this._clausesStack.pop();
                 this._literals = this._literalsStack.peek();
                 this._literalsStack.pop();
-                this._used.clear();
+                this._used = this._usedStack.peek();
+                this._usedStack.pop();
+
+                this._consumers.forEach(consumer => consumer.onBacktrack());
 
                 continue;
             }
-            if (this.solved()) return this;
 
             // choose a literal
             var literal = this.selectLiteral();
-            var notLiteral = this.negateLiteral(literal);
+            var notLiteral = Util.negateLiteral(literal);
 
             // put the negated literal on stack for backtracking
             this._clausesStack.push(this._clauses.add(new Set([notLiteral])));
             this._literalsStack.push(this._literals.add(notLiteral));
+            this._usedStack.push(this._used);
 
             // use the literal for the next
             this._clauses = this._clauses.add(new Set([literal]));
@@ -156,10 +211,11 @@ class DavisPutnam {
      * @returns {DavisPutnam}
      */
     reduce(literal) {
+        this._consumers.forEach(consumer => consumer.onReduce());
         /**
          * @type {String}
          */
-        var notLiteral = this.negateLiteral(literal);
+        var notLiteral = Util.negateLiteral(literal);
 
         /**
          * @type {Set<Set<String>>}
@@ -178,15 +234,6 @@ class DavisPutnam {
     }
 
     /**
-     * Returns a random element of a set
-     * @param {Set<T>} set
-     * @returns {T} 
-     */
-    randomElement(set) {
-        return set.slice(Math.round(Math.random() * (set.size - 1))).first();
-    }
-
-    /**
      * Wir wählen ein beliebiges Literal aus einer beliebigen Klausel,
      * so dass weder dieses Literal noch die Negation benutzt wurden.
      * @returns {String}
@@ -196,23 +243,38 @@ class DavisPutnam {
          * @type {Set<String>}
          */
         let literals = this._clauses.flatten().filter(literal => !this._literals.has(literal));
-        let posLiterals = literals.filter(literal => literal.substr(0, 1) == '!');
+        let posLiterals = literals.filter(literal => literal.substr(0, 1) != '!');
 
         // Prefer positive literals
         if (posLiterals.size > 0) {
-            return this.randomElement(posLiterals);
+            return Util.randomElement(posLiterals);
         } else {
-            return this.randomElement(literals);
+            return Util.randomElement(literals);
+        }
+    }
+}
+/**
+ * 
+ * @author Koen Loogman
+ */
+class DavisPutnamConsumer {
+    constructor() {
+        if (this.constructor == DavisPutnamConsumer) {
+            throw new Error(`Abstract classes can't be instantiated.`);
         }
     }
 
-    /**
-     * Negates the literal
-     * @param {String} literal
-     */
-    negateLiteral(literal) {
-        return ("!" + literal).replace(/^!!/, '');
+    onReduce() {
+        console.log(`reduced`);
+    }
+
+    onBacktrack() {
+        console.log(`backtracked`);
+    }
+
+    onSolved() {
+        console.log(`solved`);
     }
 }
 
-module.exports = DavisPutnam;
+module.exports = { DavisPutnam, DavisPutnamConsumer };
