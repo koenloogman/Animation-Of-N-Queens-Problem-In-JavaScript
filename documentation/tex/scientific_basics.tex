@@ -11,7 +11,48 @@ For this reason, this chapter summarizes this fundamental knowledge in order to 
 %Das Ziel dieser Arbeit besteht in der Visualisierung des Davis Putman Algorithmus, der das sogenannte N damen Problem lösen soll. Dafür muss zuerst ein allgemeines Verständnis zu diesem Algorithmus und dem mathematischen Problem geschaffen werden. In diesem Kapitel wird aus diesem Grund dieses fundamentale Wissen zusammengefasst, um eine Basis für die weiterführende Entwicklung zu schaffen. Dafür spielt unter anderem die Deklarierung des mathematischen Problems eine Rolle, damit dieses vom Davis Putman Algorithmus gelöst werden kann. 
 
 \section{Davis Putnam algorithm}
-Davis Putnam implementation \cite{DavisPutnamImp}
+Der Davis Putman Algorithmus ist ein Verfahren zur Berechnung einer Lösung von aussagelogischen Klauselmengen. Bei sehr kleinen Klauselmengen kann dies leicht bestimmt werden, wie in den zwei folgenden Beispielen zu sehen ist.
+\\
+\hspace*{1.3cm} 
+$K_1 = \bigl\{\; \{r\},\; \{\neg s\},\; \{t\},\; \{\neg u\}, \; \{\neg v\} \;\bigr\}$ 
+\\[0.2cm]
+$K_1$ kann auch als aussagelogische Formel geschrieben werden.
+\\[0.2cm]
+\hspace*{1.3cm}
+$r \wedge \neg s \wedge t \wedge \neg u \wedge \neg v$.
+\\[0.2cm]
+Es ist erkennbar, dass diese Formel lösbar ist, indem $r$ und $t$ \enquote{wahr} und $s$, $u$ und $v$ den Wert \enquote{falsch} haben.
+Als Gegenbeispiel dazu ist $K_2$ zu betrachten.
+\hspace*{1.3cm}
+$K_1 = \bigl\{\; \{r\},\; \{\},\; \{t\} \;\bigr\}$ 
+\\[0.2cm]
+Eine leere Klammer bedeutet in der Aussagelogik ein Falsum, wodurch $K_2$ unerfüllbar ist.
+Bei sehr großen Klauselmengen ist es meist nicht mehr auf dem ersten Blick zu sehen, so dass Algorithmen wie dieser eingesetzt werden. Doch um nun einen Schritt tiefer setzen zu können, müssen zwei Definitionen zuvor eingeführt werden.
+\paragraph{Unit-Klausel} Eine Klausel $C$ ist eine Unit-Klausel, wenn diese nur aus einem Literal, also aus einer Aussagevariablen besteht.
+\paragraph{Triviale Klauselmenge} Eine triviale Klauselmenge kann nur vorkommen, wenn einer der beiden Fälle eintritt.
+\begin{enumerate}
+\item $K$ enthält die leere Klausel und ist somit unerfüllbar
+\item Die Unit-Klauseln beinhalten immer verschiedene Aussagevariablen, so dass entweder nur die Klausel $\{p\}$ oder $\{\neg p\}$ vorkommen kann. Ist dies der Fall, kann eine Lösung für die Klauselmenge bestimmt werden.
+\\
+\end{enumerate}
+Damit einer dieser beiden Fälle nun eintreten kann, müssen die Klauselmengen mit der Hilfe folgender drei Möglichkeiten so vereinfacht werden, dass diese nur aus Unit-Klauseln bestehen.
+\begin{enumerate}
+\item Schnitt-Regel
+\item Subsumption
+\item Fallunterscheidung
+\end{enumerate}
+\subsection{Vereinfachung mit Schnittregel}
+\subsection{Vereinfachung mit Subsumption}
+\subsection{Vereinfachung mit Fallunterscheidung}
+Die Basis für das Prinzip der Fallunterscheidung bildet folgender Satz.
+\paragraph{Satz} Die Klauselmenge K ist genau dann erfüllbar, wenn die Klausel $K \cup \bigl\{\{p\}\bigr\}$ oder $K \cup \bigl\{\{\neg p\}\bigr\}$ erfüllbar ist.
+\\
+\\
+%TODO Keine Ahnung ob hier Beweis einfügen soll
+Für die Vereinfachung wird zu Beginn also eine Aussagenvariable p ausgewählt, die in der Klauselmenge vorkommt. Danach werden die beiden oben genannten Klauselmengen gebildet und versucht, für eine der beiden eine Lösung zu finden. Ist dieser Versuch erfolgreich, ist das Ergebnis automatisch die Lösung von $K$. Falls keine gefunden wird, ist $K$ unlösbar.
+\subsection{Vorgehen des Alorithmus}
+Durch die Wissensgrundlage, die zuvor geschaffen wurde, ist es nun möglich, das Vorgehen des Davis Putman Algorithmus zu skizzieren. Mit der Hilfe der Schnittregel und der Subsumption wird die Klauselmenge $K$ soweit es möglich ist, vereinfacht. Falls bereits nach diesem Schritt $K$ trivial ist, ist das Verfahren beendet. Andernfalls wird eine aussagelogische Variable p ausgewählt, die in K vorkommt. Dann wird rekursiv versucht, die Klauselmenge $K \cup \bigl\{\{p\}\bigr\}$ zu lösen, um eine Lösung für K zu finden. Wenn auch hier keine Lösung gefunden wurde, wird dasselbe mit dem negierten $p$ versucht. Scheitert auch dieser Versuch, ist K unlösbar.
+%TODO Stroetmanns Skript und weitere Quellen die du findest \cite{DavisPutnamImp}
 
 \section{N Queens Problem}
 %Das n Königinnen Problem ist das verallgemeinerte mathematische Problem bezogen auf ein Schachbrett, dass n \times n Felder besitzt. Ein spezielles Beispiel dazu wäre das 8 Damen Problem, welches auf dem standardisierten Schachbrett abgebildet wird. Allgemein handelt das Problem davon, n Damen auf einem n \times n Schachbrett so zu platzieren, dass keine in ihrem Zug behindert werden würde. Eine Königin in einem normalen Schachspiel kann sowohl diagonal, als auch vertikal und horizontal ihre Züge ziehen. Dieses Zugmuster kann in Figure \ref{fig:queens-problem} genauer angeschaut werden. Zusammengefasst heißt dies also, dass immer nur eine Dame auf ihrer vertikalen, horizontalen und diagonalen Linie sein darf, um sich nicht gegenseitig zu behindern. Dabei wird in diesem Problem davon ausgegangen, dass jede Dame jede andere angreifen kann und die Feldfarben ignoriert werden. 
