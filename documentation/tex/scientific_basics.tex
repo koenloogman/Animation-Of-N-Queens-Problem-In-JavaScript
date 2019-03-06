@@ -55,14 +55,18 @@ In order for one of these two cases to occur, the clause sets must be simplified
 \subsection{Vereinfachung mit Schnittregel} %TODO die dinger übersetzen
 \subsection{Vereinfachung mit Subsumption}
 \subsection{Vereinfachung mit Fallunterscheidung}
-Die Basis für das Prinzip der Fallunterscheidung bildet folgender Satz.
-\paragraph{Satz} Die Klauselmenge K ist genau dann erfüllbar, wenn die Klausel $K \cup \bigl\{\{p\}\bigr\}$ oder $K \cup \bigl\{\{\neg p\}\bigr\}$ erfüllbar ist.
+%Die Basis für das Prinzip der Fallunterscheidung bildet folgender Satz.
+The following sentence forms the basis for the principle of case differentiation. %TODO Satz übersetzen
+\paragraph{Satz} %Die Klauselmenge K ist genau dann erfüllbar, wenn die Klausel $K \cup \bigl\{\{p\}\bigr\}$ oder $K \cup \bigl\{\{\neg p\}\bigr\}$ erfüllbar ist.
+The clause set K can be fulfilled if the clause $K \cup \bigl\{\{p\}\bigr\}$ or $K \cup \bigl\{\{\neg p\neg p\}\bigr\}$ can be fulfilled.
 \\
 \\
 %TODO Keine Ahnung ob hier Beweis einfügen soll
-Für die Vereinfachung wird zu Beginn also eine Aussagenvariable p ausgewählt, die in der Klauselmenge vorkommt. Danach werden die beiden oben genannten Klauselmengen gebildet und versucht, für eine der beiden eine Lösung zu finden. Ist dieser Versuch erfolgreich, ist das Ergebnis automatisch die Lösung von $K$. Falls keine gefunden wird, ist $K$ unlösbar.
+%Für die Vereinfachung wird zu Beginn also eine Aussagenvariable p ausgewählt, die in der Klauselmenge vorkommt. Danach werden die beiden oben genannten Klauselmengen gebildet und versucht, für eine der beiden eine Lösung zu finden. Ist dieser Versuch erfolgreich, ist das Ergebnis automatisch die Lösung von $K$. Falls keine gefunden wird, ist $K$ unlösbar.
+For simplification, a statement variable p is selected at the beginning, which occurs in the clause set. Then the two clause sets mentioned above are formed and an attempt is made to find a solution for one of them. If this attempt is successful, the result is automatically the solution of $K$. If none is found, $K$ is unsolvable.
 \subsection{Vorgehen des Algorithmus}
-Durch die Wissensgrundlage, die zuvor geschaffen wurde, ist es nun möglich, das Vorgehen des Davis Putman Algorithmus zu skizzieren. Mit der Hilfe der Schnittregel und der Subsumption wird die Klauselmenge $K$ soweit es möglich ist, vereinfacht. Falls bereits nach diesem Schritt $K$ trivial ist, ist das Verfahren beendet. Andernfalls wird eine aussagelogische Variable p ausgewählt, die in K vorkommt. Dann wird rekursiv versucht, die Klauselmenge $K \cup \bigl\{\{p\}\bigr\}$ zu lösen, um eine Lösung für K zu finden. Wenn auch hier keine Lösung gefunden wurde, wird dasselbe mit dem negierten $p$ versucht. Scheitert auch dieser Versuch, ist K unlösbar. \cite{Zhang2000}, \cite{Stroetman2019}
+%Durch die Wissensgrundlage, die zuvor geschaffen wurde, ist es nun möglich, das Vorgehen des Davis Putman Algorithmus zu skizzieren. Mit der Hilfe der Schnittregel und der Subsumption wird die Klauselmenge $K$ soweit es möglich ist, vereinfacht. Falls bereits nach diesem Schritt $K$ trivial ist, ist das Verfahren beendet. Andernfalls wird eine aussagelogische Variable p ausgewählt, die in K vorkommt. Dann wird rekursiv versucht, die Klauselmenge $K \cup \bigl\{\{p\}\bigr\}$ zu lösen, um eine Lösung für K zu finden. Wenn auch hier keine Lösung gefunden wurde, wird dasselbe mit dem negierten $p$ versucht. Scheitert auch dieser Versuch, ist K unlösbar.
+The knowledge base that was previously created now makes it possible to sketch the procedure of the Davis Putman algorithm. With the help of the intersection rule and the subsumption, the clause set $K$ is simplified as far as possible. If already after this step $K$ is trivial, the procedure is finished. Otherwise a statement logical variable p is selected, which occurs in K. Then a recursive attempt is made to solve the clause set $K \cup \bigl\{\{p\}\bigr\}$ in order to find a solution for K. If no solution was found here either, the same is tried with the negated $p$. If this attempt also fails, K is unsolvable.\cite{Zhang2000}, \cite{Stroetman2019}
 %TODO weitere Quellen finden 
 
 \section{N Queens Problem}
