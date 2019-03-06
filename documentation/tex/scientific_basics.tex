@@ -33,7 +33,7 @@ $K_1 = \bigl\{\; \{r\},\; \{\},\; \{t\} \;\bigr\}$
 %Eine leere Klammer bedeutet in der Aussagelogik ein Falsum, wodurch $K_2$ unerfüllbar ist.
 %Bei sehr großen Klauselmengen ist es meist nicht mehr auf dem ersten Blick zu sehen, so dass Algorithmen wie dieser eingesetzt werden. Doch um nun einen Schritt tiefer setzen zu können, müssen zwei Definitionen zuvor eingeführt werden.
 An empty parenthesis means a falsum in the statement logic, making $K_2$ impossible to fulfill.
-With very large clause sets it is usually no longer visible at first glance, so that algorithms like this are used. But to be able to set a step lower, two definitions have to be introduced first.
+With very large clause sets it is usually no longer visible at first glance, so that algorithms like this are used. But to be able to set a step lower, two definitions have to be introduced first. \cite{Zhang2000}
 \paragraph{Unit clause} %Eine Klausel $C$ ist eine Unit-Klausel, wenn diese nur aus einem Literal, also aus einer Aussagevariablen besteht.
 A clause $C$ is a unit clause if it consists of only one literal, i.e. a statement variable.
 \paragraph{trivial clause sets} %Eine triviale Klauselmenge kann nur vorkommen, wenn einer der beiden Fälle eintritt.
@@ -61,13 +61,13 @@ Die Basis für das Prinzip der Fallunterscheidung bildet folgender Satz.
 \\
 %TODO Keine Ahnung ob hier Beweis einfügen soll
 Für die Vereinfachung wird zu Beginn also eine Aussagenvariable p ausgewählt, die in der Klauselmenge vorkommt. Danach werden die beiden oben genannten Klauselmengen gebildet und versucht, für eine der beiden eine Lösung zu finden. Ist dieser Versuch erfolgreich, ist das Ergebnis automatisch die Lösung von $K$. Falls keine gefunden wird, ist $K$ unlösbar.
-\subsection{Vorgehen des Alorithmus}
-Durch die Wissensgrundlage, die zuvor geschaffen wurde, ist es nun möglich, das Vorgehen des Davis Putman Algorithmus zu skizzieren. Mit der Hilfe der Schnittregel und der Subsumption wird die Klauselmenge $K$ soweit es möglich ist, vereinfacht. Falls bereits nach diesem Schritt $K$ trivial ist, ist das Verfahren beendet. Andernfalls wird eine aussagelogische Variable p ausgewählt, die in K vorkommt. Dann wird rekursiv versucht, die Klauselmenge $K \cup \bigl\{\{p\}\bigr\}$ zu lösen, um eine Lösung für K zu finden. Wenn auch hier keine Lösung gefunden wurde, wird dasselbe mit dem negierten $p$ versucht. Scheitert auch dieser Versuch, ist K unlösbar.
-%TODO Stroetmanns Skript und weitere Quellen die du findest \cite{DavisPutnamImp}
+\subsection{Vorgehen des Algorithmus}
+Durch die Wissensgrundlage, die zuvor geschaffen wurde, ist es nun möglich, das Vorgehen des Davis Putman Algorithmus zu skizzieren. Mit der Hilfe der Schnittregel und der Subsumption wird die Klauselmenge $K$ soweit es möglich ist, vereinfacht. Falls bereits nach diesem Schritt $K$ trivial ist, ist das Verfahren beendet. Andernfalls wird eine aussagelogische Variable p ausgewählt, die in K vorkommt. Dann wird rekursiv versucht, die Klauselmenge $K \cup \bigl\{\{p\}\bigr\}$ zu lösen, um eine Lösung für K zu finden. Wenn auch hier keine Lösung gefunden wurde, wird dasselbe mit dem negierten $p$ versucht. Scheitert auch dieser Versuch, ist K unlösbar. \cite{Zhang2000}, \cite{Stroetman2019}
+%TODO weitere Quellen finden 
 
 \section{N Queens Problem}
 %Das n Königinnen Problem ist das verallgemeinerte mathematische Problem bezogen auf ein Schachbrett, dass n \times n Felder besitzt. Ein spezielles Beispiel dazu wäre das 8 Damen Problem, welches auf dem standardisierten Schachbrett abgebildet wird. Allgemein handelt das Problem davon, n Damen auf einem n \times n Schachbrett so zu platzieren, dass keine in ihrem Zug behindert werden würde. Eine Königin in einem normalen Schachspiel kann sowohl diagonal, als auch vertikal und horizontal ihre Züge ziehen. Dieses Zugmuster kann in Figure \ref{fig:queens-problem} genauer angeschaut werden. Zusammengefasst heißt dies also, dass immer nur eine Dame auf ihrer vertikalen, horizontalen und diagonalen Linie sein darf, um sich nicht gegenseitig zu behindern. Dabei wird in diesem Problem davon ausgegangen, dass jede Dame jede andere angreifen kann und die Feldfarben ignoriert werden. 
-The n queen problem is the generalized mathematical problem related to a chessboard that consists of $n \times n$ squares. A special example would be the 8 queens problem, which is related to the standardized chessboard. In general, the problem is to place n queens on an $n \times n$ chessboard so that none would be obstructed in their turn. A queen in a normal game of chess can move diagonally, vertically and horizontally. This move pattern can be seen in Figure \ref{fig:queens-problem}. In summary, this means that there is only one queen allowed on her vertical, horizontal and diagonal line at a time so that they do not interfere with each other. In this problem it is assumed that any queen can attack any other queen and the field colors are ignored. This problem can be solved by several algorithms such as the Davis Putman algorithm.
+The n queen problem is the generalized mathematical problem related to a chessboard that consists of $n \times n$ squares. A special example would be the 8 queens problem, which is related to the standardized chessboard. In general, the problem is to place n queens on an $n \times n$ chessboard so that none would be obstructed in their turn. A queen in a normal game of chess can move diagonally, vertically and horizontally. This move pattern can be seen in Figure \ref{fig:queens-problem}. In summary, this means that there is only one queen allowed on her vertical, horizontal and diagonal line at a time so that they do not interfere with each other. In this problem it is assumed that any queen can attack any other queen and the field colors are ignored. This problem can be solved by several algorithms such as the Davis Putman algorithm. \cite{Bell2009}, \cite{Watkins2012}, \cite[146\psq]{Nudelman1995}, \cite{Stroetman2019}
 \begin{figure}[!ht]
   \centering
 \setlength{\unitlength}{1.0cm}
@@ -95,6 +95,6 @@ The n queen problem is the generalized mathematical problem related to a chessbo
 \multiput(4.5,5.75)(0,-1){5}{\vector(0,-1){0.5}}
 \end{picture}
 \vspace*{-1.0cm}
-  \caption{Das 8-Damen-Problem \cite{STROETMANN}} %TODO Quelle einfügen
+  \caption{Das 8-Damen-Problem \cite{Stroetman2019a}} 
   \label{fig:queens-problem}
 \end{figure}
