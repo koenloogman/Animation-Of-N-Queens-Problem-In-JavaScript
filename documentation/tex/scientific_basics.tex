@@ -11,37 +11,48 @@ For this reason, this chapter summarizes this fundamental knowledge in order to 
 %Das Ziel dieser Arbeit besteht in der Visualisierung des Davis Putman Algorithmus, der das sogenannte N damen Problem lösen soll. Dafür muss zuerst ein allgemeines Verständnis zu diesem Algorithmus und dem mathematischen Problem geschaffen werden. In diesem Kapitel wird aus diesem Grund dieses fundamentale Wissen zusammengefasst, um eine Basis für die weiterführende Entwicklung zu schaffen. Dafür spielt unter anderem die Deklarierung des mathematischen Problems eine Rolle, damit dieses vom Davis Putman Algorithmus gelöst werden kann. 
 
 \section{Davis Putnam algorithm}
-Der Davis Putman Algorithmus ist ein Verfahren zur Berechnung einer Lösung von aussagelogischen Klauselmengen. Bei sehr kleinen Klauselmengen kann dies leicht bestimmt werden, wie in den zwei folgenden Beispielen zu sehen ist.
+%Der Davis Putman Algorithmus ist ein Verfahren zur Berechnung einer Lösung von aussagelogischen Klauselmengen. Bei sehr kleinen Klauselmengen kann dies leicht bestimmt werden, wie in den zwei folgenden Beispielen zu sehen ist.
+The Davis Putman algorithm is a method for calculating a solution of logical clause sets. With very small clause sets this can be easily determined, as can be seen in the following two examples.
 \\
 \hspace*{1.3cm} 
 $K_1 = \bigl\{\; \{r\},\; \{\neg s\},\; \{t\},\; \{\neg u\}, \; \{\neg v\} \;\bigr\}$ 
 \\[0.2cm]
-$K_1$ kann auch als aussagelogische Formel geschrieben werden.
+$K_1$ %kann auch als aussagelogische Formel geschrieben werden.
+can also be written as a statement logic formula.
 \\[0.2cm]
 \hspace*{1.3cm}
 $r \wedge \neg s \wedge t \wedge \neg u \wedge \neg v$.
 \\[0.2cm]
-Es ist erkennbar, dass diese Formel lösbar ist, indem $r$ und $t$ \enquote{wahr} und $s$, $u$ und $v$ den Wert \enquote{falsch} haben.
-Als Gegenbeispiel dazu ist $K_2$ zu betrachten.
+%Es ist erkennbar, dass diese Formel lösbar ist, indem $r$ und $t$ \enquote{wahr} und $s$, $u$ und $v$ den Wert \enquote{falsch} haben.
+%Als Gegenbeispiel dazu ist $K_2$ zu betrachten.
+It is recognizable that this formula is solvable by $r$ and $t$ \enquote{true} and $s$, $u$ and $v$ having the value \enquote{false}.
+As a counter example $K_2$ is to be considered.
 \hspace*{1.3cm}
 $K_1 = \bigl\{\; \{r\},\; \{\},\; \{t\} \;\bigr\}$ 
 \\[0.2cm]
-Eine leere Klammer bedeutet in der Aussagelogik ein Falsum, wodurch $K_2$ unerfüllbar ist.
-Bei sehr großen Klauselmengen ist es meist nicht mehr auf dem ersten Blick zu sehen, so dass Algorithmen wie dieser eingesetzt werden. Doch um nun einen Schritt tiefer setzen zu können, müssen zwei Definitionen zuvor eingeführt werden.
-\paragraph{Unit-Klausel} Eine Klausel $C$ ist eine Unit-Klausel, wenn diese nur aus einem Literal, also aus einer Aussagevariablen besteht.
-\paragraph{Triviale Klauselmenge} Eine triviale Klauselmenge kann nur vorkommen, wenn einer der beiden Fälle eintritt.
+%Eine leere Klammer bedeutet in der Aussagelogik ein Falsum, wodurch $K_2$ unerfüllbar ist.
+%Bei sehr großen Klauselmengen ist es meist nicht mehr auf dem ersten Blick zu sehen, so dass Algorithmen wie dieser eingesetzt werden. Doch um nun einen Schritt tiefer setzen zu können, müssen zwei Definitionen zuvor eingeführt werden.
+An empty parenthesis means a falsum in the statement logic, making $K_2$ impossible to fulfill.
+With very large clause sets it is usually no longer visible at first glance, so that algorithms like this are used. But to be able to set a step lower, two definitions have to be introduced first.
+\paragraph{Unit clause} %Eine Klausel $C$ ist eine Unit-Klausel, wenn diese nur aus einem Literal, also aus einer Aussagevariablen besteht.
+A clause $C$ is a unit clause if it consists of only one literal, i.e. a statement variable.
+\paragraph{trivial clause sets} %Eine triviale Klauselmenge kann nur vorkommen, wenn einer der beiden Fälle eintritt.
+A trivial set of clauses can only occur if one of the two cases occurs.
 \begin{enumerate}
-\item $K$ enthält die leere Klausel und ist somit unerfüllbar
-\item Die Unit-Klauseln beinhalten immer verschiedene Aussagevariablen, so dass entweder nur die Klausel $\{p\}$ oder $\{\neg p\}$ vorkommen kann. Ist dies der Fall, kann eine Lösung für die Klauselmenge bestimmt werden.
+\item %$K$ enthält die leere Klausel und ist somit unerfüllbar
+$K$ contains the empty clause and is therefore unfulfillable
+\item %Die Unit-Klauseln beinhalten immer verschiedene Aussagevariablen, so dass entweder nur die Klausel $\{p\}$ oder $\{\neg p\}$ vorkommen kann. Ist dies der Fall, kann eine Lösung für die Klauselmenge bestimmt werden.
+The unit clauses always contain different statement variables, so that only the clause $\{p\}$ or $\{\neg p\}$ can occur. If this is the case, a solution for the clause set can be determined.
 \\
 \end{enumerate}
-Damit einer dieser beiden Fälle nun eintreten kann, müssen die Klauselmengen mit der Hilfe folgender drei Möglichkeiten so vereinfacht werden, dass diese nur aus Unit-Klauseln bestehen.
+%Damit einer dieser beiden Fälle nun eintreten kann, müssen die Klauselmengen mit der Hilfe folgender drei Möglichkeiten so vereinfacht werden, dass diese nur aus Unit-Klauseln bestehen.
+In order for one of these two cases to occur, the clause sets must be simplified with the help of the following three options so that they consist only of unit clauses.
 \begin{enumerate}
-\item Schnitt-Regel
+\item Schnittregel %TODO Die dinger übersetzen
 \item Subsumption
 \item Fallunterscheidung
 \end{enumerate}
-\subsection{Vereinfachung mit Schnittregel}
+\subsection{Vereinfachung mit Schnittregel} %TODO die dinger übersetzen
 \subsection{Vereinfachung mit Subsumption}
 \subsection{Vereinfachung mit Fallunterscheidung}
 Die Basis für das Prinzip der Fallunterscheidung bildet folgender Satz.
