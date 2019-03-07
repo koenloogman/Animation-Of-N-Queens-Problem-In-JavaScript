@@ -75,7 +75,7 @@ so that for a set of clauses $K$ and a literal $l$ the function $unitCut(K,\; l)
 \hspace*{1.3cm}
 $unitCut(K,\; l) = \{\; C \setminus \{\; \neg l\; \}\; |\; C \in K\; \}$
 \\[0.2cm]
-The result set of clauses will have the same amount of clauses as $K$. Only the clauses $C \in K$ where $\neg l \in C$ were affected and got that element removed.
+The result set of clauses will have the same amount of clauses as $K$. Only the clauses $C \in K$ where $\neg l \in C$ were affected and got that element removed. \cite{Stroetman2019}
 
 \subsection{Simplification with Subsumption}
 For further simplification of the set of clauses we will use subsumption. The idea is simple and can be shown with the following example:
@@ -98,7 +98,7 @@ that we will give it a set of clauses $K$ and a literal $l$, so that it will sim
 \hspace*{1.3cm}
 $subsume(K,\; l) = \{\; C \in K\; |\; l \notin C\} \cup \{\{\; l\; \}\}$
 \\[0.2cm]
-We have to add the unit clause to the set of clauses, because $l \in U$ is the case. Resulting in $U$ being removed from $K$ at first too.
+We have to add the unit clause to the set of clauses, because $l \in U$ is the case. Resulting in $U$ being removed from $K$ at first too. \cite{Stroetman2019}
 
 \subsection{Vereinfachung mit Fallunterscheidung}
 %Die Basis für das Prinzip der Fallunterscheidung bildet folgender Satz.
