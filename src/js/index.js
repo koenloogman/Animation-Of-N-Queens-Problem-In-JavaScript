@@ -20,8 +20,8 @@ class Frame extends DavisPutnamConsumer {
         if (davisPutnam) davisPutnam.addConsumer(this);
     }
 
-    onReduce() {
-        console.log('changed reduce')
+    onReduce(event) {
+        console.log(event);
     }
 }
 
@@ -61,7 +61,9 @@ const footer = $('#footer');
 
 // add step button
 header.append('<button id="step-button">Next Step</button>');
+header.append(' micro steps: <input type="checkbox" id="micro"></input>');
 const stepButton = $('#step-button');
+const micro = $('#micro');
 
 body.append('<h2>Used literals:</h2><p id="used">' + clausesToString(davisPutnam.used) + '</p>');
 body.append('<h2>Choosen literals:</h2><p id="literals">' + literalsToString(davisPutnam.literals) + '</p>');
@@ -70,6 +72,9 @@ const used = $('#used');
 const literals = $('#literals');
 const clauses = $('#clauses');
 
+micro.change((event) => {
+    davisPutnam.micro = event.currentTarget.checked;
+});
 stepButton.click((event) => {
     clauses.html(clausesToString(davisPutnam.step().clauses));
     literals.html(literalsToString(davisPutnam.literals));

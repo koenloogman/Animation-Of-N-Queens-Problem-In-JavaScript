@@ -152,10 +152,10 @@ class DavisPutnam {
              * Zusätzlich werden alle Klauseln, die von Unit-Klauseln subsumiert werden, aus der Menge S entfernt.
              */
             while (!this._units.isEmpty() && step != 0) {
-                var unit = Util.randomElement(this._units);
+                let unit = Util.randomElement(this._units);
                 this._used = this._used.add(unit);
     
-                var literal = Util.randomElement(unit);
+                let literal = Util.randomElement(unit);
                 this.reduce(literal);
                 if (this.micro) step--;
             }
@@ -170,6 +170,7 @@ class DavisPutnam {
             if (this._clauses.has(new Set())) {
                 if (this._clausesStack.isEmpty()) {
                     this._clauses = new Set([new Set()]);
+                    this._consumers.forEach(consumer => consumer.onNotSolveable());
                     return this;
                 }
                 // pop from stack to do the next
@@ -181,17 +182,16 @@ class DavisPutnam {
                 this._usedStack.pop();
 
                 this._consumers.forEach(consumer => consumer.onBacktrack());
-
                 continue;
             }
 
             // choose a literal
-            var literal = this.selectLiteral();
-            var notLiteral = Util.negateLiteral(literal);
+            let literal = this.selectLiteral();
+            let negLiteral = Util.negateLiteral(literal);
 
             // put the negated literal on stack for backtracking
-            this._clausesStack.push(this._clauses.add(new Set([notLiteral])));
-            this._literalsStack.push(this._literals.add(notLiteral));
+            this._clausesStack.push(this._clauses.add(new Set([negLiteral])));
+            this._literalsStack.push(this._literals.add(negLiteral));
             this._usedStack.push(this._used);
 
             // use the literal for the next
@@ -211,25 +211,35 @@ class DavisPutnam {
      * @returns {DavisPutnam}
      */
     reduce(literal) {
-        this._consumers.forEach(consumer => consumer.onReduce());
-        /**
-         * @type {String}
-         */
-        var notLiteral = Util.negateLiteral(literal);
+        let negLiteral = Util.negateLiteral(literal);
 
         /**
-         * @type {Set<Set<String>>}
+         * @type {{target: Set<Set<String>>, result: Set<Set<String>>}}
          */
-        var newClauses = new Set().asMutable();
-        this._clauses.forEach(clause => {
-            if (clause.has(notLiteral)) {
-                newClauses.add(clause.filter(literal => literal != notLiteral));
-            } else if (!clause.has(literal) || clause.equals(new Set([literal]))) {
-                newClauses.add(clause);
-            }
-        });
-        this._clauses = newClauses.asImmutable();
+        let unitCut = {
+            'target': this._clauses.filter(clause => clause.has(negLiteral)),
+            'result': null
+        };
+        unitCut.result = unitCut.target.map(clause => clause.remove(negLiteral));
+        let subsume = this._clauses.filter(clause => clause.has(literal));
+        let rest = this._clauses.filterNot(clause => clause.has(literal) || clause.has(negLiteral));
 
+        let event = {
+            'literal': literal,
+            'negLiteral': negLiteral,
+            'unitCut': {
+                'target': unitCut.target.toJS(),
+                'result': unitCut.result.toJS()
+            },
+            'subsume': {
+                'target': subsume.toJS(),
+                'result': []
+            },
+            'rest': rest.toJS()
+        };
+
+        this._clauses = unitCut.result.union(rest).add(new Set([literal]));
+        this._consumers.forEach(consumer => consumer.onReduce(event));
         return this;
     }
 
@@ -264,8 +274,14 @@ class DavisPutnamConsumer {
         }
     }
 
-    onReduce() {
-        console.log(`reduced`);
+    /**
+     * This function is called when the DavisPutnam algorythm uses the function reduce.
+     * The event contains the used literal, the negated literal and the targets of the unit cut and subsume operations with their results.
+     * Unaffected clauses are in rest.
+     * @param {{literal: String, negLiteral: String, unitCut: {target: Array<String>, result: Array<String>}, subsume: {target: Array<String>, result: Array<String>}, rest: Array<String>}} event 
+     */
+    onReduce(event) {
+        console.log(`reduced with '` + event.literal + `'`);
     }
 
     onBacktrack() {
@@ -274,6 +290,10 @@ class DavisPutnamConsumer {
 
     onSolved() {
         console.log(`solved`);
+    }
+
+    onNotSolveable() {
+        console.log(`not solveable`);
     }
 }
 
