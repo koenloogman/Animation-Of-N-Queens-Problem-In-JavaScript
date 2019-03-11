@@ -19,19 +19,23 @@ const Util = {
         return result;
     },
     /**
-     * Returns a random element of a set
-     * @param {Set<T>} set
-     * @returns {T} 
-     */
-    randomElement(set) {
-        return set.slice(Math.round(Math.random() * (set.size - 1))).first();
-    },
-    /**
      * Negates the literal
      * @param {String} literal
      */
     negateLiteral(literal) {
         return ("!" + literal).replace(/^!!/, '');
+    },
+
+    setToString(set) {
+        return '{' + set.join(', ') + '}';
+    },
+
+    literalsToString(set) {
+        return setToString(set.map(literal => '"' + literal + '"'));
+    },
+    
+    clausesToString(clauses) {
+        return setToString(clauses.map(clause => literalsToString(clause)));
     }
 }
 

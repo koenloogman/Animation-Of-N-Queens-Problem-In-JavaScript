@@ -1,5 +1,6 @@
 const { Set, Stack } = require('immutable');
 const Util = require('./util');
+const seedrandom = require('seedrandom');
 
 /**
  * 
@@ -24,7 +25,11 @@ class DavisPutnam {
      * schon reduziert wurde.  Beim ersten Aufruf ist diese Menge leer.
      * @param {Array<Array<String>>} clauses
      */
-    constructor(clauses) {
+    constructor(clauses = new Set([new Set()])) {
+        // reproduceable results
+        this.seed =  null;
+        this.rng = seedrandom(this.seed);
+
         // Internal
         /**
          * @type {Stack<Set<Set<String>>>}
@@ -62,12 +67,13 @@ class DavisPutnam {
         this.clauses = clauses;
 
         /**
+         * If its value is true the Algorithm will do micro steps
          * @type {Boolean}
          */
         this.micro = false;
     }
     /**
-     * Returns a set of all unit clauses of the current clauses
+     * Returns a set of all unit clauses of the current clauses.
      * @returns {Set<Set<String>>}
      */
     get _units() {
@@ -75,14 +81,14 @@ class DavisPutnam {
     }
 
     /**
-     * Adds a consumer
+     * Adds a consumer.
      * @param {DavisPutnamConsumer} consumer 
      */
     addConsumer(consumer) {
         this._consumers.add(consumer);
     }
     /**
-     * Removes a consumer
+     * Removes a consumer.
      * @param {DavisPutnamConsumer} consumer 
      */
     removeConsumer(consumer) {
@@ -90,10 +96,21 @@ class DavisPutnam {
     }
 
     /**
+     * Sets a new set of clauses to be solved and resets all previous progress.
      * @param {Array<Array<String>>} clauses
      */
     set clauses(clauses) {
+        // set global seed
+        this.rng = seedrandom(this.seed);
+
         this._clauses = new Set(clauses.map(clause => new Set(clause)));
+        this._literals = new Set();
+        this._used = new Set();
+
+        // clear stacks
+        this._clausesStack.clear();
+        this._literalsStack.clear();
+        this._usedStack.clear();
     }
     /**
      * Returns an array of clauses of the current state. Those clauses are arrays of literals.
@@ -141,7 +158,6 @@ class DavisPutnam {
     
     /**
      * Runs the davis putnam for the given amount of steps.
-     * 
      * @param {Number} step if the step is a negative number it will run till it's solved
      */
     step(step = 1) {
@@ -152,25 +168,34 @@ class DavisPutnam {
              * Zusätzlich werden alle Klauseln, die von Unit-Klauseln subsumiert werden, aus der Menge S entfernt.
              */
             while (!this._units.isEmpty() && step != 0) {
-                let unit = Util.randomElement(this._units);
+                /**
+                 * @type {Set<String>}
+                 */
+                let unit = this.randomElement(this._units);
                 this._used = this._used.add(unit);
     
-                let literal = Util.randomElement(unit);
+                let literal = unit.first();
                 this.reduce(literal);
                 if (this.micro) step--;
             }
             // check if solved
             if (this.solved()) {
-                this._consumers.forEach(consumer => consumer.onSolved());
+                this._consumers.forEach(consumer => consumer.onSolved({
+                    'davisPutnam': this,
+                    'solution': this.clauses
+                }));
                 return this;
             }
             if (step == 0) continue;
+            step--;
 
             // unsolvable
             if (this._clauses.has(new Set())) {
                 if (this._clausesStack.isEmpty()) {
                     this._clauses = new Set([new Set()]);
-                    this._consumers.forEach(consumer => consumer.onNotSolveable());
+                    this._consumers.forEach(consumer => consumer.onNotSolveable({
+                        'davisPutnam': this
+                    }));
                     return this;
                 }
                 // pop from stack to do the next
@@ -181,7 +206,9 @@ class DavisPutnam {
                 this._used = this._usedStack.peek();
                 this._usedStack.pop();
 
-                this._consumers.forEach(consumer => consumer.onBacktrack());
+                this._consumers.forEach(consumer => consumer.onBacktrack({
+                    'davisPutnam': this
+                }));
                 continue;
             }
 
@@ -197,8 +224,6 @@ class DavisPutnam {
             // use the literal for the next
             this._clauses = this._clauses.add(new Set([literal]));
             this._literals = this._literals.add(literal);
-
-            step--;
         }
         return this;
     }
@@ -206,7 +231,6 @@ class DavisPutnam {
     /**
      * Die Prozedur reduce(literal) führt alle Unit-Schnitte und alle Unit-Subsumptionen,
      * die mit der Unit-Klausel {literal} möglich sind, durch.
-     * 
      * @param {String} literal
      * @returns {DavisPutnam}
      */
@@ -225,6 +249,7 @@ class DavisPutnam {
         let rest = this._clauses.filterNot(clause => clause.has(literal) || clause.has(negLiteral));
 
         let event = {
+            'davisPutnam': this,
             'literal': literal,
             'negLiteral': negLiteral,
             'unitCut': {
@@ -257,14 +282,25 @@ class DavisPutnam {
 
         // Prefer positive literals
         if (posLiterals.size > 0) {
-            return Util.randomElement(posLiterals);
+            return this.randomElement(posLiterals);
         } else {
-            return Util.randomElement(literals);
+            return this.randomElement(literals);
         }
     }
+    
+    /**
+     * Returns a random element of a set
+     * @param {Set<T>} set
+     * @returns {T} 
+     */
+    randomElement(set) {
+        return set.slice(Math.round(this.rng() * (set.size - 1))).first();
+    }
 }
+
 /**
- * 
+ * A consumer class for the DavisPutnam.
+ * This class is abstract and has to be extended.
  * @author Koen Loogman
  */
 class DavisPutnamConsumer {
@@ -278,21 +314,36 @@ class DavisPutnamConsumer {
      * This function is called when the DavisPutnam algorythm uses the function reduce.
      * The event contains the used literal, the negated literal and the targets of the unit cut and subsume operations with their results.
      * Unaffected clauses are in rest.
-     * @param {{literal: String, negLiteral: String, unitCut: {target: Array<String>, result: Array<String>}, subsume: {target: Array<String>, result: Array<String>}, rest: Array<String>}} event 
+     * @param {{davisPutnam: DavisPutnam, literal: String, negLiteral: String, unitCut: {target: Array<String>, result: Array<String>}, subsume: {target: Array<String>, result: Array<String>}, rest: Array<String>}} event 
      */
     onReduce(event) {
         console.log(`reduced with '` + event.literal + `'`);
     }
 
-    onBacktrack() {
+    /**
+     * This function is called if a backtrack occures.
+     * The original implementation is recursive - this one on the other hand itterative.
+     * It does mimic the recursive implementation tho. So this function is called if one "recursive call" fails and a different "route" is taken.
+     * @param {{davisPutnam: DavisPutnam}}
+     */
+    onBacktrack(event) {
         console.log(`backtracked`);
     }
 
-    onSolved() {
+    /**
+     * This function is called if the algorythm found an solution.
+     * The solution is also handed over via the event.
+     * @param {{davisPutnam: DavisPutnam, solution: Array<String>}} event 
+     */
+    onSolved(event) {
         console.log(`solved`);
     }
 
-    onNotSolveable() {
+    /**
+     * This function is called if the algorythm found no solution.
+     * @param {{davisPutnam: DavisPutnam}}
+     */
+    onNotSolveable(event) {
         console.log(`not solveable`);
     }
 }
