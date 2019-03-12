@@ -60,7 +60,7 @@ class ChessBoard {
     }
 
     setCross(x, y) {
-        this.state[y][x] = 'x';
+        this.state[y][x] = '.';
     }
 
     /**

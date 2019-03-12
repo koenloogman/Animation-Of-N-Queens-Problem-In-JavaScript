@@ -3,7 +3,7 @@ const seedrandom = require('seedrandom');
 const Util = require('./util');
 
 /**
- * 
+ * TODO: Optimize and make it cleaner.
  * @author Koen Loogman
  */
 class DavisPutnam {
@@ -76,6 +76,9 @@ class DavisPutnam {
     }
     /**
      * Returns a set of all unit clauses of the current clauses.
+     * These are clauses with just one literal that have not been used to reduce the set of clauses previously.
+     * 
+     * TODO: Cache the property as it is accessed a lot and maybe add a _use
      * @returns {Set<Set<String>>}
      */
     get _units() {
@@ -115,8 +118,8 @@ class DavisPutnam {
      * @param {Array<Array<String>>} clauses
      */
     set clauses(clauses) {
-        // set global seed
-        this.random = seedrandom(this.seed);
+        // reseed random function
+        this.seed = this.seed;
 
         this._clauses = new Set(clauses.map(clause => new Set(clause)));
         this._literals = new Set();
@@ -128,7 +131,7 @@ class DavisPutnam {
         this._usedStack.clear();
     }
     /**
-     * Returns an array of clauses of the current state. Those clauses are arrays of literals.
+     * Returns an two dimensional array of literals of the current state.
      * @returns {Array<Array<String>>}
      */
     get clauses() {
@@ -157,24 +160,29 @@ class DavisPutnam {
     }
 
     /**
-     * Checks if the davis putnem algorithm has no more steps left to do.
+     * Checks if the Davis Putnam algorithm has no more steps left to do.
      * @returns {Boolean} true if done.
      */
     done() {
         return this.solved() || (this._clauses.size == 1 && this._clauses.has(new Set())) ;
     }
     /**
-     * Checks if the davis putnam algorithm has found an solution.
+     * Checks if the davis Putnam algorithm has found an solution.
+     * For this to be the case the set of clauses has to contain only clauses with one literal.
+     * And no clause contains the negated literal of a other clause.
      * @returns {Boolean} true if solution found.
      */
     solved() {
-        let literals = this._clauses.flatten();
-        return this._clauses.filter(clause => clause.size != 1 && !literals.has(Util.negateLiteral(clause.first))).isEmpty();
+        let unitClauses = this._clauses.filter(clause => clause.size == 1);
+        let literals = unitClauses.flatten();
+
+        return this._clauses.subtract(unitClauses).isEmpty() && unitClauses.filter(clause => literals.has(Util.negateLiteral(clause.first()))).isEmpty();
     }
     
     /**
      * Runs the davis putnam for the given amount of steps.
      * @param {Number} step if the step is a negative number it will run till it's solved
+     * @returns {DavisPutnam} itself
      */
     step(step = 1) {
         step = Math.round(step);
@@ -183,11 +191,11 @@ class DavisPutnam {
              * Diese Schleife berechnet alle Klauseln, die mit Unit Schnitten aus S ableitbar sind. 
              * Zusätzlich werden alle Klauseln, die von Unit-Klauseln subsumiert werden, aus der Menge S entfernt.
              */
-            while (!this._units.isEmpty() && step != 0) {
+            while (!this._units.isEmpty() && !this._clauses.has(new Set()) && step != 0) {
                 /**
                  * @type {Set<String>}
                  */
-                let unit = this.randomElement(this._units);
+                let unit = this._units.first();
                 this._used = this._used.add(unit);
     
                 let literal = unit.first();
@@ -214,17 +222,30 @@ class DavisPutnam {
                     }));
                     return this;
                 }
+
+                let oldLiterals = this._literals;
+
                 // pop from stack to do the next
-                this._clauses = this._clausesStack.peek();
+                this._clauses = this._clausesStack.first();
                 this._clausesStack.pop();
-                this._literals = this._literalsStack.peek();
+                this._literals = this._literalsStack.first();
                 this._literalsStack.pop();
-                this._used = this._usedStack.peek();
+                this._used = this._usedStack.first();
                 this._usedStack.pop();
 
-                this._consumers.forEach(consumer => consumer.onBacktrack({
-                    'davisPutnam': this
-                }));
+                // get the choosen literal
+                let literal = this._literals.subtract(oldLiterals).first();
+                this._consumers.forEach(consumer => {
+                    consumer.onBacktrack({
+                        'davisPutnam': this
+                    });
+                    if (literal) {
+                        consumer.onChoose({
+                            'davisPutnam': this,
+                            'literal': literal
+                        });
+                    }
+                });
                 continue;
             }
 
@@ -240,6 +261,10 @@ class DavisPutnam {
             // use the literal for the next
             this._clauses = this._clauses.add(new Set([literal]));
             this._literals = this._literals.add(literal);
+            this._consumers.forEach(consumer => consumer.onChoose({
+                'davisPutnam': this,
+                'literal': literal
+            }));
         }
         return this;
     }
@@ -248,7 +273,7 @@ class DavisPutnam {
      * Die Prozedur reduce(literal) führt alle Unit-Schnitte und alle Unit-Subsumptionen,
      * die mit der Unit-Klausel {literal} möglich sind, durch.
      * @param {String} literal
-     * @returns {DavisPutnam}
+     * @returns {DavisPutnam} itself
      */
     reduce(literal) {
         let negLiteral = Util.negateLiteral(literal);
@@ -258,13 +283,18 @@ class DavisPutnam {
          */
         let unitCut = {
             'target': this._clauses.filter(clause => clause.has(negLiteral)),
-            'result': null
+            'result': new Set()
         };
         unitCut.result = unitCut.target.map(clause => clause.remove(negLiteral));
-        let subsume = this._clauses.filter(clause => clause.has(literal));
-        let rest = this._clauses.filterNot(clause => clause.has(literal) || clause.has(negLiteral));
+        // do subsume
+        let subsume = {
+            'target': this._clauses.filter(clause => clause.has(literal) && clause.size > 1),
+            'result': new Set()
+        };
+        let rest = this._clauses.subtract(unitCut.target).subtract(subsume.target);
 
-        let event = {
+        this._clauses = unitCut.result.union(rest);
+        this._consumers.forEach(consumer => consumer.onReduce({
             'davisPutnam': this,
             'literal': literal,
             'negLiteral': negLiteral,
@@ -273,21 +303,18 @@ class DavisPutnam {
                 'result': unitCut.result.toJS()
             },
             'subsume': {
-                'target': subsume.toJS(),
-                'result': []
+                'target': subsume.target.toJS(),
+                'result': subsume.result.toJS()
             },
             'rest': rest.toJS()
-        };
-
-        this._clauses = unitCut.result.union(rest).add(new Set([literal]));
-        this._consumers.forEach(consumer => consumer.onReduce(event));
+        }));
         return this;
     }
 
     /**
      * Wir wählen ein beliebiges Literal aus einer beliebigen Klausel,
      * so dass weder dieses Literal noch die Negation benutzt wurden.
-     * @returns {String}
+     * @returns {String} the selected literal
      */
     selectLiteral() {
         /**
@@ -305,9 +332,9 @@ class DavisPutnam {
     }
     
     /**
-     * Returns a random element of a set
+     * Picks a random element of a set.
      * @param {Set<T>} set
-     * @returns {T} 
+     * @returns {T} the random element
      */
     randomElement(set) {
         return set.slice(Math.round(this.random() * (set.size - 1))).first();
@@ -324,6 +351,15 @@ class DavisPutnamConsumer {
         if (this.constructor == DavisPutnamConsumer) {
             throw new Error(`Abstract classes can't be instantiated.`);
         }
+    }
+
+    /**
+     * This function is called when the DavisPutnam algorythm chooses a literal.
+     * The event contains the literal.
+     * @param {{davisPutnam: DavisPutnam, literal: String}} event 
+     */
+    onChoose(event) {
+        console.log(`choosen literal '` + event.literal + `'`);
     }
 
     /**
