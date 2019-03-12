@@ -47,7 +47,7 @@ class Frame extends DavisPutnamConsumer {
     }
 
     draw() {
-        this.stepButton.prop('disabled', this.davisPutnam.solved());
+        this.stepButton.prop('disabled', this.davisPutnam.done());
         this.board.setState(this.davisPutnam.clauses);
         this.body.html('<pre>' + this.board.toString() + '</pre>');
     }
@@ -78,12 +78,18 @@ class Frame extends DavisPutnamConsumer {
     }
 
     onReduce(event) {
+        console.log(event);
         this.draw();
     }
 
     onSolved(event) {
         this.draw();
         this.footer.html('Solution found!');
+    }
+
+    onNotSolveable(event) {
+        this.draw();
+        this.footer.html('No solution found');
     }
 }
 
@@ -101,4 +107,4 @@ class Frame extends DavisPutnamConsumer {
 //     ['s','!r']
 // ];
 
-const frame = new Frame();
+const frame = new Frame(3);
