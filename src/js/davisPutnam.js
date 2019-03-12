@@ -1,6 +1,6 @@
 const { Set, Stack } = require('immutable');
-const Util = require('./util');
 const seedrandom = require('seedrandom');
+const Util = require('./util');
 
 /**
  * 
@@ -25,10 +25,12 @@ class DavisPutnam {
      * schon reduziert wurde.  Beim ersten Aufruf ist diese Menge leer.
      * @param {Array<Array<String>>} clauses
      */
-    constructor(clauses = new Set([new Set()])) {
+    constructor(clauses = new Set([new Set()]), seed = null) {
         // reproduceable results
-        this.seed =  null;
-        this.rng = seedrandom(this.seed);
+        /**
+         * @type {String}
+         */
+        this.seed =  seed;
 
         // Internal
         /**
@@ -79,6 +81,19 @@ class DavisPutnam {
     get _units() {
         return this._clauses.filter(clause => clause.size == 1 && !this._used.has(clause));
     }
+    /**
+     * @param {String} seed
+     */
+    set seed(seed) {
+        this._seed = seed;
+        this.random = seedrandom(this.seed);
+    }
+    /**
+     * @returns {String}
+     */
+    get seed() {
+        return this._seed;
+    }
 
     /**
      * Adds a consumer.
@@ -101,7 +116,7 @@ class DavisPutnam {
      */
     set clauses(clauses) {
         // set global seed
-        this.rng = seedrandom(this.seed);
+        this.random = seedrandom(this.seed);
 
         this._clauses = new Set(clauses.map(clause => new Set(clause)));
         this._literals = new Set();
@@ -153,7 +168,8 @@ class DavisPutnam {
      * @returns {Boolean} true if solution found.
      */
     solved() {
-        return this._clauses.filter(clause => clause.size != 1).isEmpty();
+        let literals = this._clauses.flatten();
+        return this._clauses.filter(clause => clause.size != 1 && !literals.has(Util.negateLiteral(clause.first))).isEmpty();
     }
     
     /**
@@ -294,7 +310,7 @@ class DavisPutnam {
      * @returns {T} 
      */
     randomElement(set) {
-        return set.slice(Math.round(this.rng() * (set.size - 1))).first();
+        return set.slice(Math.round(this.random() * (set.size - 1))).first();
     }
 }
 
