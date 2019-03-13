@@ -136,5 +136,5 @@ class Frame extends DavisPutnamConsumer {
 //     ['s','!r']
 // ];
 
-const frame = new Frame(16, 'test');
+const frame = new Frame(8, 'test');
 console.log(frame);
