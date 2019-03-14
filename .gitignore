@@ -17,6 +17,7 @@ pids
 *.seed
 
 # Following ignore List for documentation
+*/documentation.pdf
 
 # Add any directories, files, or patterns you don't want to be tracked by version control
 *.aux
