@@ -3,7 +3,9 @@
 % Javascript und verwendete Libraries
 
 \chapter{Technical Basics}
+Im vorherigen Kapitel wurden die Grundlagen zum Davis Putman Algorithmus und des N Damen Problems genauer analysiert und definiert. Nun folgt eine Sammlung von Bibliotheken und Technologien, die für die Implementierung benötigt werden. Dabei wird vor allem auf den Einsatz dieser und der Vergleich zu eventuellen Alternativen eingegangen. 
 
+\paragraph{Parcel} Parcel ist ein Module Bundling Tool zur Integration von mehreren Modulen in eine Datei. Dadurch ist es möglich, multiple Module in einem einzigen Bundle an den Browser zu senden. Diese Bibliothek bietet einige sehr nützliche Funktionen an, die die Implementierung deutlich vereinfachen. Parcel nutzt Worker Prozesse, um eine multicore Compilierung zu ermöglichen und besitzt ein Filesystem Cache, um sehr schnelles Rebuilden zu ermöglichen. Dadurch ist Parcel vor allem auf Performanz im Browser ausgelegt. Außerdem besitzt diese Bibliothek einen automatischen Support für Sprachen wie beispielsweise Javascript und CSS, wodurch keine Plugins benötigt werden. 
 Parcel to use Node.js and pack dependencies (\url{https://parceljs.org/}). Compare to Webpack etc.?
 
 To work with Set (also Stack and Range) in JS (\url{https://immutable-js.github.io/immutable-js/}), because native Set is comparing by object by Object reference (\url{http://2ality.com/2015/01/es6-maps-sets.html#why-cant-i-configure-how-maps-and-sets-compare-keys-and-values}).
