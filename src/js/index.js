@@ -19,10 +19,16 @@ let colors = {
     'queen': "#888888"
 };
 
+const scene = document.getElementById('scene');
 let two = new Two({
-    fullscreen: true,
+    width: scene.clientWidth,
+    height: scene.clientHeight,
     autostart: true
-}).appendTo(document.body);
+}).appendTo(scene);
+window.addEventListener('resize', () => {
+    two.width = scene.clientWidth;
+    two.height = scene.clientHeight;
+});
 
 let chessBoard, state = startingState, n = 8, ln = 8;
 
