@@ -46,7 +46,7 @@ function atMostOneInLowerDiagonal(k, n) {
 /**
  * @param {Number} n
  * 
- * @author Koen Loogman
+ * @author Koen Loogman <koen@loogman.de>
  */
 const QueensClauses = (n) => {
     var clauses = new Set();

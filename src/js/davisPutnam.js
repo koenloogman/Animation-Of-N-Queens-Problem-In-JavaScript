@@ -3,35 +3,22 @@ const seedrandom = require('seedrandom');
 const Util = require('./util');
 
 /**
+ * The DavisPutnam class is an iterative implementation of the
+ * 
  * TODO: Optimize and make it cleaner.
- * @author Koen Loogman
+ * @author Koen Loogman <koen@loogman.de> 
  */
 class DavisPutnam {
     /**
-     * Clauses ist eine Menge von Klauseln und literals ist eine Menge
-     * von Literalen.  Der Aufruf DavisPutnam(Clauses, Literals) versucht 
-     * eine Lösung der Menge
+     * The constructor for the davis putnam algorithm.
+     * It receives a set of clauses 
      * 
-     * Clauses
-     * 
-     * zu berechnen.  Wenn dies gelingt, wird eine Menge von Unit-Klauseln 
-     * zurück gegeben, die keine komplementären Literale enthält.  Aus dieser 
-     * Menge kann dann unmittelbar eine Belegung berechnet werden, die Clauses
-     * löst.
-     * 
-     * Wenn die Menge Clauses unlösbar ist, wird { {} } zurück gegeben.
-     * Das Argument Literals dient der Buchhaltung bei den rekursiven Aufrufen.
-     * Hier werden alle die Literale aufgesammelt, mit denen die Menge clauses
-     * schon reduziert wurde.  Beim ersten Aufruf ist diese Menge leer.
      * @param {Array<Array<String>>} clauses
+     * @param {String} seed
+     * 
+     * @returns {DavisPutnam} itself
      */
     constructor(clauses = new Set([new Set()]), seed = null) {
-        // reproduceable results
-        /**
-         * @type {String}
-         */
-        this.seed =  seed;
-
         // Internal
         /**
          * @type {Stack<Set<Set<String>>>}
@@ -58,6 +45,11 @@ class DavisPutnam {
          */
         this._used = new Set();
         /**
+         * @type {String}
+         */
+        this.literal = null;
+
+        /**
          * @type {Set<DavisPutnamConsumer>}
          */
         this._consumers = new Set().asMutable();
@@ -67,22 +59,36 @@ class DavisPutnam {
          * @type {Array<Array<String>>}
          */
         this.clauses = clauses;
-
+        /**
+         * @type {String}
+         */
+        this.seed =  seed;
         /**
          * If its value is true the Algorithm will do micro steps
          * @type {Boolean}
          */
         this.micro = false;
+
+        return this;
     }
     /**
-     * Returns a set of all unit clauses of the current clauses.
+     * Returns a set of all not used unit clauses of the current clauses.
      * These are clauses with just one literal that have not been used to reduce the set of clauses previously.
      * 
-     * TODO: Cache the property as it is accessed a lot and maybe add a _use
      * @returns {Set<Set<String>>}
      */
-    get _units() {
+    get _useable() {
         return this._clauses.filter(clause => clause.size == 1 && !this._used.has(clause));
+    }
+    /**
+     * Returns a set of all clauses that can be unit cut by the current literal.
+     * If the literal is not set it will return an empty set.
+     * 
+     * @returns {Set<Set<String>>}
+     */
+    get _cutable() {
+        if (!this.literal) return new Set();
+        return this._clauses.filter(clause => clause.has(Util.negateLiteral(this.literal)));
     }
     /**
      * @param {String} seed
@@ -100,21 +106,28 @@ class DavisPutnam {
 
     /**
      * Adds a consumer.
-     * @param {DavisPutnamConsumer} consumer 
+     * @param {DavisPutnamConsumer} consumer
+     * 
+     * @returns {DavisPutnam} itself
      */
     addConsumer(consumer) {
         this._consumers.add(consumer);
+        return this;
     }
     /**
      * Removes a consumer.
      * @param {DavisPutnamConsumer} consumer 
+     * 
+     * @returns {DavisPutnam} itself
      */
     removeConsumer(consumer) {
         this._consumers.remove(consumer);
+        return this;
     }
 
     /**
-     * Sets a new set of clauses to be solved and resets all previous progress.
+     * Sets a new set of clauses to be satisfied and resets all previous progress.
+     * 
      * @param {Array<Array<String>>} clauses
      */
     set clauses(clauses) {
@@ -132,120 +145,107 @@ class DavisPutnam {
     }
     /**
      * Returns an two dimensional array of literals of the current state.
+     * 
      * @returns {Array<Array<String>>}
      */
     get clauses() {
         return this._clauses.toJS();
     }
-    /**
-     * Returns the choosen literals of the current state.
-     * @returns {Array<String>}
-     */
-    get literals() {
-        return this._literals.toJS();
-    }
-    /**
-     * Returns the unit clauses of the current state.
-     * @returns {Array<Array<String>>}
-     */
-    get units() {
-        return this._units.toJS();
-    }
-    /**
-     * Returns the used literals of the current state.
-     * @returns {Array<Array<String>>}
-     */
-    get used() {
-        return this._used.toJS();
-    }
 
     /**
-     * Checks if the Davis Putnam algorithm has no more steps left to do.
      * @returns {Boolean} true if done.
      */
     done() {
-        return this.solved() || (this._clauses.size == 1 && this._clauses.has(new Set())) ;
+        return this.satisfied() || this.notSatisfiable();
     }
+
     /**
-     * Checks if the davis Putnam algorithm has found an solution.
-     * For this to be the case the set of clauses has to contain only clauses with one literal.
-     * And no clause contains the negated literal of a other clause.
      * @returns {Boolean} true if solution found.
      */
-    solved() {
-        let unitClauses = this._clauses.filter(clause => clause.size == 1);
-        let literals = unitClauses.flatten();
+    satisfied() {
+        // get set of unit clauses
+        let units = this._clauses.filter(clause => clause.size == 1);
+        // get all literals contained in those unit clauses
+        let literals = units.flatten();
 
-        return this._clauses.subtract(unitClauses).isEmpty() && unitClauses.filter(clause => literals.has(Util.negateLiteral(clause.first()))).isEmpty();
+        // check if set of clauses is only consisting of those unit clauses and if it makes sense
+        return this._clauses.subtract(units).isEmpty()
+        && units.filter(clause => literals.has(Util.negateLiteral(clause.first()))).isEmpty();
     }
+    /**
+     * @returns {Boolean} true if no solution can found.
+     */
+    notSatisfiable() {
+        return this._clauses.has(new Set()) && this._clausesStack.isEmpty();
+    }
+
     
     /**
      * Runs the davis putnam for the given amount of steps.
-     * @param {Number} step if the step is a negative number it will run till it's solved
+     * @param {Number} step if the step is a negative number it will run till it's satisfied
+     * 
      * @returns {DavisPutnam} itself
      */
     step(step = 1) {
-        step = Math.round(step);
+        step = Math.round(step); // make steps a whole number
+
+        // macro step loop
         while (!this.done() && step != 0) {
-            /**
-             * Diese Schleife berechnet alle Klauseln, die mit Unit Schnitten aus S ableitbar sind. 
-             * Zusätzlich werden alle Klauseln, die von Unit-Klauseln subsumiert werden, aus der Menge S entfernt.
-             */
-            while (!this._units.isEmpty() && !this._clauses.has(new Set()) && step != 0) {
-                /**
-                 * @type {Set<String>}
-                 */
-                let unit = this._units.first();
-                this._used = this._used.add(unit);
-    
-                let literal = unit.first();
-                this.reduce(literal);
-                if (this.micro) step--;
+            // micro step loop for subsume and unit cuts
+            while (!this._useable.isEmpty() && !this._clauses.has(new Set()) && step != 0) {
+                // select a new literal and subsume till unit cuts can be done with said literal
+                while (this._cutable.isEmpty() && !this._useable.isEmpty()) {
+                    /**
+                     * @type {Set<String>}
+                     */
+                    let unit = this._useable.first();
+                    this._used = this._used.add(unit);
+                    this.literal = unit.first();
+
+                    // subsume
+                    this._clauses = this._clauses.filter(clause => !clause.has(this.literal) || clause.size == 1);
+                }
+
+                // check if cuts can be done before trying to do a unit cut
+                if (!this._cutable.isEmpty()) {
+                    // do unit cut on one specific clause
+                    let target = this._cutable.first();
+                    let result = target.remove(Util.negateLiteral(this.literal));
+                    this._clauses = this._clauses.remove(target).add(result);
+                    
+                    this._consumers.forEach(consumer => consumer.onUnitCut({
+                        'davisPutnam': this,
+                        'literal': this.literal,
+                        'clause': target.toJS(),
+                        'result': result.toJS()
+                    }));
+                    if (this.micro) step--;
+                }
             }
-            // check if solved
-            if (this.solved()) {
-                this._consumers.forEach(consumer => consumer.onSolved({
+
+            // check if satisfied
+            if (this.satisfied()) {
+                this._consumers.forEach(consumer => consumer.onSatisfied({
                     'davisPutnam': this,
                     'solution': this.clauses
                 }));
-                return this;
+                continue;
             }
             if (step == 0) continue;
             step--;
 
-            // unsolvable
+            // check if current state is not solvable
             if (this._clauses.has(new Set())) {
-                if (this._clausesStack.isEmpty()) {
+                if (this.notSatisfiable()) {
+                    // overwrite clauses
                     this._clauses = new Set([new Set()]);
-                    this._consumers.forEach(consumer => consumer.onNotSolveable({
+                    this._consumers.forEach(consumer => consumer.onNotSatisfiable({
                         'davisPutnam': this
                     }));
-                    return this;
+                    continue;
                 }
-
-                let oldLiterals = this._literals;
-
-                // pop from stack to do the next
-                this._clauses = this._clausesStack.first();
-                this._clausesStack.pop();
-                this._literals = this._literalsStack.first();
-                this._literalsStack.pop();
-                this._used = this._usedStack.first();
-                this._usedStack.pop();
-
-                // get the choosen literal
-                let literal = this._literals.subtract(oldLiterals).first();
-                this._consumers.forEach(consumer => {
-                    consumer.onBacktrack({
-                        'davisPutnam': this
-                    });
-                    if (literal) {
-                        consumer.onChoose({
-                            'davisPutnam': this,
-                            'literal': literal
-                        });
-                    }
-                });
+                // simulate 2nd recursive call
+                this.backtrack();
                 continue;
             }
 
@@ -261,82 +261,75 @@ class DavisPutnam {
             // use the literal for the next
             this._clauses = this._clauses.add(new Set([literal]));
             this._literals = this._literals.add(literal);
+
             this._consumers.forEach(consumer => consumer.onChoose({
                 'davisPutnam': this,
-                'literal': literal
+                'literal': literal,
+                'literals': this._literals.toJS()
             }));
         }
         return this;
     }
 
     /**
-     * Die Prozedur reduce(literal) führt alle Unit-Schnitte und alle Unit-Subsumptionen,
-     * die mit der Unit-Klausel {literal} möglich sind, durch.
-     * @param {String} literal
+     * Picks the last element of the stacks bringing back it's previous state.
+     * Calls backtrack and choose events.
+     * 
      * @returns {DavisPutnam} itself
      */
-    reduce(literal) {
-        let negLiteral = Util.negateLiteral(literal);
+    backtrack() {
+        // save old literals to be able to know the newly added
+        let oldLiterals = this._literals;
 
-        /**
-         * @type {{target: Set<Set<String>>, result: Set<Set<String>>}}
-         */
-        let unitCut = {
-            'target': this._clauses.filter(clause => clause.has(negLiteral)),
-            'result': new Set()
-        };
-        unitCut.result = unitCut.target.map(clause => clause.remove(negLiteral));
-        // do subsume
-        let subsume = {
-            'target': this._clauses.filter(clause => clause.has(literal) && clause.size > 1),
-            'result': new Set()
-        };
-        let rest = this._clauses.subtract(unitCut.target).subtract(subsume.target);
+        // pop from stack to do the next
+        this._clauses = this._clausesStack.first();
+        this._clausesStack.pop();
+        this._literals = this._literalsStack.first();
+        this._literalsStack.pop();
+        this._used = this._usedStack.first();
+        this._usedStack.pop();
 
-        this._clauses = unitCut.result.union(rest);
-        this._consumers.forEach(consumer => consumer.onReduce({
-            'davisPutnam': this,
-            'literal': literal,
-            'negLiteral': negLiteral,
-            'unitCut': {
-                'target': unitCut.target.toJS(),
-                'result': unitCut.result.toJS()
-            },
-            'subsume': {
-                'target': subsume.target.toJS(),
-                'result': subsume.result.toJS()
-            },
-            'rest': rest.toJS()
-        }));
+        // get the choosen literal
+        this.literal = this._literals.subtract(oldLiterals).first();
+
+        this._consumers.forEach(consumer => {
+            consumer.onBacktrack({
+                'davisPutnam': this
+            });
+            consumer.onChoose({
+                'davisPutnam': this,
+                'literal': this.literal,
+                'literals': this._literals.toJS()
+            });
+        });
+
         return this;
     }
 
     /**
      * Wir wählen ein beliebiges Literal aus einer beliebigen Klausel,
      * so dass weder dieses Literal noch die Negation benutzt wurden.
+     * 
      * @returns {String} the selected literal
      */
     selectLiteral() {
         /**
          * @type {Set<String>}
          */
-        let literals = this._clauses.flatten().filter(literal => !this._literals.has(literal));
-        let posLiterals = literals.filter(literal => literal.substr(0, 1) != '!');
+        let literals = this._clauses.flatten().subtract(this._clauses.filter(clause => clause.size == 1).flatten());
+        let positive = literals.filter(literal => literal.substr(0, 1) != '!');
 
         // Prefer positive literals
-        if (posLiterals.size > 0) {
-            return this.randomElement(posLiterals);
-        } else {
-            return this.randomElement(literals);
-        }
+        return this.rndElement(positive.size > 0 ? positive : literals);
     }
     
     /**
      * Picks a random element of a set.
      * @param {Set<T>} set
+     * 
      * @returns {T} the random element
      */
-    randomElement(set) {
+    rndElement(set) {
         return set.slice(Math.round(this.random() * (set.size - 1))).first();
     }
 }
@@ -344,7 +337,7 @@ class DavisPutnam {
 /**
  * A consumer class for the DavisPutnam.
  * This class is abstract and has to be extended.
- * @author Koen Loogman
+ * @author Koen Loogman <koen@loogman.de>
  */
 class DavisPutnamConsumer {
     constructor() {
@@ -356,20 +349,20 @@ class DavisPutnamConsumer {
     /**
      * This function is called when the DavisPutnam algorythm chooses a literal.
      * The event contains the literal.
-     * @param {{davisPutnam: DavisPutnam, literal: String}} event 
+     * @param {{davisPutnam: DavisPutnam, literal: String, literals: Array<String>}} event 
      */
     onChoose(event) {
-        console.log(`choosen literal '` + event.literal + `'`);
+        console.log(`choosen literal '` + event.literal + `'` + event.literals.map(l => `'` + l + `'`));
     }
 
     /**
      * This function is called when the DavisPutnam algorythm uses the function reduce.
      * The event contains the used literal, the negated literal and the targets of the unit cut and subsume operations with their results.
      * Unaffected clauses are in rest.
-     * @param {{davisPutnam: DavisPutnam, literal: String, negLiteral: String, unitCut: {target: Array<String>, result: Array<String>}, subsume: {target: Array<String>, result: Array<String>}, rest: Array<String>}} event 
+     * @param {{davisPutnam: DavisPutnam, literal: String, clause: Array<String>, result: Array<String>}} event 
      */
-    onReduce(event) {
-        console.log(`reduced with '` + event.literal + `'`);
+    onUnitCut(event) {
+        console.log(`unit cut with '` + event.literal + `' on {'` + event.clause.join(`', '`) + `'}`);
     }
 
     /**
@@ -387,15 +380,15 @@ class DavisPutnamConsumer {
      * The solution is also handed over via the event.
      * @param {{davisPutnam: DavisPutnam, solution: Array<String>}} event 
      */
-    onSolved(event) {
-        console.log(`solved`);
+    onSatisfied(event) {
+        console.log(`satisfied`);
     }
 
     /**
      * This function is called if the algorythm found no solution.
      * @param {{davisPutnam: DavisPutnam}}
      */
-    onNotSolveable(event) {
+    onNotSatisfiable(event) {
         console.log(`not solveable`);
     }
 }

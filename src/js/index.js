@@ -100,23 +100,28 @@ class Frame extends DavisPutnamConsumer {
     }
 
     onChoose(event) {
+        super.onChoose(event);
         this.footer.append('Choose ' + event.literal + '<br>');
     }
 
-    onReduce(event) {
+    onUnitCut(event) {
+        super.onUnitCut(event);
         this.stepInfo.html('<div>Literal: ' + event.literal + '</div>');
     }
 
     onBacktrack(event) {
+        super.onBacktrack(event);
         this.footer.append('Backtracked<br>');
     }
 
-    onSolved(event) {
+    onSatisfied(event) {
+        super.onSatisfied(event);
         this.draw();
         this.footer.append('Solution found! [' + event.solution.join('] , [') + ']<br>');
     }
 
-    onNotSolveable(event) {
+    onNotSatisfiable(event) {
+        super.onNotSatisfiable(event);
         this.draw();
         this.footer.append('No solution found...<br>');
     }
@@ -136,5 +141,5 @@ class Frame extends DavisPutnamConsumer {
 //     ['s','!r']
 // ];
 
-const frame = new Frame(8, 'test');
+const frame = new Frame(4, 'test1');
 console.log(frame);
