@@ -3,18 +3,28 @@ const seedrandom = require('seedrandom');
 const Util = require('./util');
 
 /**
- * The DavisPutnam class is an iterative implementation of the
+ * The DavisPutnam class is an iterative implementation of the algorithm for a step by step calculation.
+ * It simulates the recursive calls of the original implementation using stacks.
  * 
- * TODO: Optimize and make it cleaner.
- * @author Koen Loogman <koen@loogman.de> 
+ * TODO: Use only one stack instead of 3
+ * TODO: Optimize and make it cleaner
+ * TODO: Also add more comments and documentation with examples
+ * 
+ * @author Koen Loogman <koen@loogman.de>
  */
 class DavisPutnam {
     /**
      * The constructor for the davis putnam algorithm.
-     * It receives a set of clauses 
+     * It receives a set of clauses and a seed.
+     * A set of clauses can be for example:
      * 
-     * @param {Array<Array<String>>} clauses
-     * @param {String} seed
+     *      [['p', 'q'], ['!p', 's'], ['!s']]
+     * 
+     * Which is equal to the propositional logical formula: (p or q) and (not p or s) and (not s).
+     * As for the seed any string is accepted.
+     * 
+     * @param {Array<Array<String>>} clauses - a set of clauses
+     * @param {String} seed - a seed for the random number generator
      * 
      * @returns {DavisPutnam} itself
      */
@@ -169,8 +179,7 @@ class DavisPutnam {
         let literals = units.flatten();
 
         // check if set of clauses is only consisting of those unit clauses and if it makes sense
-        return this._clauses.subtract(units).isEmpty()
-        && units.filter(clause => literals.has(Util.negateLiteral(clause.first()))).isEmpty();
+        return this._clauses.subtract(units).isEmpty() && units.filter(clause => literals.has(Util.negateLiteral(clause.first()))).isEmpty();
     }
     /**
      * @returns {Boolean} true if no solution can found.
@@ -203,7 +212,14 @@ class DavisPutnam {
                     this.literal = unit.first();
 
                     // subsume
-                    this._clauses = this._clauses.filter(clause => !clause.has(this.literal) || clause.size == 1);
+                    let clauses = this._clauses.filter(clause => clause.has(this.literal) && clause.size != 1);
+                    this._clauses = this._clauses.subtract(clauses);
+
+                    if (clauses.size > 0) this._consumers.forEach(consumer => consumer.onSubsume({
+                        'davisPutnam': this,
+                        'literal': this.literal,
+                        'clauses': clauses.toJS()
+                    }));
                 }
 
                 // check if cuts can be done before trying to do a unit cut
@@ -302,7 +318,6 @@ class DavisPutnam {
                 'literals': this._literals.toJS()
             });
         });
-
         return this;
     }
 
@@ -337,6 +352,7 @@ class DavisPutnam {
 /**
  * A consumer class for the DavisPutnam.
  * This class is abstract and has to be extended.
+ * 
  * @author Koen Loogman <koen@loogman.de>
  */
 class DavisPutnamConsumer {
@@ -347,8 +363,8 @@ class DavisPutnamConsumer {
     }
 
     /**
-     * This function is called when the DavisPutnam algorythm chooses a literal.
-     * The event contains the literal.
+     * This function is called when the DavisPutnam algorithm chooses a literal.
+     * The event contains the literal and an array with all chosen literals up to this point.
      * @param {{davisPutnam: DavisPutnam, literal: String, literals: Array<String>}} event 
      */
     onChoose(event) {
@@ -356,9 +372,8 @@ class DavisPutnamConsumer {
     }
 
     /**
-     * This function is called when the DavisPutnam algorythm uses the function reduce.
-     * The event contains the used literal, the negated literal and the targets of the unit cut and subsume operations with their results.
-     * Unaffected clauses are in rest.
+     * This function is called when the DavisPutnam algorithm does a unit cut on a clause.
+     * The event contains the used literal and clause as well as the result of the unit cut.
      * @param {{davisPutnam: DavisPutnam, literal: String, clause: Array<String>, result: Array<String>}} event 
      */
     onUnitCut(event) {
@@ -366,8 +381,17 @@ class DavisPutnamConsumer {
     }
 
     /**
-     * This function is called if a backtrack occures.
-     * The original implementation is recursive - this one on the other hand itterative.
+     * This function is called when the DavisPutnam algorithm subsumes with a literal.
+     * The event contains the used literal and the affected clauses that got removed from the set of clauses.
+     * @param {{davisPutnam: DavisPutnam, literal: String, clauses: Array<Array<String>>}} event 
+     */
+    onSubsume(event) {
+        console.log(`subsume with '` + event.literal + `' removing following clauses`, event.clauses)
+    }
+
+    /**
+     * This function is called if a backtrack occurs.
+     * The original implementation is recursive - this one on the other hand iterative.
      * It does mimic the recursive implementation tho. So this function is called if one "recursive call" fails and a different "route" is taken.
      * @param {{davisPutnam: DavisPutnam}}
      */
@@ -376,7 +400,7 @@ class DavisPutnamConsumer {
     }
 
     /**
-     * This function is called if the algorythm found an solution.
+     * This function is called if the algorithm was able to satisfy the problem.
      * The solution is also handed over via the event.
      * @param {{davisPutnam: DavisPutnam, solution: Array<String>}} event 
      */
@@ -385,11 +409,11 @@ class DavisPutnamConsumer {
     }
 
     /**
-     * This function is called if the algorythm found no solution.
+     * This function is called if the algorithm is not able to satisfy the problem.
      * @param {{davisPutnam: DavisPutnam}}
      */
     onNotSatisfiable(event) {
-        console.log(`not solveable`);
+        console.log(`not satisfiable`);
     }
 }
 

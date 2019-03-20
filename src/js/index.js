@@ -128,18 +128,18 @@ class Frame extends DavisPutnamConsumer {
 }
 
 // const clauses = [
-//     ['r','p','s'],
 //     ['r','s'],
-//     ['q','p','s'],
+//     ['s','!r'],
 //     ['!p','!q'],
-//     ['!p','s','!r'],
+//     ['q','p','s'],
+//     ['r','p','s'],
 //     ['p','!q','r'],
-//     ['!r','!s','q'],
-//     ['p','q','r','s'],
 //     ['r','!s','q'],
+//     ['!r','!s','q'],
+//     ['!p','s','!r'],
 //     ['!r','s','!q'],
-//     ['s','!r']
+//     ['p','q','r','s'],
 // ];
 
-const frame = new Frame(4, 'test1');
+const frame = new Frame(8, 'seed');
 console.log(frame);
