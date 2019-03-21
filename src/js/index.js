@@ -1,7 +1,6 @@
 'use strict';
 
 const $ = require('jquery');
-const { DavisPutnam, DavisPutnamConsumer } = require('./davisPutnam.js');
 const ChessBoard = require('./chessBoard');
 const QueensClauses = require('./qeensClauses');
 
@@ -12,18 +11,30 @@ if (module.hot) {
     })
 }
 
-class Frame extends DavisPutnamConsumer {
-    /**
-     * @param {DavisPutnam} davisPutnam 
-     */
+class Frame {
     constructor(n = 8, seed = null) {
-        super();
-
+        this.seed = seed;
         this.clauses = QueensClauses(n);
-        this.davisPutnam = new DavisPutnam(this.clauses, seed);
-        this.davisPutnam.addConsumer(this);
+
+        
         this.board = new ChessBoard(n);
         this.auto = false;
+        
+        this.dpw = new Worker('./davisPutnamWorker.js');
+        this.dpw.addEventListener('message', event => {
+            let cmd = event.data.cmd;
+            let options = event.data.options;
+
+            switch(cmd) {
+                case 'step':
+                    this.onStep(options);
+                    break;
+                default:
+            }
+            console.log('dpw:', event.data);
+            if (options.state) this.board.setState(options.state);
+            this.draw();
+        });
 
         // create frame
         $('body').append('<div id="header"></div><div id="body"></div><div id="footer"></div>');
@@ -36,12 +47,12 @@ class Frame extends DavisPutnamConsumer {
         this.header.append(' micro steps: <input type="checkbox" id="micro-toggle"></input>');
         this.header.append(' auto: <input type="checkbox" id="auto-toggle"></input>');
         this.header.append(' <button id="reset-button">Reset</button>');
-        this.stepButton = $('#step-button');
+        this.nextButton = $('#step-button');
         this.microToggle = $('#micro-toggle');
         this.autoToggle = $('#auto-toggle');
         this.resetButton = $('#reset-button');
 
-        this.stepButton.click(event => this.onNext(event));
+        this.nextButton.click(event => this.onNext(event));
         this.microToggle.change(event => this.onMicro(event));
         this.autoToggle.change(event => this.onAuto(event));
         this.resetButton.click(event => this.onReset(event));
@@ -50,46 +61,64 @@ class Frame extends DavisPutnamConsumer {
         
         this.body.append('<div id="step-info"></div>');
         this.boardTarget = $('#board-target');
-        this.stepInfo = $('#step-info');
+
+        // init stuff
+        this.onReset();
+        this.onSeed();
     }
 
     draw() {
         this.boardTarget.html(this.board.toString());
-        this.stepButton.prop('disabled', this.davisPutnam.done());
-        this.board.setState(this.davisPutnam.clauses);
+    }
+
+    onStep(options) {
+        // auto play next step with delay
+        if (this.auto && !options.done) {
+            setTimeout(() => {
+                this.nextButton.click();
+            }, 100);
+        } else {
+            this.nextButton.prop('disabled', options.done);
+        }
     }
     
-    /**
-     * @param {JQuery.ClickEvent<HTMLElement, HTMLElement, null, HTMLElement>} event 
-     */
-    onReset(event) {
-        this.davisPutnam.clauses = this.clauses;
+    onReset() {
+        this.dpw.postMessage({
+            'cmd': 'clauses',
+            'options': {
+                'clauses': this.clauses
+            }
+        });
+
+        this.nextButton.prop('disabled', false);
         this.board.clear();
-        this.stepInfo.html('');
-        this.footer.html('');
         this.draw();
     }
 
-    /**
-     * @param {JQuery.ClickEvent<HTMLElement, HTMLElement, null, HTMLElement>} event 
-     */
-    onNext(event) {
-        this.footer.html('');
-        this.davisPutnam.step();
-        this.draw();
+    onSeed() {
+        this.dpw.postMessage({
+            'cmd': 'seed',
+            'options': {
+                'seed': this.seed
+            }
+        });
+    }
 
-        if (!this.davisPutnam.done() && this.auto) {
-            setTimeout(() => {
-                frame.stepButton.click();
-            }, 100);
-        }
+    onNext() {
+        this.nextButton.prop('disabled', true);
+        this.dpw.postMessage({
+            'cmd': 'step',
+            'options': {
+                'step': 1
+            }
+        });
     }
 
     /**
      * @param {JQuery.ClickEvent<HTMLElement, HTMLElement, null, HTMLElement>} event 
      */
     onMicro(event) {
-        this.davisPutnam.micro = event.currentTarget.checked;
+        // this.davisPutnam.micro = event.currentTarget.checked;
     }
 
     /**
@@ -97,33 +126,6 @@ class Frame extends DavisPutnamConsumer {
      */
     onAuto(event) {
         this.auto = event.currentTarget.checked;
-    }
-
-    onChoose(event) {
-        super.onChoose(event);
-        this.footer.append('Choose ' + event.literal + '<br>');
-    }
-
-    onUnitCut(event) {
-        super.onUnitCut(event);
-        this.stepInfo.html('<div>Literal: ' + event.literal + '</div>');
-    }
-
-    onBacktrack(event) {
-        super.onBacktrack(event);
-        this.footer.append('Backtracked<br>');
-    }
-
-    onSatisfied(event) {
-        super.onSatisfied(event);
-        this.draw();
-        this.footer.append('Solution found! [' + event.solution.join('] , [') + ']<br>');
-    }
-
-    onNotSatisfiable(event) {
-        super.onNotSatisfiable(event);
-        this.draw();
-        this.footer.append('No solution found...<br>');
     }
 }
 
@@ -141,5 +143,4 @@ class Frame extends DavisPutnamConsumer {
 //     ['p','q','r','s'],
 // ];
 
-const frame = new Frame(8, 'seed');
-console.log(frame);
+const frame = new Frame(16, 'seed');

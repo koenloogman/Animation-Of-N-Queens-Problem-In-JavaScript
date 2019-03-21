@@ -161,6 +161,14 @@ class DavisPutnam {
     get clauses() {
         return this._clauses.toJS();
     }
+    /**
+     * Returns the state
+     * 
+     * @returns {Array<String>}
+     */
+    get state() {
+        return this._clauses.filter(clause => clause.size == 1).flatten().toJS();
+    }
 
     /**
      * @returns {Boolean} true if done.
@@ -216,9 +224,9 @@ class DavisPutnam {
                     this._clauses = this._clauses.subtract(clauses);
 
                     if (clauses.size > 0) this._consumers.forEach(consumer => consumer.onSubsume({
-                        'davisPutnam': this,
                         'literal': this.literal,
-                        'clauses': clauses.toJS()
+                        'clauses': clauses.toJS(),
+                        'state': this.state
                     }));
                 }
 
@@ -230,10 +238,10 @@ class DavisPutnam {
                     this._clauses = this._clauses.remove(target).add(result);
                     
                     this._consumers.forEach(consumer => consumer.onUnitCut({
-                        'davisPutnam': this,
                         'literal': this.literal,
                         'clause': target.toJS(),
-                        'result': result.toJS()
+                        'result': result.toJS(),
+                        'state': this.state
                     }));
                     if (this.micro) step--;
                 }
@@ -242,8 +250,7 @@ class DavisPutnam {
             // check if satisfied
             if (this.satisfied()) {
                 this._consumers.forEach(consumer => consumer.onSatisfied({
-                    'davisPutnam': this,
-                    'solution': this.clauses
+                    'state': this.state
                 }));
                 continue;
             }
@@ -256,7 +263,7 @@ class DavisPutnam {
                     // overwrite clauses
                     this._clauses = new Set([new Set()]);
                     this._consumers.forEach(consumer => consumer.onNotSatisfiable({
-                        'davisPutnam': this
+                        'state': this.state
                     }));
                     continue;
                 }
@@ -279,9 +286,9 @@ class DavisPutnam {
             this._literals = this._literals.add(literal);
 
             this._consumers.forEach(consumer => consumer.onChoose({
-                'davisPutnam': this,
                 'literal': literal,
-                'literals': this._literals.toJS()
+                'literals': this._literals.toJS(),
+                'state': this.state
             }));
         }
         return this;
@@ -310,12 +317,12 @@ class DavisPutnam {
 
         this._consumers.forEach(consumer => {
             consumer.onBacktrack({
-                'davisPutnam': this
+                'state': this.state
             });
             consumer.onChoose({
-                'davisPutnam': this,
                 'literal': this.literal,
-                'literals': this._literals.toJS()
+                'literals': this._literals.toJS(),
+                'state': this.state
             });
         });
         return this;
@@ -365,7 +372,7 @@ class DavisPutnamConsumer {
     /**
      * This function is called when the DavisPutnam algorithm chooses a literal.
      * The event contains the literal and an array with all chosen literals up to this point.
-     * @param {{davisPutnam: DavisPutnam, literal: String, literals: Array<String>}} event 
+     * @param {{literal: String, literals: Array<String>, state: Array<String>}} event 
      */
     onChoose(event) {
         console.log(`choosen literal '` + event.literal + `'` + event.literals.map(l => `'` + l + `'`));
@@ -374,7 +381,7 @@ class DavisPutnamConsumer {
     /**
      * This function is called when the DavisPutnam algorithm does a unit cut on a clause.
      * The event contains the used literal and clause as well as the result of the unit cut.
-     * @param {{davisPutnam: DavisPutnam, literal: String, clause: Array<String>, result: Array<String>}} event 
+     * @param {{literal: String, clause: Array<String>, result: Array<String>, state: Array<String>}} event 
      */
     onUnitCut(event) {
         console.log(`unit cut with '` + event.literal + `' on {'` + event.clause.join(`', '`) + `'}`);
@@ -383,7 +390,7 @@ class DavisPutnamConsumer {
     /**
      * This function is called when the DavisPutnam algorithm subsumes with a literal.
      * The event contains the used literal and the affected clauses that got removed from the set of clauses.
-     * @param {{davisPutnam: DavisPutnam, literal: String, clauses: Array<Array<String>>}} event 
+     * @param {{literal: String, clauses: Array<Array<String>>, state: Array<String>}} event 
      */
     onSubsume(event) {
         console.log(`subsume with '` + event.literal + `' removing following clauses`, event.clauses)
@@ -393,7 +400,7 @@ class DavisPutnamConsumer {
      * This function is called if a backtrack occurs.
      * The original implementation is recursive - this one on the other hand iterative.
      * It does mimic the recursive implementation tho. So this function is called if one "recursive call" fails and a different "route" is taken.
-     * @param {{davisPutnam: DavisPutnam}}
+     * @param {{state: Array<String>}}
      */
     onBacktrack(event) {
         console.log(`backtracked`);
@@ -402,7 +409,7 @@ class DavisPutnamConsumer {
     /**
      * This function is called if the algorithm was able to satisfy the problem.
      * The solution is also handed over via the event.
-     * @param {{davisPutnam: DavisPutnam, solution: Array<String>}} event 
+     * @param {{state: Array<String>}} event 
      */
     onSatisfied(event) {
         console.log(`satisfied`);
@@ -410,7 +417,7 @@ class DavisPutnamConsumer {
 
     /**
      * This function is called if the algorithm is not able to satisfy the problem.
-     * @param {{davisPutnam: DavisPutnam}}
+     * @param {{state: Array<String>}}
      */
     onNotSatisfiable(event) {
         console.log(`not satisfiable`);

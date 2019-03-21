@@ -1,13 +1,12 @@
 'use strict';
 const { Set } = require('immutable');
-const Util = require('./util');
 
 class ChessBoard {
     constructor(n = 8) {
         /**
          * @type {Set<String>}
          */
-        this._literals = new Set();
+        this.literals = new Set();
         /**
          * @type {Array<Array<T>>}
          */
@@ -20,31 +19,29 @@ class ChessBoard {
         return this.state.length;
     }
     set n(n) {
-        this.state = Array(n).fill(0).map(x => Array(n).fill(' '));
+        this.state = Array(n).fill(0).map(_ => Array(n).fill(' '));
     }
 
     clear() {
         this.state.forEach(row => row.fill(' '));
-        this._literals = new Set();
+        this.literals = new Set();
     }
 
     /**
-     * @param {Array<Array<String>>} clauses 
+     * @param {Array<String>} state 
      */
-    setState(clauses) {
+    setState(state) {
         /**
          * @type {Set<String>}
          */
-        let _literals = new Set(clauses.map(clause => new Set(clause))).flatten();
-        _literals = _literals.filter(literal => !_literals.has(Util.negateLiteral(literal)));
-
-        // get sets of elements to remove and add
-        let literals = _literals.subtract(this._literals);
-        let rem = this._literals.subtract(_literals).map(literal => (literal.substr(0, 1) == '!' ? literal.substr(1) : literal).split(',').map(n => Number(n) - 1));
+        let literals = new Set(state);
+        // get removed literals
+        let rem = this.literals.subtract(literals).map(literal => (literal.substr(0, 1) == '!' ? literal.substr(1) : literal).split(',').map(n => Number(n) - 1));
+        // get new literals
+        literals = literals.subtract(this.literals);
         let pos = literals.filter(literal => literal.substr(0, 1) != '!').map(literal => literal.split(',').map(n => Number(n) - 1));
         let neg = literals.filter(literal => literal.substr(0, 1) == '!').map(literal => literal.substr(1).split(',').map(n => Number(n) - 1));
-
-        this._literals = _literals;
+        this.literals = literals;
 
         rem.forEach(([x, y]) => this.setClear(x, y));
         pos.forEach(([x, y]) => this.setQueen(x, y));
