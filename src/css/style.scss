@@ -1,11 +1,171 @@
 @import "reset";
 
-$background: red;
+$background: #EEE;
+$highlight: rgb(22, 71, 131);
+$spacing: 1rem;
 
-body {
-
+html {
+    height: 100%;
 }
+
+html,
+body {
+    min-height: 100%;
+    font-family: 'Roboto', 'Courier New', Courier, monospace;
+    display: flex;
+    flex-direction: column;
+    color: #222;
+}
+
+h1 {
+    font-size: 1.5rem;
+}
+
+h2 {
+    font-size: 1.25rem;
+    margin-bottom: $spacing;
+}
+
+#head {
+    background: $highlight;
+    padding: $spacing;
+    color: #fff;
+}
+
+#main {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    flex: 1 0 400px;
+}
+
+#settings {
+    width: 300px;
+    padding: $spacing;
+}
+
+#form {
+    overflow: hidden;
+    margin-bottom: $spacing;
+}
+
+#form .group {
+    display: flex;
+    margin-bottom: $spacing;
+}
+
+#form .group>* {
+    line-height: 1.5rem;
+    flex: 1;
+}
+
+#form label {
+    white-space: nowrap;
+    padding-left: $spacing;
+}
+
+#form label.text-right {
+    padding: 0;
+    padding-right: $spacing;
+}
+
+input[type=text],
+input[type=number] {
+    background: $background;
+    border: none;
+    height: 1.5rem;
+}
+
+input[type=checkbox] {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
+#form label.toggle {
+    background: $background;
+    border-radius: 1.5rem;
+    padding: 0;
+    flex: 0 0 2.5rem;
+    cursor: pointer;
+}
+
+#form label.toggle::after {
+    content: '';
+    display: block;
+    border-radius: 1.5rem;
+    height: 1.5rem;
+    width: 1.5rem;
+    background: $highlight;
+    float: left;
+}
+
+#form input[type=checkbox]:checked~label.toggle::after {
+    float: right;
+}
+
+#controls {
+    display: flex;
+    justify-content: space-between;
+}
+
+#controls button {
+    display: block;
+    border: none;
+    background: $highlight;
+    height: 2rem;
+    padding: 0 $spacing;
+    color: #fff;
+}
+
+#scene {
+    flex: 4 0 400px;
+}
+
+#log {
+    padding: $spacing;
+    display: flex;
+    flex-direction: column;
+    flex: 2 0 200px;
+}
+
+#log-entries {
+    overflow-y: auto;
+    flex: 1;
+    background: $background;
+}
+
+#log-entries .entry {
+    padding: $spacing;
+    border-bottom: solid $highlight 1px;
+}
+
+#log-entries .entry:last-child {
+    border-bottom: none;
+}
+
+#log ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+#log ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: $highlight;
+}
+
+// #log ::-webkit-scrollbar-thumb:window-inactive {
+//     background: $highlight;
+// }
 
 .hide {
     visibility: hidden;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
 }

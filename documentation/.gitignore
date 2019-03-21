@@ -1,0 +1,32 @@
+# TexMaker
+*.aux
+*.glo
+*.idx
+*.log
+*.toc
+*.ist
+*.acn
+*.acr
+*.alg
+*.bbl
+*.blg
+*.dvi
+*.glg
+*.lol
+*.gls
+*.ilg
+*.ind
+*.lof
+*.lot
+*.maf
+*.mtc
+*.mtc1
+*.out
+*.synctex.gz
+documentation.pdf
+documentation.run.xml
+documentation.bcf
+
+# JabRef
+literatur.bib.sav
+*.bib.bak

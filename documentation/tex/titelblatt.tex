@@ -1,0 +1,241 @@
+% -------------------------------------------------------
+% In dieser Datei sollten eigentlich keine Veränderungen mehr
+% notwendig sein.
+% -------------------------------------------------------
+
+\thispagestyle{empty}
+
+% Fakultäten der DHBW-Mannheim
+% -------------------------------------------------------
+\ifthenelse{\equal{\dhbwfakultaet}{I}}%
+  {\newcommand{\dhbwfakultaetlangde}{Fakultät für Informatik}%
+   \newcommand{\dhbwfakultaetlangen}{Department of Computer Science}}{}
+
+\ifthenelse{\equal{\dhbwfakultaet}{E}}%
+  {\newcommand{\dhbwfakultaetlangde}{Fakultät für Elektrotechnik}%
+   \newcommand{\dhbwfakultaetlangen}{Department of Electrical Engineering}}{}
+
+\ifthenelse{\equal{\dhbwfakultaet}{S}}%
+  {\newcommand{\dhbwfakultaetlangde}{Fakultät für Sozialwesen}%
+   \newcommand{\dhbwfakultaetlangen}{Department of Social Work}}{}
+
+
+
+\ifthenelse{\equal{\dhbwstudiengang}{IB}}%
+  {\newcommand{\dhbwstudienganglangde}{Informatik}%
+  \newcommand{\dhbwstudienganglangen}{Computer Science}%
+  \newcommand{\dhbwtypde}{Bachelor-Thesis}%
+  \newcommand{\dhbwtypen}{Bachelor Thesis}%
+  \newcommand{\dhbwgrad}{\dhbwbsc}}{}
+  
+\ifthenelse{\equal{\dhbwstudiengang}{AI}}%
+  {\newcommand{\dhbwstudienganglangde}{Angewandte Informatik}%
+  \newcommand{\dhbwstudienganglangen}{Applied Computer Science}%
+  \newcommand{\dhbwtypde}{Bachelor-Thesis}%
+  \newcommand{\dhbwtypen}{Bachelor Thesis}%
+  \newcommand{\dhbwgrad}{\dhbwbsc}}{}
+
+\ifthenelse{\equal{\dhbwstudiengang}{SAB}}%
+  {\newcommand{\dhbwstudienganglangde}{Soziale Arbeit}%
+   \newcommand{\dhbwstudienganglangen}{Social Labour}%
+   \newcommand{\dhbwtypde}{Bachelor-Thesis}%
+   \newcommand{\dhbwtypen}{Bachelor Thesis}%
+   \newcommand{\dhbwgrad}{\dhbwba}}{}
+   
+\ifthenelse{\equal{\dhbwstudiengang}{SAM}}%
+  {\newcommand{\dhbwstudienganglangde}{Soziale Arbeit}%
+   \newcommand{\dhbwstudienganglangen}{Social Labour}%
+   \newcommand{\dhbwtypde}{Master-Thesis}%
+   \newcommand{\dhbwtypen}{Master Thesis}%
+   \newcommand{\dhbwgrad}{\dhbwmastera}}{}
+
+\ifthenelse{\equal{\dhbwstudiengang}{TIB}}%
+  {\newcommand{\dhbwstudienganglangde}{Technische Informatik}%
+   \newcommand{\dhbwstudienganglangen}{Technical Information Technology}%
+   \newcommand{\dhbwtypde}{Bachelor-Thesis}%
+   \newcommand{\dhbwtypen}{Bachelor Thesis}%
+   \newcommand{\dhbwgrad}{\dhbwbsc}}{}
+  
+
+\newcommand{\dhbwbsc}{Bachelor of Science (B.Sc.)}
+\newcommand{\dhbwba}{Bachelor of Arts (B.A.)}
+\newcommand{\dhbwmaster}{Master of Science (M.Sc.)}
+\newcommand{\dhbwmastera}{Master of Arts (M.A.)}
+\newcommand{\dhbwmasterba}{Master of Business Administration (MBA)}
+
+\newcommand{\dhbwkoerperschaftde}{DHBW Mannheim}
+\newcommand{\dhbwkoerperschaften}{Baden-Wuerttemberg Cooperative State University Mannheim}
+
+\newcommand{\dhbwautorbib}{\dhbwautornname, \dhbwautorvname \  \& \dhbwautorrnname, \dhbwautorrvname} % Autor Nachname, Vorname
+\newcommand{\dhbwautor}{\dhbwautorvname \ \dhbwautornname \  \& \dhbwautorrvname \ \dhbwautorrnname} % Autor Vorname Nachname
+
+\ifthenelse{\equal{\dhbwsprache}{de}}%
+  {\newcommand{\dhbwtyp}{\dhbwtypde}%
+   %\newcommand{\dhbwthesistype}{zur Erlangung des akademischen Grades \dhbwgrad}%
+   \newcommand{\dhbwthesistype}{Studienarbeit}%
+   \newcommand{\dhbwkoerperschaft}{\dhbwkoerperschaftde}%
+   \newcommand{\dhbwstudiengangname}{Studiengang \dhbwstudienganglangde}%
+   \newcommand{\dhbwstudienganglang}{\dhbwstudienganglangde}%
+   \newcommand{\dhbwtitel}{\dhbwtitelde}%
+   \newcommand{\dhbwtutor}{Betreuer}%
+   \newcommand{\dhbwfakultaetlang}{\dhbwfakultaetlangde}%
+   \newcommand{\dhbwlistoftables}{Tabellenverzeichnis}%
+   \newcommand{\dhbwlistoffigures}{Abbildungsverzeichnis}%
+   \newcommand{\dhbwlistings}{Quellcodeverzeichnis}%
+   \newcommand{\dhbwindex}{Index}%
+   \newcommand{\dhbwabbreviations}{Abkürzungsverzeichnis}%   
+   \selectlanguage{ngerman}}
+   %else
+  {\newcommand{\dhbwtyp}{\dhbwtypen}%
+   %\newcommand{\dhbwthesistype}{for the acquisition of the academic degree \dhbwgrad}%
+   \newcommand{\dhbwthesistype}{T\_3200}%
+   \newcommand{\dhbwkoerperschaft}{\dhbwkoerperschaften}%
+   \newcommand{\dhbwstudiengangname}{Course of Studies: \dhbwstudienganglang}%
+   \newcommand{\dhbwstudienganglang}{\dhbwstudienganglangen}%
+   \newcommand{\dhbwtitel}{\dhbwtitelen}%
+   \newcommand{\dhbwtutor}{Tutors}
+   \newcommand{\dhbwfakultaetlang}{\dhbwfakultaetlangen}%
+   \newcommand{\dhbwlistoftables}{List of Tables}%
+   \newcommand{\dhbwlistoffigures}{List of Figures}%
+   \newcommand{\dhbwlistings}{Listings}%
+   \newcommand{\dhbwindex}{Index}%
+   \newcommand{\dhbwabbreviations}{List of Abbreviations}%
+   \selectlanguage{english}}%
+
+
+% Daten in die Standard-Felder von KOMA-Script eintragen
+\titlehead{\dhbwtyp\ in\  \dhbwstudienganglang}
+\subject{}
+\title{\dhbwtitel}
+\author{\dhbwauthor}
+\date{\small{\dhbwdatum}}
+
+% Daten für das fertige PDF-Dokument
+\hypersetup{
+  pdftitle={\dhbwtitel},  % Titel des Dokuments
+  pdfauthor={\dhbwautor},              % Autor
+  pdfsubject={\dhbwtyp\ in\ \dhbwstudienganglang},                % Thema
+  pdfkeywords={\dhbwtitel}         % Schlüsselworte
+}
+
+\newlength{\bindekorrektur}
+\newlength{\seitenanfang}
+\newlength{\seitenbreite}
+  
+\setlength{\bindekorrektur}{-46mm}   % Korrektur der horizontalen Position
+\setlength{\seitenanfang}{0mm}       % Korrektur der vertikalen Position
+\setlength{\seitenbreite}{297mm}
+
+%\noindent\includegraphics[width=7cm]{dhbw-logo.pdf}\\
+\noindent\includegraphics[width=0.49\textwidth]{img/DHBW-Logo.pdf}
+\hfill
+%\noindent\includegraphics[width=0.27\textwidth]{SAP_grad_R_pref.png}
+
+% Titel der Arbeit
+\begin{textblock*}{128mm}(45mm,\seitenanfang + 62mm) % 4,5cm vom linken Rand und 6,0cm vom oberen Rand
+  \centering\Large\sffamily
+  \vspace{4mm} % Kleiner zusätzlicher Abstand oben für bessere Optik
+  \textbf{\dhbwtitel}
+\end{textblock*}%
+
+% Name
+\begin{textblock*}{128mm}(45mm,\seitenanfang + 103mm)
+  \centering\large\sffamily
+  \dhbwautor
+\end{textblock*}
+
+% Thesis
+\begin{textblock*}{\seitenbreite}(\bindekorrektur,\seitenanfang + 130mm)
+  \centering\large\sffamily
+  %\dhbwtyp\\
+  Study report \\ %TODO only for this thesis
+  \begin{small}\dhbwthesistype \end{small}\\
+  \vspace{2mm}
+  \dhbwstudiengangname
+\end{textblock*}
+
+% Fakultät
+\begin{textblock*}{\seitenbreite}(\bindekorrektur,\seitenanfang + 165mm)
+  \centering\large\sffamily
+  \dhbwfakultaetlang\\
+  \vspace{2mm}
+  \dhbwkoerperschaft
+\end{textblock*}
+
+% Datum
+\begin{textblock*}{\seitenbreite}(\bindekorrektur,\seitenanfang + 190mm)
+  \centering\large 
+  \textsf{\dhbwdatum}
+\end{textblock*}
+
+% Firma
+\begin{textblock*}{\seitenbreite}(\bindekorrektur,\seitenanfang + 215mm)
+  \centering\large 
+  %\textsf{Durchgeführt bei der Firma \dhbwfirma}
+\end{textblock*}
+
+% Betreuer
+\begin{textblock*}{\seitenbreite}(\bindekorrektur,\seitenanfang + 240mm)
+  \centering\large\sffamily
+  \dhbwtutor \\
+  \vspace{2mm}
+  \dhbwbetreuer\\
+  \vspace{2mm}
+  \dhbwzweitkorrektor
+\end{textblock*}
+
+% Bibliographische Informationen
+\null\newpage
+\thispagestyle{empty}
+  
+\newcommand{\dhbwbibde}{\begin{small}\textbf{\dhbwautorbib}: \\ \dhbwtitelde \ / \dhbwautor. \ -- \\ \dhbwtypde, \dhbwort : \dhbwkoerperschaftde, \dhbwjahr. \pageref{lastpage} Seiten.\end{small}}
+
+\newcommand{\dhbwbiben}{\begin{small}\textbf{\dhbwautorbib}: \\ \dhbwtitelen \ / \dhbwautor. \ -- \\ \dhbwtypen, \dhbwort : \dhbwkoerperschaften, \dhbwjahr. \pageref{lastpage} pages. \end{small}}
+
+\ifthenelse{\equal{\dhbwsprache}{de}}%
+  {\dhbwbibde \\ \vspace{0.5cm} \\ \dhbwbiben}
+  {\dhbwbiben \\ \vspace{0.5cm} \\ \dhbwbibde}
+
+
+% Erklärung
+\clearpage\setcounter{page}{1}
+\thispagestyle{empty}
+\textsf{\large\textbf{Erklärung}}
+
+Hiermit erkläre ich, dass ich die vorliegende Arbeit selbstständig verfasst und keine anderen als die angegebenen Quellen und Hilfsmittel benutzt habe.
+
+\ifthenelse{\boolean{dhbwpublizieren} \and \not\boolean{dhbwsperrvermerk}}%
+{
+\vspace{0.5cm}
+Ich bin damit einverstanden, dass meine Arbeit veröffentlicht wird, d.\,h. dass die Arbeit elektronisch gespeichert, in andere Formate konvertiert, auf den Servern der Hochschule Mannheim öffentlich zugänglich gemacht und über das Internet verbreitet werden darf. 
+}{}%
+
+
+\vspace{1cm}
+\dhbwort, \dhbwdatum \\
+
+\vspace{1.2cm}						                                      
+\dhbwautor
+
+\ifthenelse{\boolean{dhbwsperrvermerk}}%
+{%
+\vspace{11cm}
+\color{red}\textsf{\large\textbf{Sperrvermerk}}
+
+Diese Arbeit basiert auf internen und vertraulichen Daten des Unternehmens \dhbwfirma.
+
+Diese Arbeit darf Dritten, mit Ausnahme der betreuenden Dozenten und befugten Mitglieder des Prüfungsausschusses, ohne ausdrückliche Zustimmung des Unternehmens und des Verfassers nicht zugänglich gemacht werden.
+
+Eine Vervielfältigung und Veröffentlichung der Arbeit ohne ausdrückliche Genehmigung -- auch in Auszügen -- ist nicht erlaubt.
+\color{black}
+}{}
+
+\cleardoublepage
+
+% Abstract
+\chapter*{Abstract}
+
+\ifthenelse{\equal{\dhbwsprache}{de}}%
+  {\subsubsection*{\dhbwtitelde}\dhbwabstractde\subsubsection*{\dhbwtitelen}\dhbwabstracten}
+  {\subsubsection*{\dhbwtitelen}\dhbwabstracten\subsubsection*{\dhbwtitelde}\dhbwabstractde}
+

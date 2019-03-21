@@ -1,0 +1,150 @@
+% !TeX root = ../documentation.tex
+
+% Davis Putnam (in eigenen Worten)
+
+\chapter{Scientific Basics}
+The aim of this work is to visualize the Davis Putman algorithm that solves the so-called n queens problem. 
+\\
+Therefore a general understanding of this algorithm and the mathematical problem has to be created.
+\\
+For this reason, this chapter summarizes this fundamental knowledge in order to create a basis for further development. Among other things, the declaration of the mathematical problem plays a role here, so that it can be solved by the Davis Putman algorithm. 
+%Das Ziel dieser Arbeit besteht in der Visualisierung des Davis Putman Algorithmus, der das sogenannte N damen Problem lösen soll. Dafür muss zuerst ein allgemeines Verständnis zu diesem Algorithmus und dem mathematischen Problem geschaffen werden. In diesem Kapitel wird aus diesem Grund dieses fundamentale Wissen zusammengefasst, um eine Basis für die weiterführende Entwicklung zu schaffen. Dafür spielt unter anderem die Deklarierung des mathematischen Problems eine Rolle, damit dieses vom Davis Putman Algorithmus gelöst werden kann. 
+
+\section{Davis Putnam algorithm}
+%Der Davis Putman Algorithmus ist ein Verfahren zur Berechnung einer Lösung von aussagelogischen Klauselmengen. Bei sehr kleinen Klauselmengen kann dies leicht bestimmt werden, wie in den zwei folgenden Beispielen zu sehen ist.
+The Davis Putman algorithm is a method for calculating a solution of logical clause sets. With very small clause sets this can be easily determined, as can be seen in the following two examples.
+\\
+\hspace*{1.3cm} 
+$K_1 = \bigl\{\; \{r\},\; \{\neg s\},\; \{t\},\; \{\neg u\}, \; \{\neg v\} \;\bigr\}$ 
+\\[0.2cm]
+$K_1$ %kann auch als aussagelogische Formel geschrieben werden.
+can also be written as a statement logic formula.
+\\[0.2cm]
+\hspace*{1.3cm}
+$r \land \neg s \land t \land \neg u \land \neg v$.
+\\[0.2cm]
+%Es ist erkennbar, dass diese Formel lösbar ist, indem $r$ und $t$ \enquote{wahr} und $s$, $u$ und $v$ den Wert \enquote{falsch} haben.
+%Als Gegenbeispiel dazu ist $K_2$ zu betrachten.
+It is recognizable that this formula is solvable by $r$ and $t$ \enquote{true} and $s$, $u$ and $v$ having the value \enquote{false}.
+As a counter example $K_2$ is to be considered.
+\\
+\hspace*{1.3cm}
+$K_2 = \bigl\{\; \{r\},\; \{\},\; \{t\} \;\bigr\}$ 
+\\[0.2cm]
+$K_2$ can also be written as a statement logic formula.
+\\[0.2cm]
+\hspace*{1.3cm}
+$r \land \bot \land t$.
+\\[0.2cm]
+%Eine leere Klammer bedeutet in der Aussagelogik ein Falsum, wodurch $K_2$ unerfüllbar ist.
+%Bei sehr großen Klauselmengen ist es meist nicht mehr auf dem ersten Blick zu sehen, so dass Algorithmen wie dieser eingesetzt werden. Doch um nun einen Schritt tiefer setzen zu können, müssen zwei Definitionen zuvor eingeführt werden.
+An empty set means a falsum in the statement logic, making $K_2$ impossible to fulfill.
+With very large clause sets it is usually no longer visible at first glance, so that algorithms like this are used. But to be able to set a step lower, two definitions have to be introduced first. \cite{Zhang2000}
+\paragraph{Unit clause} %Eine Klausel $C$ ist eine Unit-Klausel, wenn diese nur aus einem Literal, also aus einer Aussagevariablen besteht.
+A clause $C$ is a unit clause if it consists of only one literal, i.e. a statement variable.
+\paragraph{trivial clause sets} %Eine triviale Klauselmenge kann nur vorkommen, wenn einer der beiden Fälle eintritt.
+A trivial set of clauses can only occur if one of the two cases occurs.
+\begin{enumerate}
+\item %$K$ enthält die leere Klausel und ist somit unerfüllbar
+$K$ contains the empty clause and is therefore unfulfillable
+\item %Die Unit-Klauseln beinhalten immer verschiedene Aussagevariablen, so dass entweder nur die Klausel $\{p\}$ oder $\{\neg p\}$ vorkommen kann. Ist dies der Fall, kann eine Lösung für die Klauselmenge bestimmt werden.
+The unit clauses always contain different statement variables, so that only the clause $\{p\}$ or $\{\neg p\}$ can occur. If this is the case, a solution for the clause set can be determined.
+\\
+\end{enumerate}
+%Damit einer dieser beiden Fälle nun eintreten kann, müssen die Klauselmengen mit der Hilfe folgender drei Möglichkeiten so vereinfacht werden, dass diese nur aus Unit-Klauseln bestehen.
+In order for one of these two cases to occur, the clause sets must be simplified with the help of the following three options so that they consist only of unit clauses.
+\begin{enumerate}
+\item Cut Rule 
+\item Subsumption
+\item Case Differentiation
+\end{enumerate}
+
+\subsection{Simplification with Cut Rule} 
+To simplify the set of clauses $K$ the cut rule can be used. A usual application of the cut rule is.
+\\
+\hspace*{1.3cm}
+$\dfrac{C_1 \cup \{ l \} \;\;\;\;\;\; C_2 \cup \{ \neg l \}}{C_1 \cup C_2}$
+\\[0.2cm]
+In this case the result clause will usually have more literals than $C_1 \cup \{ l \}$ or $C_2 \cup \{ \neg l \}$ alone. Because if the clause $C_1 \cup \{ l \}$ contains $m + 1$ literals and $C_1 \cup \{ l \}$ contains $n + 1$ literals, then the union $C_1 \cup C_2$ can have upto $m + n$ literals in total. In general $m + n$ is bigger than $m + 1$ or $n + 1$. The clause can be smaller than previously if both sets contain the same literals, but it is only granted to be smaller if $m = 0 \lor n = 0$. This is the case for unit clauses. Therefore we will only allow the use of the cut rule if one of the clauses is a unit clause. These cuts will be called unit cuts. To be able to do those unit cuts with a unit clause $\{\; l\; \}$ on all clauses of a set of clauses $K$. We define the function
+\\
+\hspace*{1.3cm}
+$unitCut: 2^{K} \times L \to 2^{K}$
+\\[0.2cm]
+so that for a set of clauses $K$ and a literal $l$ the function $unitCut(K,\; l)$ will simplify the set of clauses as much as possible by using unit cuts:
+\\
+\hspace*{1.3cm}
+$unitCut(K,\; l) = \{\; C \setminus \{\; \neg l\; \}\; |\; C \in K\; \}$
+\\[0.2cm]
+The result set of clauses will have the same amount of clauses as $K$. Only the clauses $C \in K$ where $\neg l \in C$ were affected and got that element removed. \cite{Stroetman2019}
+
+\subsection{Simplification with Subsumption}
+For further simplification of the set of clauses we will use subsumption. The idea is simple and can be shown with the following example:
+\\
+\hspace*{1.3cm}
+$K = \{\; \{\; l,\; p,\; \neg q \;\},\; \{\; l\; \}\; \} \cup M$
+\\[0.2cm]
+It is clear that the clause $\{\; l\; \}$ implifies the clause $\{\; l,\; p,\; \neg q \;\}$, because if $\{\; l\; \}$ is fulfill, then $\{\; l,\; p,\; \neg q \;\}$ will be fulfill too. That's because
+\\
+\hspace*{1.3cm}
+$\models l \to l \lor p \lor \neg q$
+\\[0.2cm]
+is given. With that in mind we can say that we can subsume a clause $C$ with a unit clause $U$ if $U \subseteq C$. That means if we have a set of clauses $K$ with $C \in K \land U \in K$ and $U$ can subsume $C$, we can remove the clause $C$ from $K$ to reduce its size. We define a function
+\\
+\hspace*{1.3cm}
+$subsume: 2^{K} \times L \to 2^{K}$
+\\[0.2cm]
+that we will give it a set of clauses $K$ and a literal $l$, so that it will simplify $K$ by subsuming $K$ with the unit clause $\{\; l\; \}$ and keep the unit clause itself:
+\\
+\hspace*{1.3cm}
+$subsume(K,\; l) = \{\; C \in K\; |\; l \notin C\} \cup \{\{\; l\; \}\}$
+\\[0.2cm]
+We have to add the unit clause to the set of clauses, because $l \in U$ is the case. Resulting in $U$ being removed from $K$ at first too. \cite{Stroetman2019}
+\subsection{Simplification with Case Differentiation}
+%Die Basis für das Prinzip der Fallunterscheidung bildet folgender Satz.
+The following sentence forms the basis for the principle of case differentiation. 
+\paragraph{Theorem} %Die Klauselmenge K ist genau dann erfüllbar, wenn die Klausel $K \cup \bigl\{\{p\}\bigr\}$ oder $K \cup \bigl\{\{\neg p\}\bigr\}$ erfüllbar ist.
+The clause set K can be fulfilled if the clause $K \cup \bigl\{\{p\}\bigr\}$ or $K \cup \bigl\{\{\neg p\}\bigr\}$ can be fulfilled.
+\\
+\\
+%TODO Keine Ahnung ob hier Beweis einfügen soll
+%Für die Vereinfachung wird zu Beginn also eine Aussagenvariable p ausgewählt, die in der Klauselmenge vorkommt. Danach werden die beiden oben genannten Klauselmengen gebildet und versucht, für eine der beiden eine Lösung zu finden. Ist dieser Versuch erfolgreich, ist das Ergebnis automatisch die Lösung von $K$. Falls keine gefunden wird, ist $K$ unlösbar.
+For simplification, a statement variable p is selected at the beginning, which occurs in the clause set. Then the two clause sets mentioned above are formed and an attempt is made to find a solution for one of them. If this attempt is successful, the result is automatically the solution of $K$. If none is found, $K$ is unsolvable.
+
+\subsection{Vorgehen des Algorithmus}
+%Durch die Wissensgrundlage, die zuvor geschaffen wurde, ist es nun möglich, das Vorgehen des Davis Putman Algorithmus zu skizzieren. Mit der Hilfe der Schnittregel und der Subsumption wird die Klauselmenge $K$ soweit es möglich ist, vereinfacht. Falls bereits nach diesem Schritt $K$ trivial ist, ist das Verfahren beendet. Andernfalls wird eine aussagelogische Variable p ausgewählt, die in K vorkommt. Dann wird rekursiv versucht, die Klauselmenge $K \cup \bigl\{\{p\}\bigr\}$ zu lösen, um eine Lösung für K zu finden. Wenn auch hier keine Lösung gefunden wurde, wird dasselbe mit dem negierten $p$ versucht. Scheitert auch dieser Versuch, ist K unlösbar.
+The knowledge base that was previously created now makes it possible to sketch the procedure of the Davis Putman algorithm. With the help of the intersection rule and the subsumption, the clause set $K$ is simplified as far as possible. If already after this step $K$ is trivial, the procedure is finished. Otherwise a statement logical variable p is selected, which occurs in K. Then a recursive attempt is made to solve the clause set $K \cup \bigl\{\{p\}\bigr\}$ in order to find a solution for K. If no solution was found here either, the same is tried with the negated $p$. If this attempt also fails, K is unsolvable.\cite{Zhang2000}, \cite{Stroetman2019}
+%TODO weitere Quellen finden 
+
+\section{N Queens Problem}
+%Das n Königinnen Problem ist das verallgemeinerte mathematische Problem bezogen auf ein Schachbrett, dass n \times n Felder besitzt. Ein spezielles Beispiel dazu wäre das 8 Damen Problem, welches auf dem standardisierten Schachbrett abgebildet wird. Allgemein handelt das Problem davon, n Damen auf einem n \times n Schachbrett so zu platzieren, dass keine in ihrem Zug behindert werden würde. Eine Königin in einem normalen Schachspiel kann sowohl diagonal, als auch vertikal und horizontal ihre Züge ziehen. Dieses Zugmuster kann in Figure \ref{fig:queens-problem} genauer angeschaut werden. Zusammengefasst heißt dies also, dass immer nur eine Dame auf ihrer vertikalen, horizontalen und diagonalen Linie sein darf, um sich nicht gegenseitig zu behindern. Dabei wird in diesem Problem davon ausgegangen, dass jede Dame jede andere angreifen kann und die Feldfarben ignoriert werden. 
+The n queen problem is the generalized mathematical problem related to a chessboard that consists of $n \times n$ squares. A special example would be the 8 queens problem, which is related to the standardized chessboard. In general, the problem is to place n queens on an $n \times n$ chessboard so that none would be obstructed in their turn. A queen in a normal game of chess can move diagonally, vertically and horizontally. This move pattern can be seen in Figure \ref{fig:queens-problem}. In summary, this means that there is only one queen allowed on her vertical, horizontal and diagonal line at a time so that they do not interfere with each other. In this problem it is assumed that any queen can attack any other queen and the field colors are ignored. This problem can be solved by several algorithms such as the Davis Putman algorithm. \cite{Bell2009}, \cite{Watkins2012}, \cite[146\psq]{Nudelman1995}, \cite{Stroetman2019}
+\begin{figure}[!ht]
+  \centering
+\setlength{\unitlength}{1.0cm}
+\begin{picture}(10,9)
+\thicklines
+\put(1,1){\line(1,0){8}}
+\put(1,1){\line(0,1){8}}
+\put(1,9){\line(1,0){8}}
+\put(9,1){\line(0,1){8}}
+\put(0.9,0.9){\line(1,0){8.2}}
+\put(0.9,9.1){\line(1,0){8.2}}
+\put(0.9,0.9){\line(0,1){8.2}}
+\put(9.1,0.9){\line(0,1){8.2}}
+\thinlines
+\multiput(1,2)(0,1){7}{\line(1,0){8}}
+\multiput(2,1)(1,0){7}{\line(0,1){8}}
+\put(4.15,6.15){{\chess Q}}
+\multiput(5.25,6.5)(1,0){4}{\vector(1,0){0.5}}
+\multiput(3.75,6.5)(-1,0){3}{\vector(-1,0){0.5}}
+\multiput(5.25,7.25)(1,1){2}{\vector(1,1){0.5}}
+\multiput(5.25,5.75)(1,-1){4}{\vector(1,-1){0.5}}
+\multiput(3.75,5.75)(-1,-1){3}{\vector(-1,-1){0.5}}
+\multiput(3.75,7.25)(-1,1){2}{\vector(-1,1){0.5}}
+\multiput(4.5,7.25)(0,1){2}{\vector(0,1){0.5}}
+\multiput(4.5,5.75)(0,-1){5}{\vector(0,-1){0.5}}
+\end{picture}
+\vspace*{-1.0cm}
+  \caption{Das 8-Damen-Problem \cite{Stroetman2019a}} 
+  \label{fig:queens-problem}
+\end{figure}
