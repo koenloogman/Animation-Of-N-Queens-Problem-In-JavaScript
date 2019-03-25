@@ -59,7 +59,8 @@ class DavisPutnamWorker extends	DavisPutnamConsumer {
                 'done': this.davisPutnam.done(),
                 'satisfied': this.davisPutnam.satisfied(),
                 'notSatisfiable': this.davisPutnam.notSatisfiable(),
-                'micro': this.davisPutnam.micro
+                'micro': this.davisPutnam.micro,
+                'state': this.davisPutnam.state
             }
         });
     }

@@ -26,7 +26,7 @@ class ChessBoard {
         // create board and groups
         this.size = size;
         this.board = two.makeRectangle(size / 2, size / 2, size, size);
-        this.board.fill = '#555';
+        this.board.fill = '#4F2649';
         this.board.noStroke();
         this.tilesGroup = two.makeGroup();
         this.pawns = two.makeGroup();
@@ -43,7 +43,7 @@ class ChessBoard {
         // values for the board
         let padding = this.size * 0.2 / n;
         let slotSize = (this.size - padding) / n;
-        let tileSize = slotSize - padding / 2;
+        let tileSize = slotSize - padding / n;
 
         // remove old tiles and pawns from the scene
         this.tilesGroup.remove(this.tiles);
@@ -67,14 +67,14 @@ class ChessBoard {
 
             // create tile
             let tile = new Two.Rectangle(x * slotSize , y * slotSize, tileSize, tileSize);
-            tile.fill = y % 2 == x % 2 ? '#ddd' : '#222';
+            tile.fill = y % 2 == x % 2 ? '#FCFCFC' : '#080816';
             this.tiles[i] = tile;
 
             // create queen
             let queen = new Two.Group();
             queen.add(new Two.Circle(0 , 0, tileSize / 2 * 0.9));
             queen.translation = new Two.Vector(x * slotSize, y * slotSize);
-            queen.fill = '#26f';
+            queen.fill = '#88D317';
             queen.noStroke();
             this.queens[i] = queen;
 
@@ -85,8 +85,8 @@ class ChessBoard {
             cross.add(new Two.Line(-point, point, point, -point));
             cross.translation = new Two.Vector(x * slotSize, y * slotSize);
             cross.linewidth = tileSize * 0.1;
-            cross.stroke = '#c20';
-            cross.opacity = 0.8;
+            cross.opacity = 0.5;
+            cross.stroke = y % 2 != x % 2 ? '#FCFCFC' : '#080816';
             this.crosses[i] = cross;
         }
 

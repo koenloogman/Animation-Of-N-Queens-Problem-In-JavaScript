@@ -23,15 +23,15 @@ const Util = {
      * @param {String} literal
      */
     negateLiteral(literal) {
-        return ("!" + literal).replace(/^!!/, '');
+        return ('!' + literal).replace(/^!!/, '');
     },
 
     setToString(set) {
-        return '{' + set.join(', ') + '}';
+        return '{ ' + set.join(', ') + ' }';
     },
 
     clauseToString(set) {
-        return this.setToString(set.map(literal => '"' + literal + '"'));
+        return this.setToString(set.map(literal => '\'' + literal + '\''));
     },
     
     clausesToString(clauses) {

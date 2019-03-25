@@ -66,12 +66,10 @@ class Frame {
                 case 'satisfied':
                 case 'notSatisfiable':
                     this.newLogEntry(cmd, options);
+                    // this.board.setState(options.state);
                     break;
                 default:
             }
-            //TODO: only update if needed
-            console.log('dpw:', event.data);
-            if (options.state) this.board.setState(options.state);
         });
 
         // init state with values
@@ -89,7 +87,7 @@ class Frame {
         let text;
         switch(cmd) {
             case 'choose':
-                text = 'Choose "' + options.literal + '"';
+                text = 'Choose \'' + options.literal + '\'';
                 break;
             case 'backtrack':
                 text = 'Backtrack';
@@ -121,6 +119,8 @@ class Frame {
     }
 
     onWorkerEnd(options) {
+        this.board.setState(options.state);
+
         // auto play next step with delay
         if (this.auto && !options.done) {
             setTimeout(() => {

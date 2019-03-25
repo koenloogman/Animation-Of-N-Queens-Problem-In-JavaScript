@@ -1,7 +1,13 @@
 @import "reset";
 
-$background: #EEE;
-$highlight: rgb(22, 71, 131);
+// color palette
+$bg1: #FCFCFC;
+$bg2: #EFEFEF;
+$fc: #080816;
+$lc: #88D317;
+$hc: #4F2649;
+
+// other
 $spacing: 1rem;
 
 html {
@@ -10,15 +16,16 @@ html {
 
 html,
 body {
+    background: $bg2;
+    color: $fc;
     min-height: 100%;
     font-family: 'Roboto', 'Courier New', Courier, monospace;
     display: flex;
     flex-direction: column;
-    color: #222;
 }
 
 h1 {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
 }
 
 h2 {
@@ -27,9 +34,9 @@ h2 {
 }
 
 #head {
-    background: $highlight;
+    background: $hc;
+    color: $bg2;
     padding: $spacing;
-    color: #fff;
     margin-bottom: $spacing;
 }
 
@@ -49,7 +56,7 @@ h2 {
 #settings #controls,
 #settings .group {
     display: flex;
-    align-content: space-between;
+    justify-content: space-between;
     margin-bottom: $spacing;
 }
 #settings .group > label {
@@ -65,15 +72,17 @@ h2 {
 }
 
 #settings input[type=text] {
-    background: #ddd;
+    background: $bg1;
+    color: $fc;
     line-height: 1.5rem;
+    padding: 0 0.5rem;
     border: none;
 }
 
-#settings .auto-toggle::before,
 #settings .btn {
+    background: $lc;
+    color: $bg1;
     display: inline-block;
-    background: $highlight;
     height: 2rem;
     line-height: 2rem;
     font-size: 1rem;
@@ -81,13 +90,8 @@ h2 {
     margin: 0;
     padding: 0 1rem;
     border: none;
-    color: #fff;
-    margin-right: $spacing;
-}
-
-#settings input[type=checkbox]:disabled~.auto-toggle::before,
-#settings .btn:disabled {
-    background: #555;
+    cursor: pointer;
+    flex: 0 auto;
 }
 
 #settings .auto-toggle::before {
@@ -106,23 +110,32 @@ h2 {
 }
 
 #settings .micro-toggle {
+    background: $bg1;
     display: block;
-    background: #ddd;
     height: 1.5rem;
     width: 2.5rem;
     border-radius: 1.5rem;
 }
 #settings .micro-toggle::before {
+    background: $lc;
     display: block;
     content: '';
     float: right;
     height: 1.5rem;
     width: 1.5rem;
-    background: $highlight;
     border-radius: 1.5rem;
+    cursor: pointer;
 }
 #settings input[type=checkbox]:checked~.micro-toggle::before {
     float: left;
+}
+
+#settings input[type=text]:disabled,
+#settings input[type=checkbox]:disabled~.micro-toggle,
+#settings input[type=checkbox]:disabled~.auto-toggle,
+#settings .btn:disabled {
+    opacity: 0.6;
+    cursor: default;
 }
 
 #scene {
@@ -140,47 +153,44 @@ h2 {
 }
 
 #log-entries {
+    background: $bg1;
     overflow-y: auto;
     flex: 1;
-    background: $background;
 }
 
 #log-entries .entry {
     padding: 0.5rem 1rem;
-    border-bottom: 1px solid $highlight;
+    border-bottom: 1px solid $fc;
 }
 
 #log-entries .choose {
-    background: rgb(84, 121, 79);
-    color: #fff;
+    background: $fc;
+    color: $bg1;
 }
 #log-entries .satisfied {
-    background: rgb(26, 153, 9);
-    color: #fff;
+    background: $lc;
+    color: $bg1;
 }
 
 #log-entries .backtrack {
-    background: rgb(121, 79, 79);
-    color: #fff;
+    background: $hc;
+    color: $bg1;
 }
+
 #log-entries .notSatisfiable {
-    background: rgb(153, 9, 9);
-    color: #fff;
+    background: rgb(179, 42, 42);
+    color: $bg1;
 }
 
 #log ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
+    width: 8px;
+    height: 8px;
 }
 
 #log ::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background: $highlight;
+    background: $hc;
+    border-radius: 8px;
 }
-
-// #log ::-webkit-scrollbar-thumb:window-inactive {
-//     background: $highlight;
-// }
 
 .hide {
     visibility: hidden;
@@ -192,4 +202,8 @@ h2 {
 
 .text-right {
     text-align: right;
+}
+
+.tiny {
+    font-size: 0.75rem;
 }
