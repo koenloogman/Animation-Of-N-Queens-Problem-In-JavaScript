@@ -38,6 +38,33 @@ class DavisPutnamWorker extends	DavisPutnamConsumer {
     }
 
     /**
+     * Tells the main script that the worker started calculating.
+     */
+    onStart() {
+        self.postMessage({
+            'cmd': 'start',
+            'options': {
+                'calculating': true
+            }
+        });
+    }
+
+    /**
+     * Tells the main script that the worker is done.
+     */
+    onEnd() {
+        self.postMessage({
+            'cmd': 'end',
+            'options': {
+                'done': this.davisPutnam.done(),
+                'satisfied': this.davisPutnam.satisfied(),
+                'notSatisfiable': this.davisPutnam.notSatisfiable(),
+                'micro': this.davisPutnam.micro
+            }
+        });
+    }
+
+    /**
      * Sets the seed of the davis putnam object.
      * 
      * @param {{seed: string}} options 
@@ -53,6 +80,7 @@ class DavisPutnamWorker extends	DavisPutnamConsumer {
      */
     onClauses(options) {
         this.davisPutnam.clauses = options.clauses;
+        this.onEnd();
     }
 
     /**
@@ -70,15 +98,9 @@ class DavisPutnamWorker extends	DavisPutnamConsumer {
      * @param {{step: Number}} options 
      */
     onStep(options) {
+        this.onStart();
         this.davisPutnam.step(options.step || 1);
-        self.postMessage({
-            'cmd': 'step',
-            'options': {
-                'done': this.davisPutnam.done(),
-                'satisfied': this.davisPutnam.satisfied(),
-                'notSatisfiable': this.davisPutnam.notSatisfiable()
-            }
-        });
+        this.onEnd();
     }
 
     // Following functions overwrite those of the extended DavisPutnamConsumer

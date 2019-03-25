@@ -30,6 +30,7 @@ h2 {
     background: $highlight;
     padding: $spacing;
     color: #fff;
+    margin-bottom: $spacing;
 }
 
 #main {
@@ -37,96 +38,105 @@ h2 {
     flex-wrap: nowrap;
     flex-direction: row;
     flex: 1 0 400px;
+    margin-bottom: 1rem;
 }
 
 #settings {
     width: 300px;
-    padding: $spacing;
+    padding: 0 1rem;
 }
 
-#form {
-    overflow: hidden;
-    margin-bottom: $spacing;
-}
-
-#form .group {
+#settings #controls,
+#settings .group {
     display: flex;
+    align-content: space-between;
     margin-bottom: $spacing;
 }
-
-#form .group>* {
+#settings .group > label {
+    flex: 1 auto;
     line-height: 1.5rem;
-    flex: 1;
+    padding-right: 1rem;
 }
 
-#form label {
-    white-space: nowrap;
-    padding-left: $spacing;
-}
-
-#form label.text-right {
-    padding: 0;
-    padding-right: $spacing;
-}
-
-input[type=text],
-input[type=number] {
-    background: $background;
-    border: none;
-    height: 1.5rem;
-}
-
-input[type=checkbox] {
+#settings input[type=checkbox] {
     position: absolute;
     top: -9999px;
     left: -9999px;
 }
 
-#form label.toggle {
-    background: $background;
-    border-radius: 1.5rem;
-    padding: 0;
-    flex: 0 0 2.5rem;
-    cursor: pointer;
+#settings input[type=text] {
+    background: #ddd;
+    line-height: 1.5rem;
+    border: none;
 }
 
-#form label.toggle::after {
-    content: '';
+#settings .auto-toggle::before,
+#settings .btn {
+    display: inline-block;
+    background: $highlight;
+    height: 2rem;
+    line-height: 2rem;
+    font-size: 1rem;
+    font-weight: normal;
+    margin: 0;
+    padding: 0 1rem;
+    border: none;
+    color: #fff;
+    margin-right: $spacing;
+}
+
+#settings input[type=checkbox]:disabled~.auto-toggle::before,
+#settings .btn:disabled {
+    background: #555;
+}
+
+#settings .auto-toggle::before {
+    content: 'Play';
+}
+#settings input[type=checkbox]:checked~.auto-toggle::before {
+    content: 'Stop';
+}
+
+#settings .micro-macro::after {
     display: block;
+    content: 'Macro';
+    flex: 1 auto;
+    line-height: 1.5rem;
+    padding-left: 1rem;
+}
+
+#settings .micro-toggle {
+    display: block;
+    background: #ddd;
+    height: 1.5rem;
+    width: 2.5rem;
     border-radius: 1.5rem;
+}
+#settings .micro-toggle::before {
+    display: block;
+    content: '';
+    float: right;
     height: 1.5rem;
     width: 1.5rem;
     background: $highlight;
+    border-radius: 1.5rem;
+}
+#settings input[type=checkbox]:checked~.micro-toggle::before {
     float: left;
 }
 
-#form input[type=checkbox]:checked~label.toggle::after {
-    float: right;
-}
-
-#controls {
-    display: flex;
-    justify-content: space-between;
-}
-
-#controls button {
-    display: block;
-    border: none;
-    background: $highlight;
-    height: 2rem;
-    padding: 0 $spacing;
-    color: #fff;
-}
-
 #scene {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex: 4 0 400px;
 }
 
 #log {
-    padding: $spacing;
     display: flex;
     flex-direction: column;
     flex: 2 0 200px;
+    padding: 0 1rem;
 }
 
 #log-entries {
@@ -136,12 +146,26 @@ input[type=checkbox] {
 }
 
 #log-entries .entry {
-    padding: $spacing;
-    border-bottom: solid $highlight 1px;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid $highlight;
 }
 
-#log-entries .entry:last-child {
-    border-bottom: none;
+#log-entries .choose {
+    background: rgb(84, 121, 79);
+    color: #fff;
+}
+#log-entries .satisfied {
+    background: rgb(26, 153, 9);
+    color: #fff;
+}
+
+#log-entries .backtrack {
+    background: rgb(121, 79, 79);
+    color: #fff;
+}
+#log-entries .notSatisfiable {
+    background: rgb(153, 9, 9);
+    color: #fff;
 }
 
 #log ::-webkit-scrollbar {

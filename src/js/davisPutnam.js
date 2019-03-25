@@ -174,7 +174,7 @@ class DavisPutnam {
      * @returns {Boolean} true if done.
      */
     done() {
-        return this.satisfied() || this.notSatisfiable();
+        return this.satisfied() || (this.notSatisfiable() && this._clauses.size == 1);
     }
 
     /**

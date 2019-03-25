@@ -17,43 +17,33 @@
             <h2>Settings</h2>
             <div id="form">
                 <div class="group">
-                    <label for="seed" class="text-right">Seed</label>
-                    <input id="seed" type="text"></input>
+                    <label for="seed-field" class="text-right">Seed</label>
+                    <input id="seed-field" type="text"></input>
                 </div>
                 <div class="group">
-                    <label for="num-n" class="text-right">Number n</label>
-                    <input id="num-n" type="number"></input>
+                    <label for="n-field" class="text-right">Number n</label>
+                    <input id="n-field" type="text"></input>
                 </div>
-                <div class="group">
+                <div class="group micro-macro">
                     <label class="text-right">Micro</label>
-                    <input id="macro" type="checkbox"></input>
-                    <label for="macro" class="toggle"></label>
-                    <label>Macro</label>
+                    <span>
+                        <input id="micro-toggle" type="checkbox"></input>
+                        <label for="micro-toggle" class="micro-toggle"></label>
+                    </span>
                 </div>
             </div>
             <h2>Controls</h2>
             <div id="controls">
-                <button>Play</button>
-                <button>Next Step</button>
-                <button>Reset</button>
+                <input id="auto-toggle" type="checkbox"></input>
+                <label for="auto-toggle" class="auto-toggle"></label>
+                <button id="next-button" class="btn">Next Step</button>
+                <button id="reset-button" class="btn">Reset</button>
             </div>
         </div>
         <div id="scene"></div>
         <div id="log">
             <h2>Calculation</h2>
             <div id="log-entries">
-                <div class="entry">
-                    Some log entry
-                </div>
-                <div class="entry">
-                    Some log entry
-                </div>
-                <div class="entry">
-                    Some log entry
-                </div>
-                <div class="entry">
-                    Some log entry
-                </div>
             </div>
         </div>
     </div>

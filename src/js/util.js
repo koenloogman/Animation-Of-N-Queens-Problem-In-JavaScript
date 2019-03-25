@@ -30,12 +30,12 @@ const Util = {
         return '{' + set.join(', ') + '}';
     },
 
-    literalsToString(set) {
-        return setToString(set.map(literal => '"' + literal + '"'));
+    clauseToString(set) {
+        return this.setToString(set.map(literal => '"' + literal + '"'));
     },
     
     clausesToString(clauses) {
-        return setToString(clauses.map(clause => literalsToString(clause)));
+        return this.setToString(clauses.map(clause => literalsToString(clause)));
     }
 }
 
