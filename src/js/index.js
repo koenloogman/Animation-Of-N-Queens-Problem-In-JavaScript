@@ -13,7 +13,7 @@ if (module.hot) {
 }
 
 class Frame {
-    constructor() {
+    constructor(n = 8, seed = 69) {
         // chessboard
         this.scene = document.getElementById('scene');
         let size = Math.min(this.scene.clientHeight, this.scene.clientWidth) * 0.9;
@@ -73,9 +73,9 @@ class Frame {
         this.n = null;
         this.auto = false;
         this.clauses = null;
-        this.seedField.value = 42;
+        this.seedField.value = n;
         this.changeSeed();
-        this.nField.value = 8;
+        this.nField.value = seed;
         this.changeN();
     }
 
