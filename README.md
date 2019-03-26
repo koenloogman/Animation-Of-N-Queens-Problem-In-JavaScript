@@ -10,7 +10,7 @@ npm install
 To start the parcel project use:
 
 ```cmd
-npm start
+npm run dev
 ```
 
 And to build the project use:
