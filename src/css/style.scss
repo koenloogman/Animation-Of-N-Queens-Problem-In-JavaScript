@@ -45,13 +45,13 @@ a {
     margin-bottom: $spacing;
 }
 
-#main {
+/*#main {
     display: flex;
     flex-wrap: nowrap;
     flex-direction: row;
     flex: 1 0 400px;
     margin-bottom: 1rem;
-}
+}*/
 
 #settings {
     width: 300px;
@@ -224,4 +224,35 @@ a {
 
 .tiny {
     font-size: 0.75rem;
+}
+
+//CSS Grid for positioning
+.grid {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 30% auto 30%;
+  grid-template-rows: 6rem auto;
+  grid-template-areas:
+    'titel titel titel'
+    'settings scene calculation';
+  grid-column-gap: 40px;
+  grid-row-gap: 10px;
+}
+
+.grid__titel {
+  grid-area: titel;
+}
+
+.grid__settings {
+  grid-area: settings;
+}
+
+.grid__scene {
+  grid-area: scene;
+}
+
+.grid__calculation {
+  grid-area: calculation;
+  min-width: 350px;
+  max-height: 800px;
 }

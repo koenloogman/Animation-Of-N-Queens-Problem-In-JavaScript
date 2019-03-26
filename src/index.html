@@ -11,13 +11,12 @@
     <title>Animation of the N-Queens Problem</title>
 </head>
 
-<body>
-    <div id="head">
+<body class="grid">
+    <div id="head" class="grid__titel">
         <h1>Animation of the N-Queens Problem</h1>
         <span class="tiny">By <a href="https://github.com/koenloogman">Koen Loogman</a> &amp; <a href="https://github.com/jessicaroth">Jessica Roth</a></span>
     </div>
-    <div id="main">
-        <div id="settings">
+        <div id="settings" class="grid__settings">
             <h2>Settings</h2>
             <div id="form">
                 <div class="group">
@@ -44,13 +43,12 @@
                 <button id="reset-button" class="btn">Reset</button>
             </div>
         </div>
-        <div id="scene"></div>
-        <div id="log">
+        <div id="scene" class="grid__scene"></div>
+        <div id="log" class="grid__calculation">
             <h2>Calculation</h2>
             <div id="log-entries">
             </div>
         </div>
-    </div>
 </body>
 <script type="text/javascript" src="js/index.js"></script>
 
