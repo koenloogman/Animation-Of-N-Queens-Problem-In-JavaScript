@@ -2,16 +2,19 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Test Project</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.scss">
-    <link rel="icon" type="image/gif" href="css/favicon.gif">
+    <meta name="author" content="Koen Loogman"/>
+    <meta name="description" content="Animation of the Davis Putnam Algorithm satisfying the N-Queens Problem in JavaScript."/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/style.scss"/>
+    <link rel="shortcut icon" href="css/favicon.ico"/>
+    <title>Animation of the N-Queens Problem</title>
 </head>
 
 <body>
     <div id="head">
         <h1>Animation of the N-Queens Problem</h1>
-        <span class="tiny">By Koen Loogman &amp; Jessica Roth</span>
+        <span class="tiny">By <a href="https://github.com/koenloogman">Koen Loogman</a> &amp; <a href="https://github.com/jessicaroth">Jessica Roth</a></span>
     </div>
     <div id="main">
         <div id="settings">
@@ -19,11 +22,11 @@
             <div id="form">
                 <div class="group">
                     <label for="seed-field" class="text-right">Seed</label>
-                    <input id="seed-field" type="text"></input>
+                    <input id="seed-field" type="text" title="This seed is used for the random number generator."></input>
                 </div>
                 <div class="group">
                     <label for="n-field" class="text-right">Number n</label>
-                    <input id="n-field" type="text"></input>
+                    <input id="n-field" type="text" title="This number defines the size of the chessboard and the amount of queens."></input>
                 </div>
                 <div class="group micro-macro">
                     <label class="text-right">Micro</label>

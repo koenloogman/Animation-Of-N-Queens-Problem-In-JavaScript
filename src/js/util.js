@@ -27,11 +27,11 @@ const Util = {
     },
 
     setToString(set) {
-        return '{ ' + set.join(', ') + ' }';
+        return '<span class="set">{ ' + set.join(', ') + ' }</span>';
     },
 
     clauseToString(set) {
-        return this.setToString(set.map(literal => '\'' + literal + '\''));
+        return this.setToString(set.map(literal => '<span class="literal">\'' + literal + '\'</span>'));
     },
     
     clausesToString(clauses) {

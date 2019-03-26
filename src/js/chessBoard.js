@@ -87,9 +87,8 @@ class ChessBoard {
             cross.add(new Two.Line(-corner, corner, corner, -corner));
             cross.translation = new Two.Vector(x * slotSize, y * slotSize);
             cross.linewidth = tileSize * 0.1;
-            cross.opacity = 0.75;
-            //cross.stroke = y % 2 != x % 2 ? '#FCFCFC' : '#080816';
-            cross.stroke = '#F00';
+            cross.opacity = 0.8;
+            cross.stroke = '#D31717';
             this.crosses[i] = cross;
         }
 
