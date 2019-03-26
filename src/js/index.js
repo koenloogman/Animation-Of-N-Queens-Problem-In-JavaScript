@@ -49,7 +49,7 @@ class Frame {
         this.dpw.addEventListener('message', event => {
             let cmd = event.data.cmd;
             let options = event.data.options;
-
+            
             switch(cmd) {
                 case 'start':
                     this.onWorkerStart(options);

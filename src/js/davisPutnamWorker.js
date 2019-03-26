@@ -32,7 +32,6 @@ class DavisPutnamWorker extends	DavisPutnamConsumer {
                     this.onStep(options);
                     break;
                 default:
-                    // console.log('@worker:', event.data);
             }
         });
     }
