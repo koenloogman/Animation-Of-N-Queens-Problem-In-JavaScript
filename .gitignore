@@ -16,6 +16,9 @@ pids
 *.pid
 *.seed
 
+# Ignore map files
+*.map
+
 # Following ignore List for documentation
 */documentation.pdf
 
