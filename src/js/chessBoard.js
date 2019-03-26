@@ -19,17 +19,18 @@ class ChessBoard {
          * @type {Array<Array<T>>}
          */
         this.state = [[]];
+        this.tiles = [];
         this.queens = [];
         this.crosses = [];
-        this.tiles = [];
 
         // create board and groups
         this.size = size;
         this.board = two.makeRectangle(size / 2, size / 2, size, size);
         this.board.fill = '#4F2649';
         this.board.noStroke();
-        this.tilesGroup = two.makeGroup();
-        this.pawns = two.makeGroup();
+        this.tileLayer = two.makeGroup();
+        this.queenLayer = two.makeGroup();
+        this.crossLayer = two.makeGroup();
 
         this.n = n;
     }
@@ -45,10 +46,10 @@ class ChessBoard {
         let slotSize = (this.size - padding) / n;
         let tileSize = slotSize - padding / n;
 
-        // remove old tiles and pawns from the scene
-        this.tilesGroup.remove(this.tiles);
-        this.pawns.remove(this.queens);
-        this.pawns.remove(this.crosses)
+        // remove old tiles and queenLayer from the scene
+        this.tileLayer.remove(this.tiles);
+        this.queenLayer.remove(this.queens);
+        this.crossLayer.remove(this.crosses)
 
         // initialize reference arrays
         this.state = Array(n).fill(0).map(_ => Array(n).fill(' '));
@@ -56,11 +57,12 @@ class ChessBoard {
         this.queens = Array(n * n).fill(null);
         this.crosses = Array(n * n).fill(null);
 
-        // set start vector
-        this.tilesGroup.translation = new Two.Vector((slotSize + padding) / 2, (slotSize + padding) / 2);
-        this.pawns.translation = this.tilesGroup.translation;
+        // set start vector to center of the first tile
+        this.tileLayer.translation = new Two.Vector((slotSize + padding) / 2, (slotSize + padding) / 2);
+        this.queenLayer.translation = this.tileLayer.translation;
+        this.crossLayer.translation = this.tileLayer.translation;
 
-        // init all tiles and pawns
+        // init all tiles and queenLayer
         for (let i = 0; i < n * n; i++) {
             let x = i % n;
             let y = Math.floor(i / n);
@@ -79,10 +81,10 @@ class ChessBoard {
             this.queens[i] = queen;
 
             // create cross
-            let point = tileSize * 0.75 / 2;
+            let corner = tileSize * 0.75 / 2;
             let cross = new Two.Group();
-            cross.add(new Two.Line(-point, -point, point, point));
-            cross.add(new Two.Line(-point, point, point, -point));
+            cross.add(new Two.Line(-corner, -corner, corner, corner));
+            cross.add(new Two.Line(-corner, corner, corner, -corner));
             cross.translation = new Two.Vector(x * slotSize, y * slotSize);
             cross.linewidth = tileSize * 0.1;
             cross.opacity = 0.75;
@@ -91,8 +93,8 @@ class ChessBoard {
             this.crosses[i] = cross;
         }
 
-        this.tilesGroup.add(this.tiles);
-        this.tilesGroup.noStroke();
+        this.tileLayer.add(this.tiles);
+        this.tileLayer.noStroke();
     }
 
     clear() {
@@ -123,18 +125,18 @@ class ChessBoard {
 
     setClear(x, y) {
         this.state[y][x] = ' ';
-        this.pawns.remove(this.queens[x + y * this.n]);
-        this.pawns.remove(this.crosses[x + y * this.n]);
+        this.queenLayer.remove(this.queens[x + y * this.n]);
+        this.crossLayer.remove(this.crosses[x + y * this.n]);
     }
 
     setQueen(x, y) {
         this.state[y][x] = 'Q';
-        this.pawns.add(this.queens[x + y * this.n]);
+        this.queenLayer.add(this.queens[x + y * this.n]);
     }
 
     setCross(x, y) {
         this.state[y][x] = '.';
-        this.pawns.add(this.crosses[x + y * this.n]);
+        this.crossLayer.add(this.crosses[x + y * this.n]);
     }
 
     /**
