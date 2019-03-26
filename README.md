@@ -1,5 +1,11 @@
 # Animation Of N Queens Problem In JavaScript
 
+## GitHub Pages
+
+The Project result can be viewed at [https://koenloogman.github.io/Animation-Of-N-Queens-Problem-In-JavaScript/](GitHub Pages).
+
+## Run locally
+
 For this project you need to have Node.js, NPM and Parcel installed.
 Once you have those installed use the following command to get all the needed modules.
 
