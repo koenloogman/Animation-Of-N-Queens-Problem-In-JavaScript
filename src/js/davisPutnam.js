@@ -6,9 +6,7 @@ const Util = require('./util');
  * The DavisPutnam class is an iterative implementation of the algorithm for a step by step calculation.
  * It simulates the recursive calls of the original implementation using stacks.
  * 
- * TODO: Use only one stack instead of 3
- * TODO: Optimize and make it cleaner
- * TODO: Also add more comments and documentation with examples
+ * TODO: Add more comments and documentation with examples
  * 
  * @author Koen Loogman <koen@loogman.de>
  */
@@ -37,7 +35,7 @@ class DavisPutnam {
         /**
          * @type {Set<Set<String>>}
          */
-        this._clauses = new Set([new Set()]);
+        this._clauses = null;
         /**
          * @type {Set<String>}
          */
@@ -140,6 +138,7 @@ class DavisPutnam {
         this._clauses = new Set(clauses.map(clause => new Set(clause)));
         this.literals = new Set();
         this.used = new Set();
+        this.literal = null;
 
         // clear stack
         this.stack.clear();
