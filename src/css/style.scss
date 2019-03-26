@@ -118,8 +118,8 @@ h2 {
 }
 #settings .micro-toggle::before {
     background: $lc;
-    display: block;
     content: '';
+    display: block;
     float: right;
     height: 1.5rem;
     width: 1.5rem;
@@ -161,6 +161,7 @@ h2 {
 #log-entries .entry {
     padding: 0.5rem 1rem;
     border-bottom: 1px solid $fc;
+    cursor: pointer;
 }
 
 #log-entries .choose {

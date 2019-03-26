@@ -14,10 +14,6 @@ if (module.hot) {
 
 class Frame {
     constructor() {
-        // default values
-        this.auto = false;
-        this.clauses = [];
-        
         // chessboard
         this.scene = document.getElementById('scene');
         let size = Math.min(this.scene.clientHeight, this.scene.clientWidth) * 0.9;
@@ -46,6 +42,7 @@ class Frame {
 
         // log
         this.log = document.getElementById('log-entries');
+        this.log.addEventListener("click", event => this.onEntry(event));
 
         // davis putnam worker
         this.dpw = new Worker('./davisPutnamWorker.js');
@@ -66,23 +63,43 @@ class Frame {
                 case 'satisfied':
                 case 'notSatisfiable':
                     this.newLogEntry(cmd, options);
-                    // this.board.setState(options.state);
+                    this.board.setState(options.state);
                     break;
                 default:
             }
         });
 
         // init state with values
-        this.randomSeed(8);
+        this.n = null;
+        this.auto = false;
+        this.clauses = null;
+        this.seedField.value = 42;
+        this.changeSeed();
         this.nField.value = 8;
         this.changeN();
+    }
+
+    /**
+     * 
+     * @param {Event} event 
+     */
+    onEntry(event) {
+        /**
+         * @type {HTMLElement}
+         */
+        let target = event.target;
+        // only trigger on entries
+        if (target.classList.contains('entry')) {
+            let state = JSON.parse(target.dataset.state);
+            this.board.setState(state);
+        }
     }
 
     newLogEntry(cmd, options) {
         const entry = document.createElement('div');
         entry.classList.add('entry');
         entry.classList.add(cmd);
-        entry.dataset.state = options.state;
+        entry.dataset.state = JSON.stringify(options.state);
 
         let text;
         switch(cmd) {
@@ -147,8 +164,14 @@ class Frame {
         }
         console.log('set n to ' + n);
         
-        this.board.n = n;
-        this.clauses = QueensClauses(n);
+        // reset will trigger this function too so we check if we need to recalculate or use the old values
+        if (this.n != n) {
+            this.n = n;
+            this.board.n = n;
+            this.clauses = QueensClauses(n);
+        } else {
+            //this.board.clear();
+        }
         this.log.innerHTML = "";
         this.dpw.postMessage({
             'cmd': 'clauses',
@@ -199,7 +222,7 @@ class Frame {
     }
 
     /**
-     * @param {JQuery.ClickEvent<HTMLElement, HTMLElement, null, HTMLElement>} event 
+     * @param {Event} event 
      */
     changeMicro(event) {
         console.log('set micro to ', event.currentTarget.checked);
@@ -212,7 +235,7 @@ class Frame {
     }
 
     /**
-     * @param {JQuery.ClickEvent<HTMLElement, HTMLElement, null, HTMLElement>} event 
+     * @param {Event} event 
      */
     changeAuto(event) {
         this.auto = event.currentTarget.checked;

@@ -31,29 +31,21 @@ class DavisPutnam {
     constructor(clauses = new Set([new Set()]), seed = null) {
         // Internal
         /**
-         * @type {Stack<Set<Set<String>>>}
+         * @type {Stack<{clauses: Set<Set<String>>, literals: Stack<Set<String>>, used: Stack<Set<Set<String>>>}>}
          */
-        this._clausesStack = new Stack().asMutable();
+        this.stack = new Stack().asMutable();
         /**
          * @type {Set<Set<String>>}
          */
         this._clauses = new Set([new Set()]);
         /**
-         * @type {Stack<Set<String>>}
-         */
-        this._literalsStack = new Stack().asMutable();
-        /**
          * @type {Set<String>}
          */
-        this._literals = new Set();
-        /**
-         * @type {Stack<Set<Set<String>>>}
-         */
-        this._usedStack = new Stack().asMutable();
+        this.literals = new Set();
         /**
          * @type {Set<Set<String>>}
          */
-        this._used = new Set();
+        this.used = new Set();
         /**
          * @type {String}
          */
@@ -62,7 +54,7 @@ class DavisPutnam {
         /**
          * @type {Set<DavisPutnamConsumer>}
          */
-        this._consumers = new Set().asMutable();
+        this.consumers = new Set().asMutable();
 
         // External
         /**
@@ -72,6 +64,7 @@ class DavisPutnam {
         /**
          * @type {String}
          */
+        this._seed = null;
         this.seed =  seed;
         /**
          * If its value is true the Algorithm will do micro steps
@@ -87,8 +80,8 @@ class DavisPutnam {
      * 
      * @returns {Set<Set<String>>}
      */
-    get _useable() {
-        return this._clauses.filter(clause => clause.size == 1 && !this._used.has(clause));
+    get useable() {
+        return this._clauses.filter(clause => clause.size == 1 && !this.used.has(clause));
     }
     /**
      * Returns a set of all clauses that can be unit cut by the current literal.
@@ -96,7 +89,7 @@ class DavisPutnam {
      * 
      * @returns {Set<Set<String>>}
      */
-    get _cutable() {
+    get cutable() {
         if (!this.literal) return new Set();
         return this._clauses.filter(clause => clause.has(Util.negateLiteral(this.literal)));
     }
@@ -106,6 +99,7 @@ class DavisPutnam {
     set seed(seed) {
         this._seed = seed;
         this.random = seedrandom(this.seed);
+        seedrandom(seed, { global: true });
     }
     /**
      * @returns {String}
@@ -121,7 +115,7 @@ class DavisPutnam {
      * @returns {DavisPutnam} itself
      */
     addConsumer(consumer) {
-        this._consumers.add(consumer);
+        this.consumers.add(consumer);
         return this;
     }
     /**
@@ -131,7 +125,7 @@ class DavisPutnam {
      * @returns {DavisPutnam} itself
      */
     removeConsumer(consumer) {
-        this._consumers.remove(consumer);
+        this.consumers.remove(consumer);
         return this;
     }
 
@@ -145,13 +139,11 @@ class DavisPutnam {
         this.seed = this.seed;
 
         this._clauses = new Set(clauses.map(clause => new Set(clause)));
-        this._literals = new Set();
-        this._used = new Set();
+        this.literals = new Set();
+        this.used = new Set();
 
-        // clear stacks
-        this._clausesStack.clear();
-        this._literalsStack.clear();
-        this._usedStack.clear();
+        // clear stack
+        this.stack.clear();
     }
     /**
      * Returns an two dimensional array of literals of the current state.
@@ -193,7 +185,7 @@ class DavisPutnam {
      * @returns {Boolean} true if no solution can found.
      */
     notSatisfiable() {
-        return this._clauses.has(new Set()) && this._clausesStack.isEmpty();
+        return this._clauses.has(new Set()) && this.stack.isEmpty();
     }
 
     
@@ -209,21 +201,21 @@ class DavisPutnam {
         // macro step loop
         while (!this.done() && step != 0) {
             // micro step loop for subsume and unit cuts
-            while (!this._useable.isEmpty() && !this._clauses.has(new Set()) && step != 0) {
+            while (!this.useable.isEmpty() && !this._clauses.has(new Set()) && step != 0) {
                 // select a new literal and subsume till unit cuts can be done with said literal
-                while (this._cutable.isEmpty() && !this._useable.isEmpty()) {
+                while (this.cutable.isEmpty() && !this.useable.isEmpty()) {
                     /**
                      * @type {Set<String>}
                      */
-                    let unit = this._useable.first();
-                    this._used = this._used.add(unit);
+                    let unit = this.rndElement(this.useable);
+                    this.used = this.used.add(unit);
                     this.literal = unit.first();
 
                     // subsume
                     let clauses = this._clauses.filter(clause => clause.has(this.literal) && clause.size != 1);
                     this._clauses = this._clauses.subtract(clauses);
 
-                    if (clauses.size > 0) this._consumers.forEach(consumer => consumer.onSubsume({
+                    if (clauses.size > 0) this.consumers.forEach(consumer => consumer.onSubsume({
                         'literal': this.literal,
                         'clauses': clauses.toJS(),
                         'state': this.state
@@ -231,13 +223,13 @@ class DavisPutnam {
                 }
 
                 // check if cuts can be done before trying to do a unit cut
-                if (!this._cutable.isEmpty()) {
+                if (!this.cutable.isEmpty()) {
                     // do unit cut on one specific clause
-                    let target = this._cutable.first();
+                    let target = this.rndElement(this.cutable);
                     let result = target.remove(Util.negateLiteral(this.literal));
                     this._clauses = this._clauses.remove(target).add(result);
                     
-                    this._consumers.forEach(consumer => consumer.onUnitCut({
+                    this.consumers.forEach(consumer => consumer.onUnitCut({
                         'literal': this.literal,
                         'clause': target.toJS(),
                         'result': result.toJS(),
@@ -249,7 +241,7 @@ class DavisPutnam {
 
             // check if satisfied
             if (this.satisfied()) {
-                this._consumers.forEach(consumer => consumer.onSatisfied({
+                this.consumers.forEach(consumer => consumer.onSatisfied({
                     'state': this.state
                 }));
                 continue;
@@ -262,7 +254,7 @@ class DavisPutnam {
                 if (this.notSatisfiable()) {
                     // overwrite clauses
                     this._clauses = new Set([new Set()]);
-                    this._consumers.forEach(consumer => consumer.onNotSatisfiable({
+                    this.consumers.forEach(consumer => consumer.onNotSatisfiable({
                         'state': this.state
                     }));
                     continue;
@@ -277,17 +269,19 @@ class DavisPutnam {
             let negLiteral = Util.negateLiteral(literal);
 
             // put the negated literal on stack for backtracking
-            this._clausesStack.push(this._clauses.add(new Set([negLiteral])));
-            this._literalsStack.push(this._literals.add(negLiteral));
-            this._usedStack.push(this._used);
+            this.stack.push({
+                clauses: this._clauses.add(new Set([negLiteral])),
+                literals: this.literals.add(negLiteral),
+                used: this.used
+            });
 
             // use the literal for the next
             this._clauses = this._clauses.add(new Set([literal]));
-            this._literals = this._literals.add(literal);
+            this.literals = this.literals.add(literal);
 
-            this._consumers.forEach(consumer => consumer.onChoose({
+            this.consumers.forEach(consumer => consumer.onChoose({
                 'literal': literal,
-                'literals': this._literals.toJS(),
+                'literals': this.literals.toJS(),
                 'state': this.state
             }));
         }
@@ -302,26 +296,28 @@ class DavisPutnam {
      */
     backtrack() {
         // save old literals to be able to know the newly added
-        let oldLiterals = this._literals;
+        let oldLiterals = this.literals;
 
         // pop from stack to do the next
-        this._clauses = this._clausesStack.first();
-        this._clausesStack.pop();
-        this._literals = this._literalsStack.first();
-        this._literalsStack.pop();
-        this._used = this._usedStack.first();
-        this._usedStack.pop();
+        /**
+         * @type {{clauses: Set<Set<String>>, literals: Stack<Set<String>>, used: Stack<Set<Set<String>>>}}
+         */
+        let values = this.stack.first();
+        this.stack.pop();
+        this._clauses = values.clauses;
+        this.literals = values.literals;
+        this.used = values.used;
 
         // get the choosen literal
-        this.literal = this._literals.subtract(oldLiterals).first();
+        this.literal = this.literals.subtract(oldLiterals).first();
 
-        this._consumers.forEach(consumer => {
+        this.consumers.forEach(consumer => {
             consumer.onBacktrack({
                 'state': this.state
             });
             consumer.onChoose({
                 'literal': this.literal,
-                'literals': this._literals.toJS(),
+                'literals': this.literals.toJS(),
                 'state': this.state
             });
         });

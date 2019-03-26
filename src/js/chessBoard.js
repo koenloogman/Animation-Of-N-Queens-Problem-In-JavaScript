@@ -85,8 +85,9 @@ class ChessBoard {
             cross.add(new Two.Line(-point, point, point, -point));
             cross.translation = new Two.Vector(x * slotSize, y * slotSize);
             cross.linewidth = tileSize * 0.1;
-            cross.opacity = 0.5;
-            cross.stroke = y % 2 != x % 2 ? '#FCFCFC' : '#080816';
+            cross.opacity = 0.75;
+            //cross.stroke = y % 2 != x % 2 ? '#FCFCFC' : '#080816';
+            cross.stroke = '#F00';
             this.crosses[i] = cross;
         }
 
@@ -95,8 +96,8 @@ class ChessBoard {
     }
 
     clear() {
-        this.state.forEach((row, y) => row.forEach((_, x) => this.setClear(x, y)));
         this.literals = new Set();
+        this.state.forEach((row, y) => row.forEach((_, x) => this.setClear(x, y)));
     }
 
     /**
