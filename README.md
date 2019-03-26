@@ -2,7 +2,7 @@
 
 ## GitHub Pages
 
-The Project result can be viewed at [https://koenloogman.github.io/Animation-Of-N-Queens-Problem-In-JavaScript/](GitHub Pages).
+The Project result can be viewed at [a link](https://koenloogman.github.io/Animation-Of-N-Queens-Problem-In-JavaScript/).
 
 ## Run locally
 
