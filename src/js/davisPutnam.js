@@ -99,7 +99,6 @@ class DavisPutnam {
     set seed(seed) {
         this._seed = seed;
         this.random = seedrandom(this.seed);
-        seedrandom(seed, { global: true });
     }
     /**
      * @returns {String}
