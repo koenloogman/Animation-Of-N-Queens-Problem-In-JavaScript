@@ -33,8 +33,6 @@
   },
   "dependencies": {
     "immutable": "^4.0.0-rc.12",
-    "jquery": "^3.3.1",
-    "promise-worker": "^2.0.1",
     "seedrandom": "^3.0.1",
     "two.js": "^0.7.0-beta.3"
   }
