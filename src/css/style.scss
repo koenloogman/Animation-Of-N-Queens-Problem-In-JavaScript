@@ -209,29 +209,27 @@ h2 {
                 }
             }
 
+            // highlight different entries
             .choose {
                 background: $fc;
             }
             .satisfied {
                 background: $lc;
-                color: $bg1;
             }
             .backtrack {
                 background: $hc;
-                color: $bg1;
             }
             .notSatisfiable {
                 background: #D31717;
-                color: $bg1;
             }            
         }
     }
 
+    // custom scrollbar for the log
     ::-webkit-scrollbar {
         width: 8px;
         height: 8px;
     }
-
     ::-webkit-scrollbar-thumb {
         background: $hc;
         border-radius: 8px;
