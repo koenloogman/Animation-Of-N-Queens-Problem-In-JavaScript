@@ -73,9 +73,9 @@ class Frame {
         this.n = null;
         this.auto = false;
         this.clauses = null;
-        this.seedField.value = n;
+        this.seedField.value = seed;
         this.changeSeed();
-        this.nField.value = seed;
+        this.nField.value = n;
         this.changeN();
     }
 
