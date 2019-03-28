@@ -6,6 +6,7 @@ $bg2: #EFEFEF;
 $fc: #080816;
 $lc: #88D317;
 $hc: #4F2649;
+$wc: #D31717;
 
 // other
 $spacing: 1rem;
@@ -33,7 +34,7 @@ a {
 .grid {
     margin: 0;
     display: grid;
-    grid-template-columns: 300px auto 400px;
+    grid-template-columns: 275px 325px 400px;
     grid-template-rows: 5.25rem calc(100% - 6.25rem);
     grid-template-areas:
         'titel titel titel'
@@ -55,6 +56,13 @@ a {
 
     .grid__calculation {
         grid-area: calculation;
+    }
+}
+
+// let the scene scale on bigger screens
+@media (min-width: 1000px) {
+    .grid {
+        grid-template-columns: 275px auto 400px;
     }
 }
 
@@ -83,42 +91,44 @@ h2 {
     min-width: 3rem;
     padding: 0 $spacing;
 
+    // checkbox hack because they will be replaced with different visual elements
     input[type=checkbox] {
         position: absolute;
         top: -9999px;
         left: -9999px;
     }
-    
-    .form {
-        .group {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: $spacing;
-            
-            >label {
-                flex: 1 auto;
-                line-height: 1.5rem;
-                padding-right: $spacing;
-                white-space: nowrap
-            }
-        }
-        
+
+    .micro-macro::after,
+    label {
+        line-height: 1.5rem;
+        white-space: nowrap;
+        text-align: right;
+    }
+
+    .options {
+        display: grid;
+        grid-template-columns: 5rem 1fr;
+        grid-gap: $spacing;
+        margin-bottom: $spacing;
+
         input[type=text] {
+            box-sizing: border-box;
             background: $bg1;
             color: $fc;
             line-height: 1.5rem;
             padding: 0 0.5rem;
             border: none;
+            width: 100%;
         }
+    }
 
-        .micro-macro::after {
-            display: block;
-            content: 'Macro';
-            flex: 1 auto;
-            line-height: 1.5rem;
-            padding-left: $spacing;
-        }
-    
+    .micro-macro {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        grid-gap: $spacing;
+        margin-bottom: $spacing;
+
+        // toggle socket
         .micro-toggle {
             background: $bg1;
             display: block;
@@ -126,7 +136,8 @@ h2 {
             width: 2.5rem;
             border-radius: 1.5rem;
         }
-    
+        
+        // toggle leaver
         .micro-toggle::before {
             background: $lc;
             content: '';
@@ -137,7 +148,7 @@ h2 {
             border-radius: 1.5rem;
             cursor: pointer;
         }
-    
+
         input[type=checkbox]:checked~.micro-toggle::before {
             float: left;
         }
@@ -147,10 +158,16 @@ h2 {
         }
     }
 
+    // add macro "label" at the right side of the toggle
+    .micro-macro::after {
+        content: 'Macro';
+        text-align: left;
+    }
     
     .controls {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: auto auto auto;
+        grid-gap: $spacing;
         margin-bottom: $spacing;
 
         .button {
@@ -160,19 +177,19 @@ h2 {
             height: 2rem;
             line-height: 2rem;
             font-size: 1rem;
+            padding: 0 0.5rem;
             font-weight: normal;
             margin: 0;
-            padding: 0 $spacing;
             border: none;
+            white-space: nowrap;
+            text-align: center;
             cursor: pointer;
-            flex: 0 auto;
-            white-space: nowrap
         }
         
+        // play / stop button toggle
         .auto-toggle::before {
             content: 'Play';
         }
-
         input[type=checkbox]:checked~.auto-toggle::before {
             content: 'Stop';
         }
@@ -187,12 +204,14 @@ h2 {
     }
 }
 
+//TODO: use grid
 #scene {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+//TODO: use grid
 .log {
     display: flex;
     flex-direction: column;
@@ -207,7 +226,7 @@ h2 {
 
         .entry {
             color: $bg1;
-            padding: 0.5rem $spacing;
+            padding: 0.5rem;
             border-bottom: 1px solid $fc;
             line-height: 1.5rem;
             font-size: 1rem;
@@ -217,14 +236,6 @@ h2 {
         // highlight different entries
         .unitCut {
             color: $hc;
-            
-            .set {
-                color: $hc;
-
-                .literal {
-                    color: #D31717;
-                }
-            }
         }
         .choose {
             background: $fc;
@@ -236,29 +247,28 @@ h2 {
             background: $hc;
         }
         .notSatisfiable {
-            background: #D31717;
+            background: $wc;
+        }
+
+        // highlight syntax
+        .set {
+            color: $hc;
+        }
+        .literal {
+            color: $wc;
+        }
+        .literal.true {
+            color: $lc;
         }
     }
 
     // custom scrollbar for the log
-    ::-webkit-scrollbar {
+    #log-entries::-webkit-scrollbar {
         width: 8px;
         height: 8px;
     }
-    ::-webkit-scrollbar-thumb {
+    #log-entries::-webkit-scrollbar-thumb {
         background: $hc;
         border-radius: 8px;
     }
-}
-
-.hide {
-    visibility: hidden;
-}
-
-.text-left {
-    text-align: left;
-}
-
-.text-right {
-    text-align: right;
 }

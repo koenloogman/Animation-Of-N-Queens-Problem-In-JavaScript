@@ -31,7 +31,10 @@ const Util = {
     },
 
     clauseToString(set) {
-        return this.setToString(set.map(literal => '<span class="literal">\'' + literal + '\'</span>'));
+        return this.setToString(set.map(literal => {
+            let _class = literal.substr(0, 1) != '!' ? 'true' : 'false';
+            return '<span class="literal ' + _class + '">\'' + literal + '\'</span>'
+        }));
     },
     
     clausesToString(clauses) {
