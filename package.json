@@ -23,13 +23,13 @@
   },
   "homepage": "https://github.com/koenloogman/Animation-Of-N-Queens-Problem-In-JavaScript#readme",
   "devDependencies": {
-    "autoprefixer": "^9.4.10",
+    "autoprefixer": "^9.5.0",
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
     "css-mqpacker": "^7.0.0",
     "node-sass": "^4.11.0",
-    "parcel-bundler": "^1.12.1",
-    "sass": "^1.17.2"
+    "parcel-bundler": "^1.12.3",
+    "sass": "^1.17.3"
   },
   "dependencies": {
     "immutable": "^4.0.0-rc.12",
