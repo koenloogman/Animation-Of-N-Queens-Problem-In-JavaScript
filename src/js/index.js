@@ -73,9 +73,9 @@ class Frame {
         this.n = null;
         this.auto = false;
         this.clauses = null;
-        this.seedField.value = n;
+        this.seedField.value = seed;
         this.changeSeed();
-        this.nField.value = seed;
+        this.nField.value = n;
         this.changeN();
     }
 
@@ -104,7 +104,8 @@ class Frame {
         let text;
         switch(cmd) {
             case 'choose':
-                text = 'Choose \'' + options.literal + '\'';
+                let _class = options.literal.substr(0, 1) != '!' ? 'true' : 'false';
+                text = 'Choose <span class="literal ' + _class + '">\'' + options.literal + '\'</span>';
                 break;
             case 'backtrack':
                 text = 'Backtrack';
