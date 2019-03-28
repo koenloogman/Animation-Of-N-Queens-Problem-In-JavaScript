@@ -33,7 +33,7 @@ a {
 .grid {
     margin: 0;
     display: grid;
-    grid-template-columns: 20% auto 30%;
+    grid-template-columns: 300px auto 400px;
     grid-template-rows: 5.25rem calc(100% - 6.25rem);
     grid-template-areas:
         'titel titel titel'
@@ -55,7 +55,6 @@ a {
 
     .grid__calculation {
         grid-area: calculation;
-        min-width: 350px;
     }
 }
 
@@ -84,95 +83,108 @@ h2 {
     min-width: 3rem;
     padding: 0 $spacing;
 
-    .controls,
-    .group {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: $spacing;
-    }
-    
-    .group>label {
-        flex: 1 auto;
-        line-height: 1.5rem;
-        padding-right: $spacing;
-        white-space: nowrap
-    }
-
     input[type=checkbox] {
         position: absolute;
         top: -9999px;
         left: -9999px;
     }
+    
+    .form {
+        .group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: $spacing;
+            
+            >label {
+                flex: 1 auto;
+                line-height: 1.5rem;
+                padding-right: $spacing;
+                white-space: nowrap
+            }
+        }
+        
+        input[type=text] {
+            background: $bg1;
+            color: $fc;
+            line-height: 1.5rem;
+            padding: 0 0.5rem;
+            border: none;
+        }
 
-    input[type=text] {
-        background: $bg1;
-        color: $fc;
-        line-height: 1.5rem;
-        padding: 0 0.5rem;
-        border: none;
+        .micro-macro::after {
+            display: block;
+            content: 'Macro';
+            flex: 1 auto;
+            line-height: 1.5rem;
+            padding-left: $spacing;
+        }
+    
+        .micro-toggle {
+            background: $bg1;
+            display: block;
+            height: 1.5rem;
+            width: 2.5rem;
+            border-radius: 1.5rem;
+        }
+    
+        .micro-toggle::before {
+            background: $lc;
+            content: '';
+            display: block;
+            float: right;
+            height: 1.5rem;
+            width: 1.5rem;
+            border-radius: 1.5rem;
+            cursor: pointer;
+        }
+    
+        input[type=checkbox]:checked~.micro-toggle::before {
+            float: left;
+        }
+
+        input[type=checkbox]:disabled~.micro-toggle::before {
+            cursor: default;
+        }
     }
 
-    .btn {
-        background: $lc;
-        color: $bg1;
-        display: inline-block;
-        height: 2rem;
-        line-height: 2rem;
-        font-size: 1rem;
-        font-weight: normal;
-        margin: 0;
-        padding: 0 $spacing;
-        border: none;
-        cursor: pointer;
-        flex: 0 auto;
-        white-space: nowrap
+    
+    .controls {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: $spacing;
+
+        .button {
+            background: $lc;
+            color: $bg1;
+            display: inline-block;
+            height: 2rem;
+            line-height: 2rem;
+            font-size: 1rem;
+            font-weight: normal;
+            margin: 0;
+            padding: 0 $spacing;
+            border: none;
+            cursor: pointer;
+            flex: 0 auto;
+            white-space: nowrap
+        }
+        
+        .auto-toggle::before {
+            content: 'Play';
+        }
+
+        input[type=checkbox]:checked~.auto-toggle::before {
+            content: 'Stop';
+        }
     }
 
-    .auto-toggle::before {
-        content: 'Play';
-    }
-    input[type=checkbox]:checked~.auto-toggle::before {
-        content: 'Stop';
-    }
-
-    .micro-macro::after {
-        display: block;
-        content: 'Macro';
-        flex: 1 auto;
-        line-height: 1.5rem;
-        padding-left: $spacing;
-    }
-    .micro-toggle {
-        background: $bg1;
-        display: block;
-        height: 1.5rem;
-        width: 2.5rem;
-        border-radius: 1.5rem;
-    }
-    .micro-toggle::before {
-        background: $lc;
-        content: '';
-        display: block;
-        float: right;
-        height: 1.5rem;
-        width: 1.5rem;
-        border-radius: 1.5rem;
-        cursor: pointer;
-    }
-
-    input[type=checkbox]:checked~.micro-toggle::before {
-        float: left;
-    }
     input[type=text]:disabled,
     input[type=checkbox]:disabled~.micro-toggle,
     input[type=checkbox]:disabled~.auto-toggle,
-    .btn:disabled {
+    .button:disabled {
         opacity: 0.6;
         cursor: default;
     }
-    input[type=checkbox]:disabled~.micro-toggle::before {
-        cursor: default;
-    }    
 }
 
 #scene {
@@ -200,7 +212,12 @@ h2 {
             line-height: 1.5rem;
             font-size: 1rem;
             cursor: pointer;
+        }
 
+        // highlight different entries
+        .unitCut {
+            color: $hc;
+            
             .set {
                 color: $hc;
 
@@ -208,20 +225,18 @@ h2 {
                     color: #D31717;
                 }
             }
-
-            // highlight different entries
-            .choose {
-                background: $fc;
-            }
-            .satisfied {
-                background: $lc;
-            }
-            .backtrack {
-                background: $hc;
-            }
-            .notSatisfiable {
-                background: #D31717;
-            }            
+        }
+        .choose {
+            background: $fc;
+        }
+        .satisfied {
+            background: $lc;
+        }
+        .backtrack {
+            background: $hc;
+        }
+        .notSatisfiable {
+            background: #D31717;
         }
     }
 
