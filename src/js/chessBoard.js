@@ -3,14 +3,29 @@ const { Set } = require('immutable');
 const Two = require('two.js');
 
 /**
- * TODO: Implement two.js and make a real chessboard
+ * TODO: clean up code and don't use strings within
  */
 class ChessBoard {
     /**
      * @param {Two} two 
      * @param {Number} n 
      */
-    constructor(two, size, n = 8) {
+    constructor(options) {
+        // overwrite default settings with the options
+        const settings = {
+            two: new Two(),
+            size: 200,
+            n: 8,
+            color: {
+                board: '#4F2649',
+                tileB: '#FCFCFC',
+                tileW: '#080816',
+                queen: '#88D317',
+                cross: '#D31717'
+            }
+        };
+        this.settings = {...settings, ...options};
+
         /**
          * @type {Set<String>}
          */
@@ -24,15 +39,15 @@ class ChessBoard {
         this.crosses = [];
 
         // create board and groups
-        this.size = size;
-        this.board = two.makeRectangle(size / 2, size / 2, size, size);
-        this.board.fill = '#4F2649';
+        this.size = this.settings.size;
+        this.board = this.settings.two.makeRectangle(this.settings.size / 2, this.settings.size / 2, this.settings.size, this.settings.size);
+        this.board.fill = this.settings.color.board;
         this.board.noStroke();
-        this.tileLayer = two.makeGroup();
-        this.queenLayer = two.makeGroup();
-        this.crossLayer = two.makeGroup();
+        this.tileLayer = this.settings.two.makeGroup();
+        this.queenLayer = this.settings.two.makeGroup();
+        this.crossLayer = this.settings.two.makeGroup();
 
-        this.n = n;
+        this.n = this.settings.n;
     }
 
     get n() {
@@ -41,7 +56,7 @@ class ChessBoard {
     set n(n) {
         this.literals = new Set();
         
-        // values for the board
+        // calculate sizes
         let padding = this.size * 0.2 / n;
         let slotSize = (this.size - padding) / n;
         let tileSize = slotSize - padding / n;
@@ -69,14 +84,14 @@ class ChessBoard {
 
             // create tile
             let tile = new Two.Rectangle(x * slotSize , y * slotSize, tileSize, tileSize);
-            tile.fill = y % 2 == x % 2 ? '#FCFCFC' : '#080816';
+            tile.fill = y % 2 == x % 2 ? this.settings.color.tileW : this.settings.color.tileB;
             this.tiles[i] = tile;
 
             // create queen
             let queen = new Two.Group();
             queen.add(new Two.Circle(0 , 0, tileSize / 2 * 0.9));
             queen.translation = new Two.Vector(x * slotSize, y * slotSize);
-            queen.fill = '#88D317';
+            queen.fill = this.settings.color.queen;
             queen.noStroke();
             this.queens[i] = queen;
 
@@ -88,7 +103,7 @@ class ChessBoard {
             cross.translation = new Two.Vector(x * slotSize, y * slotSize);
             cross.linewidth = tileSize * 0.1;
             cross.opacity = 0.8;
-            cross.stroke = '#D31717';
+            cross.stroke = this.settings.color.cross;
             this.crosses[i] = cross;
         }
 
@@ -102,30 +117,41 @@ class ChessBoard {
     }
 
     /**
-     * @param {Array<String>} state 
+     * @param {Array<String>} state
      */
     setState(state) {
         /**
          * @type {Set<String>}
          */
         let _literals = new Set(state);
+
+        // get removed literals
+        let remove = this.literals.subtract(_literals).map(literal => (literal.substr(0, 1) == '!' ? literal.substr(1) : literal).split(',').map(n => Number(n) - 1));
+        
         // get new literals
         let literals = _literals.subtract(this.literals);
-        // get removed literals
-        let rem = this.literals.subtract(_literals).map(literal => (literal.substr(0, 1) == '!' ? literal.substr(1) : literal).split(',').map(n => Number(n) - 1));
-        let pos = literals.filter(literal => literal.substr(0, 1) != '!').map(literal => literal.split(',').map(n => Number(n) - 1));
-        let neg = literals.filter(literal => literal.substr(0, 1) == '!').map(literal => literal.substr(1).split(',').map(n => Number(n) - 1));
+        let queens = literals.filter(literal => literal.substr(0, 1) != '!').map(literal => literal.split(',').map(n => Number(n) - 1));
+        let crosses = literals.filter(literal => literal.substr(0, 1) == '!').map(literal => literal.substr(1).split(',').map(n => Number(n) - 1));
+        
+        // overwrite old literals
         this.literals = _literals;
 
-        rem.forEach(([x, y]) => this.setClear(x, y));
-        pos.forEach(([x, y]) => this.setQueen(x, y));
-        neg.forEach(([x, y]) => this.setCross(x, y));
+        // update the visuals
+        remove.forEach(([x, y]) => this.setClear(x, y));
+        queens.forEach(([x, y]) => this.setQueen(x, y));
+        crosses.forEach(([x, y]) => this.setCross(x, y));
     }
 
     setClear(x, y) {
         this.state[y][x] = ' ';
-        this.queenLayer.remove(this.queens[x + y * this.n]);
-        this.crossLayer.remove(this.crosses[x + y * this.n]);
+
+        // remove queen only if not in literals
+        if (!this.literals.contains((x + 1) + ',' + (y + 1)))
+            this.queenLayer.remove(this.queens[x + y * this.n]);
+        
+        // remove cross only if not in literals
+        if (!this.literals.contains('!' + (x + 1) + ',' + (y + 1)))
+            this.crossLayer.remove(this.crosses[x + y * this.n]);
     }
 
     setQueen(x, y) {
@@ -139,6 +165,8 @@ class ChessBoard {
     }
 
     /**
+     * Returns a ASCII representation of the state.
+     * 
      * @returns {String}
      */
     toString() {

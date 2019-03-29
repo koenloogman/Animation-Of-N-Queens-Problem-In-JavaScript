@@ -13,7 +13,14 @@ if (module.hot) {
 }
 
 class Frame {
-    constructor(n = 8, seed = 69) {
+    constructor(options) {
+        // overwrite default settings with the options
+        const settings = {
+            n: 8,
+            seed: 69
+        };
+        this.settings = {...settings, ...options};
+
         // chessboard
         this.scene = document.getElementById('scene');
         let size = Math.min(this.scene.clientHeight, this.scene.clientWidth) * 0.9;
@@ -23,7 +30,10 @@ class Frame {
             'autostart': true
         });
         this.two.appendTo(scene);
-        this.board = new ChessBoard(this.two, size);
+        this.board = new ChessBoard({
+            'two': this.two,
+            'size': size
+        });
 
         // user interactions
         this.nField = document.getElementById('n-field');
@@ -35,8 +45,8 @@ class Frame {
 
         this.nField.addEventListener('change', _ => this.changeN());
         this.seedField.addEventListener('change', _ => this.changeSeed());
-        this.microToggle.addEventListener('change', event => this.changeMicro(event));
-        this.autoToggle.addEventListener('change', event => this.changeAuto(event));
+        this.microToggle.addEventListener('change', _ => this.changeMicro());
+        this.autoToggle.addEventListener('change', _ => this.changeAuto());
         this.nextButton.addEventListener('click', _ => this.onNext());
         this.resetButton.addEventListener('click', _ => this.onReset());
 
@@ -69,13 +79,16 @@ class Frame {
             }
         });
 
-        // init state with values
+        // init frame
         this.n = null;
         this.auto = false;
+        this.calculating = false;
         this.clauses = null;
-        this.seedField.value = seed;
+        this.nField.value = settings.n;
+        this.seedField.value = settings.seed;
+
+        // init chessboard
         this.changeSeed();
-        this.nField.value = n;
         this.changeN();
     }
 
@@ -88,6 +101,12 @@ class Frame {
          * @type {HTMLElement}
          */
         let target = event.target;
+
+        // span is used to syntax highlight so move up to the div element
+        while (target.nodeName == 'SPAN') {
+            target = target.parentNode;
+        }
+
         // only trigger on entries
         if (target.classList.contains('entry')) {
             let state = JSON.parse(target.dataset.state);
@@ -134,10 +153,16 @@ class Frame {
         this.microToggle.disabled = true;
         this.nextButton.disabled = true;
         this.resetButton.disabled = true;
+
+        // lock next step
+        this.calculating = true;
     }
 
     onWorkerEnd(options) {
+        // hand state to chessboard
         this.board.setState(options.state);
+        // free next step
+        this.calculating = false;
 
         // auto play next step with delay
         if (this.auto && !options.done) {
@@ -153,7 +178,11 @@ class Frame {
             this.nextButton.disabled = options.done;
             this.resetButton.disabled = false;
 
-            if (this.auto) this.autoToggle.checked = this.auto = false;
+            // disable auto if set
+            if (this.auto) {
+                this.autoToggle.checked = false;
+                this.changeAuto();
+            }
         }
     }
 
@@ -170,8 +199,6 @@ class Frame {
             this.n = n;
             this.board.n = n;
             this.clauses = QueensClauses(n);
-        } else {
-            //this.board.clear();
         }
         this.log.innerHTML = "";
         this.dpw.postMessage({
@@ -214,7 +241,7 @@ class Frame {
     }
 
     onNext() {
-        this.dpw.postMessage({
+        if (!this.calculating) this.dpw.postMessage({
             'cmd': 'step',
             'options': {
                 'step': 1
@@ -223,23 +250,23 @@ class Frame {
     }
 
     /**
-     * @param {Event} event 
+     * 
      */
-    changeMicro(event) {
-        console.log('set micro to ', event.currentTarget.checked);
+    changeMicro() {
+        console.log('set micro to ', this.microToggle.checked);
         this.dpw.postMessage({
             'cmd': 'micro',
             'options': {
-                'micro': event.currentTarget.checked
+                'micro': this.microToggle.checked
             }
         });
     }
 
     /**
-     * @param {Event} event 
+     * 
      */
-    changeAuto(event) {
-        this.auto = event.currentTarget.checked;
+    changeAuto() {
+        this.auto = this.autoToggle.checked;
         if (this.auto) {
             console.log('activated auto');
             this.onNext();
@@ -248,20 +275,6 @@ class Frame {
         }
     }
 }
-
-// const clauses = [
-//     ['r','s'],
-//     ['s','!r'],
-//     ['!p','!q'],
-//     ['q','p','s'],
-//     ['r','p','s'],
-//     ['p','!q','r'],
-//     ['r','!s','q'],
-//     ['!r','!s','q'],
-//     ['!p','s','!r'],
-//     ['!r','s','!q'],
-//     ['p','q','r','s'],
-// ];
 
 const frame = new Frame();
 window.addEventListener('resize', _ => {
