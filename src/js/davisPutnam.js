@@ -32,7 +32,7 @@ class DavisPutnam {
             clauses: new Set([new Set()]),
             seed: null
         };
-        settings = {...settings, ...options};
+        let {clauses, seed} = {...settings, ...options};
 
         // Internal
         /**
@@ -65,12 +65,12 @@ class DavisPutnam {
         /**
          * @type {Array<Array<String>>}
          */
-        this.clauses = settings.clauses;
+        this.clauses = clauses;
         /**
          * @type {String}
          */
         this._seed = null;
-        this.seed = settings.seed;
+        this.seed = seed;
         /**
          * If its value is true the Algorithm will do micro steps
          * @type {Boolean}
