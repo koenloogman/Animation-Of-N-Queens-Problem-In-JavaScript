@@ -35,12 +35,10 @@ a {
     margin: 0;
     display: grid;
     grid-template-columns: 275px 325px 400px;
-    grid-template-rows: 5.25rem calc(100% - 6.25rem);
+    grid-template-rows: 5.25rem calc(100% - 5.25rem);
     grid-template-areas:
         'titel titel titel'
         'settings scene calculation';
-    grid-column-gap: 1rem;
-    grid-row-gap: 1rem;
 
     .grid__title {
         grid-area: titel;
@@ -88,8 +86,7 @@ h2 {
 }
 
 .settings {
-    min-width: 3rem;
-    padding: 0 $spacing;
+    padding: $spacing;
 
     // checkbox hack because they will be replaced with different visual elements
     input[type=checkbox] {
@@ -216,8 +213,7 @@ h2 {
     display: flex;
     flex-direction: column;
     flex: 2 0 200px;
-    padding: 0 $spacing;
-    padding-bottom: $spacing;
+    padding: $spacing;
 
     #log-entries {
         background: $bg1;
