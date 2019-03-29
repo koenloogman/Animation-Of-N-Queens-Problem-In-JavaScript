@@ -82,6 +82,7 @@ a {
 
 h2 {
     font-size: 1.25rem;
+    line-height: 1.5rem;
     margin-bottom: $spacing;
 }
 
@@ -201,24 +202,20 @@ h2 {
     }
 }
 
-//TODO: use grid
 #scene {
-    display: flex;
+    display: grid;
     justify-content: center;
     align-items: center;
 }
 
-//TODO: use grid
 .log {
-    display: flex;
-    flex-direction: column;
-    flex: 2 0 200px;
+    display: grid;
+    grid-template-rows: 2.5rem 1fr;
     padding: $spacing;
 
     #log-entries {
         background: $bg1;
         overflow-y: auto;
-        flex: 1;
 
         .entry {
             color: $bg1;
@@ -227,6 +224,10 @@ h2 {
             line-height: 1.5rem;
             font-size: 1rem;
             cursor: pointer;
+        }
+        
+        .entry:hover {
+            opacity: 0.75;
         }
 
         // highlight different entries
