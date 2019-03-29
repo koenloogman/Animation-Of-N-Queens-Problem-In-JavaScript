@@ -79,6 +79,7 @@ class DavisPutnamWorker extends	DavisPutnamConsumer {
      * @param {{clauses: Array<Array<String>>}} options 
      */
     onClauses(options) {
+        this.onStart();
         this.davisPutnam.clauses = options.clauses;
         this.onEnd();
     }
