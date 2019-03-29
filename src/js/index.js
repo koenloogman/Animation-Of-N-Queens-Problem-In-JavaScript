@@ -190,7 +190,14 @@ class Frame {
         let n = Number(this.nField.value);
         if (isNaN(n) || n < 1){
             alert('only numbers greater 0 are allowed.');
+            this.nField.value = this.board.n;
             return;
+        }
+        if (n > 32) {
+            if (!confirm('are you sure you want to use such a high number?')) {
+                this.nField.value = this.board.n;
+                return;
+            }
         }
         console.log('set n to ' + n);
         
