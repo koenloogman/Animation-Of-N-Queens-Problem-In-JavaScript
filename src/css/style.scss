@@ -35,12 +35,10 @@ a {
     margin: 0;
     display: grid;
     grid-template-columns: 275px 325px 400px;
-    grid-template-rows: 5.25rem calc(100% - 6.25rem);
+    grid-template-rows: 5.25rem calc(100% - 5.25rem);
     grid-template-areas:
         'titel titel titel'
         'settings scene calculation';
-    grid-column-gap: 1rem;
-    grid-row-gap: 1rem;
 
     .grid__title {
         grid-area: titel;
@@ -84,12 +82,12 @@ a {
 
 h2 {
     font-size: 1.25rem;
+    line-height: 1.5rem;
     margin-bottom: $spacing;
 }
 
 .settings {
-    min-width: 3rem;
-    padding: 0 $spacing;
+    padding: $spacing;
 
     // checkbox hack because they will be replaced with different visual elements
     input[type=checkbox] {
@@ -204,25 +202,20 @@ h2 {
     }
 }
 
-//TODO: use grid
 #scene {
-    display: flex;
+    display: grid;
     justify-content: center;
     align-items: center;
 }
 
-//TODO: use grid
 .log {
-    display: flex;
-    flex-direction: column;
-    flex: 2 0 200px;
-    padding: 0 $spacing;
-    padding-bottom: $spacing;
+    display: grid;
+    grid-template-rows: 2.5rem 1fr;
+    padding: $spacing;
 
     #log-entries {
         background: $bg1;
         overflow-y: auto;
-        flex: 1;
 
         .entry {
             color: $bg1;
@@ -231,6 +224,10 @@ h2 {
             line-height: 1.5rem;
             font-size: 1rem;
             cursor: pointer;
+        }
+        
+        .entry:hover {
+            opacity: 0.75;
         }
 
         // highlight different entries

@@ -26,7 +26,14 @@ class DavisPutnam {
      * 
      * @returns {DavisPutnam} itself
      */
-    constructor(clauses = new Set([new Set()]), seed = null) {
+    constructor(options) {
+        // overwrite default settings with the options
+        const settings = {
+            clauses: new Set([new Set()]),
+            seed: null
+        };
+        let {clauses, seed} = {...settings, ...options};
+
         // Internal
         /**
          * @type {Stack<{clauses: Set<Set<String>>, literals: Stack<Set<String>>, used: Stack<Set<Set<String>>>}>}
@@ -63,7 +70,7 @@ class DavisPutnam {
          * @type {String}
          */
         this._seed = null;
-        this.seed =  seed;
+        this.seed = seed;
         /**
          * If its value is true the Algorithm will do micro steps
          * @type {Boolean}
@@ -142,6 +149,22 @@ class DavisPutnam {
 
         // clear stack
         this.stack.clear();
+
+        // check if already satisfied
+        if (this.satisfied()) {
+            this.consumers.forEach(consumer => consumer.onSatisfied({
+                'state': this.state
+            }));
+        }
+
+        // check if current state is not satisfiable
+        if (this.notSatisfiable()) {
+            // overwrite clauses
+            this._clauses = new Set([new Set()]);
+            this.consumers.forEach(consumer => consumer.onNotSatisfiable({
+                'state': this.state
+            }));
+        }
     }
     /**
      * Returns an two dimensional array of literals of the current state.
@@ -247,7 +270,7 @@ class DavisPutnam {
             if (step == 0) continue;
             step--;
 
-            // check if current state is not solvable
+            // check if current state is not satisfiable
             if (this._clauses.has(new Set())) {
                 if (this.notSatisfiable()) {
                     // overwrite clauses
