@@ -6,7 +6,7 @@
 Im vorherigen Kapitel wurden die Grundlagen zum Davis Putman Algorithmus und des N Damen Problems genauer analysiert und definiert. Nun folgt eine Sammlung von Bibliotheken und Technologien, die für die Implementierung benötigt werden. Dabei wird vor allem auf den Einsatz dieser und der Vergleich zu eventuellen Alternativen eingegangen. 
 
 \section{Parcel}
-%Kommentar zu Koen: Sollten wir Module Bundling noch im Allgemeinen erklären oder weglassen oder ins Implementierungs Kapitel schieben?
+%TODO Koen: Sollten wir Module Bundling noch im Allgemeinen erklären oder weglassen oder ins Implementierungs Kapitel schieben?
 Parcel ist ein Module Bundling Tool zur Integration von mehreren Modulen in eine Datei. Dadurch ist es möglich, multiple Module in einem einzigen Bundle an den Browser zu senden. Diese Bibliothek bietet einige sehr nützliche Funktionen an, die die Implementierung deutlich vereinfachen. Parcel nutzt Worker Prozesse, um eine multicore Compilierung zu ermöglichen und besitzt ein Filesystem Cache, um sehr schnelles Rebuilden zu ermöglichen. Dadurch ist Parcel vor allem auf Performanz im Browser ausgelegt. Um diese zusätzlich zu erhöhen, teilt Parcel die Output Bundles auf, so dass nur die benötigten Teile beim initialen Start geladen werden. Außerdem besitzt diese Bibliothek einen automatischen Support für Sprachen wie beispielsweise Javascript und CSS, wodurch keine Plugins benötigt werden. Der Programmcode und auch die Nodejs Module werden außerdem automatisch transformiert. Das ist sehr wichtig für dieses Projekt, da mit Nodejs und Pack dependencies gearbeitet wird. Ein weiteres interessantes Feature von Parcel ist das automatische Updaten der Module im Browser, wenn Änderungen durch die Entwicklung angewendet werden müssen. Das macht den Arbeitsprozess dynamisch und schneller. Das übersichtliche und verständliche Error Logging erleichtert zusätzlich dazu die Implementierung. 
 %TODO Quellen einbauen (\url{https://parceljs.org/}). 
 \subsection{Aktuelle Alternativen}
@@ -22,11 +22,20 @@ Auch nach diesem Vergleich ist die Entscheidung auf Parcel gefallen, da Rollup w
 %https://webpack.js.org/concepts
 %https://rollupjs.org/guide/en
 
-To work with Set (also Stack and Range) in JS (\url{https://immutable-js.github.io/immutable-js/}), because native Set is comparing by object by Object reference (\url{http://2ality.com/2015/01/es6-maps-sets.html#why-cant-i-configure-how-maps-and-sets-compare-keys-and-values}).
+\section{Immutablejs}
+%TODO Koen: Bitte überprüfen, ob alles richtig ist, bitte auch ergänzen, fande das Thema schwer zu greifen
+In der späteren Umsetzung des Davis Putman Algorithmus wird ein bekanntes Problem bei der Benutzung mit Javascript auftauchen. Es handelt sich dabei um das Vergleichen zwischen Sets. Aber auch beim Verwenden von Stacks und Range tritt das Problem mit Javascript auf. Das native Set vergleicht Objekte dabei über die Object by Object Reference. Vergleiche mit mutable Objekten ist meist sehr schwierig, da wenn ein Objekt sich ändert, sich die Lokation dieser in einer Collection auch ändert. Die Bibliothek Immutablejs ermöglicht die Erstellung von immutable Objekten, die, sobald sie erstellt wurden, nicht mehr änderbar sind. Außerdem stellt diese mehrere persistente immutable Datenstrukturen wie Stack, Set und Range für die Entwickler zur Verfügung. Damit löst diese Bibliothek das Problem der Vergleiche zwischen Objekten.
+%TODO Quellen einbauen (\url{https://immutable-js.github.io/immutable-js/}); (\url{http://2ality.com/2015/01/es6-maps-sets.html#why-cant-i-configure-how-maps-and-sets-compare-keys-and-values}).
 
-Two.js to animate and use svg files (\url{https://two.js.org/}). Maybe compare to other Libraries?
+\section{Two.js}
+Diese Bibliothek ist eine zweidimensionale Zeichnungs-API, die zur Nutzung und Animation von SVG Dateien verwendet wird. Two.js unterstützt auch canvas und webgl. Der Hauptfokus von Two.js liegt deutlich auf den Vektorgrafiken, da sie stark von den motion graphics geprägt wurden. Deshalb ist die Kreation und Animation von flachen Formen verkürzt und einfacher unter der Verwendung von Two.js möglich. Two.js basiert grundlegend auf einem Scenegraph. Wenn ein Objekt gezeichnet oder erstellt wird, speichert dies die Bibliothek und merkt sich dieses. Dadurch kann nach der Erstellung jegliche Operationen auf das Objekt anwenden. Two.js beinhaltet außerdem einen Animations Loop, der sehr einfach gehalten wurde, um eine Automation oder die Kombination mit anderen Bibliotheken zu ermöglichen. Das letzte große Feature von Two.js ist der SVG Interpreter, welcher es ermöglicht, erstellte SVGs in beliebten Programmen wie Adobe Illustrator zu übernehmen und direkt in die Two.js Scene einzubringen. Dadurch wird die Möglichkeit zur Selbstgestaltung von SVGs wie Icons sehr gut unterstützt.
+%TODO Quelle einfügen https://two.js.org/#introduction
+%TODO Koen: Irgendwelche Ideen für zu vergleichende Libaries?
 
-Seedrandom to replicate previous calculations (\url{https://github.com/davidbau/seedrandom})
+\section{Seedrandom.js}
+Diese Bibliothek von David Bau stellt einen Seeded Random Number Generator für JavaScript und kann dabei als plain Javascript, Node.js Module oder AMD module verwendet werden. Seedrandom.js wird dabei hauptsächlich dazu verwendet, um zuvor erstellte Kalkulationen durch den gleichen Seed wieder erneut zu replizieren. Dadurch können Seeds, die ein bestimmtes Problem sehr schnell lösen können oder einen für Erkärungszwecken anschaulichen Rechnungsweg bereitstellen, jederzeit für dasselbe Ergebnis wiederverwendet werden.
+%TODO Koen: Gibts da noch mehr zu sagen?
+%TODO Quellen: https://github.com/davidbau/seedrandom 
 
 %Keine Promises mehr; Promises in JS (\url{https://medium.freecodecamp.org/promises-in-javascript-explained-277b98850de})
 
