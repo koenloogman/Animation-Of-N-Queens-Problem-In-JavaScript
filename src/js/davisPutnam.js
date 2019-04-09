@@ -1,4 +1,4 @@
-const { Set, Stack } = require('immutable');
+const { Set } = require('immutable');
 const seedrandom = require('seedrandom');
 const Util = require('./util');
 
@@ -36,9 +36,9 @@ class DavisPutnam {
 
         // Internal
         /**
-         * @type {Stack<{clauses: Set<Set<String>>, literals: Stack<Set<String>>, used: Stack<Set<Set<String>>>}>}
+         * @type {Array<{clauses: Set<Set<String>>, literals: Stack<Set<String>>, used: Stack<Set<Set<String>>>}>}
          */
-        this.stack = new Stack().asMutable();
+        this.stack = [];
         /**
          * @type {Set<Set<String>>}
          */
@@ -148,7 +148,7 @@ class DavisPutnam {
         this.literal = null;
 
         // clear stack
-        this.stack.clear();
+        this.stack = [];
 
         // check if already satisfied
         if (this.satisfied()) {
@@ -323,8 +323,7 @@ class DavisPutnam {
         /**
          * @type {{clauses: Set<Set<String>>, literals: Stack<Set<String>>, used: Stack<Set<Set<String>>>}}
          */
-        let values = this.stack.first();
-        this.stack.pop();
+        let values = this.stack.pop();
         this._clauses = values.clauses;
         this.literals = values.literals;
         this.used = values.used;
