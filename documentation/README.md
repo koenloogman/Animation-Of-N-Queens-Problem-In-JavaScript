@@ -13,8 +13,12 @@ Quick overview of what's planned for the documentation of the project.
         - Define to be satisfiable
 3. Technical Basics
     - Javascript and used Libraries
-4. Implementation
-5. Prospect
+4. Conception
+    - Requirements
+    - Architecture
+    - Layout Design
+5. Implementation
+6. Prospect
 
 ## Roadmap
 
@@ -22,9 +26,11 @@ Step 1: Scientific Basics
 
 Step 2: Technische Grundlagen
 
-Step 3: Implementierung
+Step 4: Konzeption
 
-Step 4: Einleitung und Ausblick
+Step 5: Implementierung
+
+Step 6: Einleitung und Ausblick
 
 ## Requirements
 
