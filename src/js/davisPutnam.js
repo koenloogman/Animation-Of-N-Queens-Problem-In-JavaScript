@@ -6,20 +6,16 @@ const Util = require('./util');
  * The DavisPutnam class is an iterative implementation of the algorithm for a step by step calculation.
  * It simulates the recursive calls of the original implementation using stacks.
  * 
- * TODO: Add more comments and documentation with examples
- * 
  * @author Koen Loogman <koen@loogman.de>
  */
 class DavisPutnam {
     /**
      * The constructor for the davis putnam algorithm.
-     * It receives a set of clauses and a seed.
-     * A set of clauses can be for example:
+     * It receives a set of clauses and a seed. The set of clauses being a two dimensional array and the seed a string.
      * 
-     *      [['p', 'q'], ['!p', 's'], ['!s']]
-     * 
-     * Which is equal to the propositional logical formula: (p or q) and (not p or s) and (not s).
-     * As for the seed any string is accepted.
+     * @example
+     * // example for a set of clauses
+     * [['p', 'q'], ['!p', 's'], ['!s']] // is equal to the propositional logical formula: (p or q) and (not p or s) and (not s).
      * 
      * @param {Array<Array<String>>} clauses - a set of clauses
      * @param {String} seed - a seed for the random number generator
@@ -36,49 +32,58 @@ class DavisPutnam {
 
         // Internal
         /**
+         * The stack is used for backtracking
          * @type {Array<{clauses: Set<Set<String>>, literals: Stack<Set<String>>, used: Stack<Set<Set<String>>>}>}
          */
         this.stack = [];
         /**
+         * Internal set of clauses using the Set class of Immutable.js
          * @type {Set<Set<String>>}
          */
         this._clauses = null;
         /**
+         * Set of literals that had been chosen
          * @type {Set<String>}
          */
         this.literals = new Set();
         /**
+         * Set of previously used unit clauses
          * @type {Set<Set<String>>}
          */
         this.used = new Set();
         /**
+         * The current literal that's being used to do the unit cuts
          * @type {String}
          */
         this.literal = null;
 
         /**
+         * Set of DavisPutnamConsumer classes to send events to
          * @type {Set<DavisPutnamConsumer>}
          */
         this.consumers = new Set().asMutable();
 
         // External
         /**
+         * External representation of the internal set of clauses
          * @type {Array<Array<String>>}
          */
         this.clauses = clauses;
         /**
+         * Internal seed string
          * @type {String}
          */
         this._seed = null;
         this.seed = seed;
         /**
-         * If its value is true the Algorithm will do micro steps
+         * If its value is true the algorithm will do micro steps otherwise macro steps
          * @type {Boolean}
          */
         this.micro = false;
 
         return this;
     }
+
     /**
      * Returns a set of all not used unit clauses of the current clauses.
      * These are clauses with just one literal that have not been used to reduce the set of clauses previously.
@@ -88,6 +93,7 @@ class DavisPutnam {
     get useable() {
         return this._clauses.filter(clause => clause.size == 1 && !this.used.has(clause));
     }
+
     /**
      * Returns a set of all clauses that can be unit cut by the current literal.
      * If the literal is not set it will return an empty set.
@@ -98,14 +104,19 @@ class DavisPutnam {
         if (!this.literal) return new Set();
         return this._clauses.filter(clause => clause.has(Util.negateLiteral(this.literal)));
     }
+
     /**
      * @param {String} seed
      */
     set seed(seed) {
+        //Sets the seed and initializes the random number generator with given seed.
         this._seed = seed;
         this.random = seedrandom(this.seed);
     }
+
     /**
+     * The seed that's currently being used. If undefined the seed is not known.
+     * 
      * @returns {String}
      */
     get seed() {
@@ -113,8 +124,9 @@ class DavisPutnam {
     }
 
     /**
-     * Adds a consumer.
-     * @param {DavisPutnamConsumer} consumer
+     * Adds a consumer to the set of consumers.
+     * 
+     * @param {DavisPutnamConsumer} consumer - the consumer to add
      * 
      * @returns {DavisPutnam} itself
      */
@@ -122,9 +134,11 @@ class DavisPutnam {
         this.consumers.add(consumer);
         return this;
     }
+
     /**
-     * Removes a consumer.
-     * @param {DavisPutnamConsumer} consumer 
+     * Removes a consumer from the set of consumers.
+     * 
+     * @param {DavisPutnamConsumer} consumer - the consumer to remove
      * 
      * @returns {DavisPutnam} itself
      */
@@ -135,6 +149,7 @@ class DavisPutnam {
 
     /**
      * Sets a new set of clauses to be satisfied and resets all previous progress.
+     * It also calls satisfied or not satisfiable events if the given set is already satisfied or not satisfiable.
      * 
      * @param {Array<Array<String>>} clauses
      */
@@ -166,16 +181,19 @@ class DavisPutnam {
             }));
         }
     }
+
     /**
-     * Returns an two dimensional array of literals of the current state.
+     * Returns the set of clauses as a two dimensional array of strings.
      * 
      * @returns {Array<Array<String>>}
      */
     get clauses() {
         return this._clauses.toJS();
     }
+
     /**
-     * Returns the state
+     * Returns the current state of the set of clauses.
+     * The state being all literals of the unit clauses.
      * 
      * @returns {Array<String>}
      */
@@ -184,6 +202,8 @@ class DavisPutnam {
     }
 
     /**
+     * A check if the algorithm is done satisfying or can't satisfy the problem.
+     * 
      * @returns {Boolean} true if done.
      */
     done() {
@@ -191,7 +211,10 @@ class DavisPutnam {
     }
 
     /**
-     * @returns {Boolean} true if solution found.
+     * Checks if the problem is satisfied.
+     * This is the case if the set of clauses only consists of unit clauses with no contradictions.
+     * 
+     * @returns {Boolean} true if satisfied
      */
     satisfied() {
         // get set of unit clauses
@@ -202,23 +225,25 @@ class DavisPutnam {
         // check if set of clauses is only consisting of those unit clauses and if it makes sense
         return this._clauses.subtract(units).isEmpty() && units.filter(clause => literals.has(Util.negateLiteral(clause.first()))).isEmpty();
     }
+
     /**
-     * @returns {Boolean} true if no solution can found.
+     * Checks if the problem is not satisfiable.
+     * This is the case if the empty set is part of the clauses and the stack is empty.
+     * 
+     * @returns {Boolean} true if not satisfiable
      */
     notSatisfiable() {
         return this._clauses.has(new Set()) && this.stack.isEmpty();
     }
-
     
     /**
      * Runs the davis putnam for the given amount of steps.
+     * 
      * @param {Number} step if the step is a negative number it will run till it's satisfied
      * 
      * @returns {DavisPutnam} itself
      */
     step(step = 1) {
-        step = Math.round(step); // make steps a whole number
-
         // macro step loop
         while (!this.done() && step != 0) {
             // micro step loop for subsume and unit cuts
@@ -345,8 +370,8 @@ class DavisPutnam {
     }
 
     /**
-     * Wir wählen ein beliebiges Literal aus einer beliebigen Klausel,
-     * so dass weder dieses Literal noch die Negation benutzt wurden.
+     * Chooses a random literal that itself nor its negation has been used yet.
+     * Positive literals are being favoured in this case.
      * 
      * @returns {String} the selected literal
      */
@@ -363,6 +388,7 @@ class DavisPutnam {
     
     /**
      * Picks a random element of a set.
+     * 
      * @param {Set<T>} set
      * 
      * @returns {T} the random element
