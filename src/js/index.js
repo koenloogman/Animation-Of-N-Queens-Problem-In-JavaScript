@@ -5,13 +5,19 @@ const QueensClauses = require('./qeensClauses');
 const Two = require('two.js');
 const Util = require('./util');
 
-//Force page refresh on hot reload
+// force page refresh on hot reload (Parcel Stuff)
 if (module.hot) {
     module.hot.accept(function () {
         window.location.reload();
     });
 }
 
+/**
+ * A Frame class to setup the GUI for the N-Queens Problem animation.
+ * It creates all handlers and background tasks for the user interaction and visual representation.
+ * 
+ * @author Koen Loogman <koen@loogman.de>
+ */
 class Frame {
     constructor(options) {
         // overwrite default settings with the options
@@ -21,7 +27,7 @@ class Frame {
         };
         this.settings = {...settings, ...options};
 
-        // chessboard
+        // Two.js chessboard for visual representation of the state
         this.scene = document.getElementById('scene');
         let size = Math.min(this.scene.clientHeight, this.scene.clientWidth) * 0.9;
         this.two = new Two({
@@ -35,27 +41,27 @@ class Frame {
             'size': size
         });
 
-        // user interactions
+        // get user interaction elements by their id
         this.nField = document.getElementById('n-field');
         this.seedField = document.getElementById('seed-field');
         this.microToggle = document.getElementById('micro-toggle');
         this.autoToggle = document.getElementById('auto-toggle');
         this.nextButton = document.getElementById('next-button');
         this.resetButton = document.getElementById('reset-button');
+        this.log = document.getElementById('log-entries');
 
+        // setup listeners for those user interaction elements
         this.nField.addEventListener('change', _ => this.changeN());
         this.seedField.addEventListener('change', _ => this.changeSeed());
         this.microToggle.addEventListener('change', _ => this.changeMicro());
         this.autoToggle.addEventListener('change', _ => this.changeAuto());
         this.nextButton.addEventListener('click', _ => this.onNext());
         this.resetButton.addEventListener('click', _ => this.onReset());
-
-        // log
-        this.log = document.getElementById('log-entries');
         this.log.addEventListener("click", event => this.onEntry(event));
 
-        // davis putnam worker
+        // setup the DavisPutnamWorker as a independent thread
         this.dpw = new Worker('./davisPutnamWorker.js');
+        // create a listener for incoming commands of the worker
         this.dpw.addEventListener('message', event => {
             let cmd = event.data.cmd;
             let options = event.data.options;
@@ -76,6 +82,7 @@ class Frame {
                     this.board.setState(options.state);
                     break;
                 default:
+                    // undefined command
             }
         });
 
@@ -84,6 +91,8 @@ class Frame {
         this.auto = false;
         this.calculating = false;
         this.clauses = null;
+        
+        // set start values of the animation
         this.nField.value = settings.n;
         this.seedField.value = settings.seed;
 
@@ -93,6 +102,8 @@ class Frame {
     }
 
     /**
+     * This function is called when the user clicks on a log entry.
+     * It changes the state of the chessboard to the state it had when the entry was added to the log.
      * 
      * @param {Event} event 
      */
@@ -114,6 +125,12 @@ class Frame {
         }
     }
 
+    /**
+     * This function creates a new log entry depending on the type of command that came from the DavisPutnamWorker.
+     * 
+     * @param {String} cmd 
+     * @param {*} options 
+     */
     newLogEntry(cmd, options) {
         const entry = document.createElement('div');
         entry.classList.add('entry');
@@ -139,6 +156,8 @@ class Frame {
                 text = 'Problem is not satisfiable';
                 break;
             default:
+                // unknown command
+                return;
         }
         entry.innerHTML = text;
 
@@ -146,6 +165,12 @@ class Frame {
         this.log.insertBefore(entry, this.log.firstChild);
     }
 
+    /**
+     * This function is called when the worker starts calculating.
+     * It locks the user interaction to prevent new unwanted commands to be send to the worker.
+     * 
+     * @param {{calculating: Boolean}} options 
+     */
     onWorkerStart(options) {
         this.nField.disabled = true;
         this.seedField.disabled = true;
@@ -155,9 +180,15 @@ class Frame {
         this.resetButton.disabled = true;
 
         // lock next step
-        this.calculating = true;
+        this.calculating = options.calculating;
     }
 
+    /**
+     * This function is called when the worker finished its calculation.
+     * It unlocks the user interaction again.
+     * 
+     * @param {*} options 
+     */
     onWorkerEnd(options) {
         // hand state to chessboard
         this.board.setState(options.state);
@@ -186,6 +217,10 @@ class Frame {
         }
     }
 
+    /**
+     * This function is called if the user changes the N for the N-Queens Problem.
+     * It changes the chessboard to be able to visualize the new problem and calculates the new set of clauses for the DavisPutnamWorker.
+     */
     changeN() {
         let n = Number(this.nField.value);
         if (isNaN(n) || n < 1){
@@ -199,7 +234,6 @@ class Frame {
                 return;
             }
         }
-        console.log('set n to ' + n);
         
         // reset will trigger this function too so we check if we need to recalculate or use the old values
         if (this.n != n) {
@@ -216,8 +250,11 @@ class Frame {
         });
     }
 
+    /**
+     * This function is called if the user changes the seed.
+     * It hands the seed over to the DavisPutnamWorker.
+     */
     changeSeed() {
-        console.log('set seed to ' + this.seedField.value);
         this.dpw.postMessage({
             'cmd': 'seed',
             'options': {
@@ -243,10 +280,18 @@ class Frame {
         this.changeSeed();
     }
     
+    /**
+     * This function is called if the user wants to reset the animation.
+     * It basically sets the N to the same value.
+     */
     onReset() {
         this.changeN();
     }
 
+    /**
+     * This function is called if the user wants to see the next step of the calculation.
+     * It tells the DavisPutnamWorker to calculate the next step.
+     */
     onNext() {
         if (!this.calculating) this.dpw.postMessage({
             'cmd': 'step',
@@ -257,10 +302,9 @@ class Frame {
     }
 
     /**
-     * 
+     * This function is called if the user wants to change from micro to macro steps and vice versa.
      */
     changeMicro() {
-        console.log('set micro to ', this.microToggle.checked);
         this.dpw.postMessage({
             'cmd': 'micro',
             'options': {
@@ -270,22 +314,23 @@ class Frame {
     }
 
     /**
-     * 
+     * This function is called if the user wants to start or stop the automated steps.
      */
     changeAuto() {
         this.auto = this.autoToggle.checked;
         if (this.auto) {
-            console.log('activated auto');
             this.onNext();
         } else {
-            console.log('deactivated auto');
+            // auto is false
         }
     }
 }
 
+// initialize frame
 const frame = new Frame();
+// resize Two.js on window resize for responsiveness
 window.addEventListener('resize', _ => {
-    let scene = frame.scene;
+    let scene = frame.scene; // get container of two.js object
     let size = Math.min(scene.clientWidth, scene.clientHeight) * 0.9;
     frame.two.height = size;
     frame.two.width = size;

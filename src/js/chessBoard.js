@@ -3,19 +3,22 @@ const { Set } = require('immutable');
 const Two = require('two.js');
 
 /**
- * TODO: clean up code and don't use strings within
+ * The ChessBoard class is a chessboard implemented with Two.js to display the state of the DavisPutnam algorithm when solving the N-Queens Problem.
+ * 
+ * @author Koen Loogman <koen@loogman.de>
  */
 class ChessBoard {
     /**
-     * @param {Two} two 
-     * @param {Number} n 
+     * The constructor of the ChessBoard class.
+     * 
+     * @param {{two: Two, n: Number, size: Number, color: {board: String, tileB: String, tileW: String, queen: String, cross: String}}} options
      */
     constructor(options) {
         // overwrite default settings with the options
         const settings = {
             two: new Two(),
-            size: 200,
             n: 8,
+            size: 200,
             color: {
                 board: '#4F2649',
                 tileB: '#FCFCFC',
@@ -50,16 +53,22 @@ class ChessBoard {
         this.n = this.settings.n;
     }
 
+    /**
+     * @returns {Number} 
+     */
     get n() {
         return this.state.length;
     }
+    /**
+     * @param {Number} n - number of tiles for x and y axis of the chessboard
+     */
     set n(n) {
         this.literals = new Set();
         
         // calculate sizes
-        let padding = this.size * 0.2 / n;
-        let slotSize = (this.size - padding) / n;
-        let tileSize = slotSize - padding / n;
+        let padding = this.size * 0.1 / n;
+        let slotSize = (this.size - padding * 2) / n;
+        let tileSize = slotSize - padding * 2 / n;
 
         // remove old tiles and queenLayer from the scene
         this.tileLayer.remove(this.tiles);
@@ -73,17 +82,17 @@ class ChessBoard {
         this.crosses = Array(n * n).fill(null);
 
         // set start vector to center of the first tile
-        this.tileLayer.translation = new Two.Vector((slotSize + padding) / 2, (slotSize + padding) / 2);
+        this.tileLayer.translation = new Two.Vector(slotSize / 2 + padding, slotSize / 2 + padding);
         this.queenLayer.translation = this.tileLayer.translation;
         this.crossLayer.translation = this.tileLayer.translation;
 
-        // init all tiles and queenLayer
+        // init all layers
         for (let i = 0; i < n * n; i++) {
             let x = i % n;
             let y = Math.floor(i / n);
 
             // create tile
-            let tile = new Two.Rectangle(x * slotSize , y * slotSize, tileSize, tileSize);
+            let tile = new Two.Rectangle(x * slotSize, y * slotSize, tileSize, tileSize);
             tile.fill = y % 2 == x % 2 ? this.settings.color.tileW : this.settings.color.tileB;
             this.tiles[i] = tile;
 
@@ -111,12 +120,17 @@ class ChessBoard {
         this.tileLayer.noStroke();
     }
 
+    /**
+     * Clears the current state of the chessboard.
+     */
     clear() {
         this.literals = new Set();
         this.state.forEach((row, y) => row.forEach((_, x) => this.setClear(x, y)));
     }
 
     /**
+     * Sets the state of the chessboard and changes the visual representation by removing and adding queens and crosses to the board.
+     * 
      * @param {Array<String>} state
      */
     setState(state) {
@@ -129,9 +143,9 @@ class ChessBoard {
         let remove = this.literals.subtract(_literals).map(literal => (literal.substr(0, 1) == '!' ? literal.substr(1) : literal).split(',').map(n => Number(n) - 1));
         
         // get new literals
-        let literals = _literals.subtract(this.literals);
-        let queens = literals.filter(literal => literal.substr(0, 1) != '!').map(literal => literal.split(',').map(n => Number(n) - 1));
-        let crosses = literals.filter(literal => literal.substr(0, 1) == '!').map(literal => literal.substr(1).split(',').map(n => Number(n) - 1));
+        let add = _literals.subtract(this.literals);
+        let queens = add.filter(literal => literal.substr(0, 1) != '!').map(literal => literal.split(',').map(n => Number(n) - 1));
+        let crosses = add.filter(literal => literal.substr(0, 1) == '!').map(literal => literal.substr(1).split(',').map(n => Number(n) - 1));
         
         // overwrite old literals
         this.literals = _literals;
@@ -142,6 +156,12 @@ class ChessBoard {
         crosses.forEach(([x, y]) => this.setCross(x, y));
     }
 
+    /**
+     * Clears the given tile of the chessboard by removing the queen and/or cross.
+     * 
+     * @param {Number} x - column
+     * @param {Number} y - row
+     */
     setClear(x, y) {
         this.state[y][x] = ' ';
 
@@ -154,11 +174,23 @@ class ChessBoard {
             this.crossLayer.remove(this.crosses[x + y * this.n]);
     }
 
+    /**
+     * Sets a queen at the given tile.
+     * 
+     * @param {Number} x - column
+     * @param {Number} y - row
+     */
     setQueen(x, y) {
         this.state[y][x] = 'Q';
         this.queenLayer.add(this.queens[x + y * this.n]);
     }
 
+    /**
+     * Sets a cross at the given tile.
+     * 
+     * @param {Number} x - column
+     * @param {Number} y - row
+     */
     setCross(x, y) {
         this.state[y][x] = '.';
         this.crossLayer.add(this.crosses[x + y * this.n]);

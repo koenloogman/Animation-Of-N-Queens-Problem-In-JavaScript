@@ -1,6 +1,10 @@
 const { DavisPutnam, DavisPutnamConsumer } = require('./davisPutnam.js');
 
 /**
+ * Worker class to run the DavisPutnam class in its own thread.
+ * It implements the DavisPutnamConsumer class and returns the events as messages to the main script.
+ * On each start of an time consuming task it tells the main script about the start and end of this calculation.
+ * This way new messages can be prevented before the worker finished the task.
  * 
  * @author Koen Loogman <koen@loogman.de>
  */
@@ -32,6 +36,7 @@ class DavisPutnamWorker extends	DavisPutnamConsumer {
                     this.onStep(options);
                     break;
                 default:
+                    // undefined command
             }
         });
     }
@@ -49,7 +54,7 @@ class DavisPutnamWorker extends	DavisPutnamConsumer {
     }
 
     /**
-     * Tells the main script that the worker is done.
+     * Tells the main script that the worker is done calculating.
      */
     onEnd() {
         self.postMessage({
@@ -59,7 +64,8 @@ class DavisPutnamWorker extends	DavisPutnamConsumer {
                 'satisfied': this.davisPutnam.satisfied(),
                 'notSatisfiable': this.davisPutnam.notSatisfiable(),
                 'micro': this.davisPutnam.micro,
-                'state': this.davisPutnam.state
+                'state': this.davisPutnam.state,
+                'calculating': false
             }
         });
     }
