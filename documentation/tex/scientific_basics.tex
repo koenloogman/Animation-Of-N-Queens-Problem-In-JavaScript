@@ -155,75 +155,52 @@ The theoretical foundation that was previously created now makes it possible to 
 
 % TODO: nicely format
 \begin{listing}[ht]
-function Satisfiable( clause set $S$ ) return boolean
-\\
-  \hspace*{0.5cm}
-  /* unit propagation */
-  \\
-  \hspace*{0.5cm}
-  repeat for each unit clause $L$ in $S$ do
-  \\
-    \hspace*{1.0cm}
-    /* unit subsumption */
-    \\
-    \hspace*{1.0cm}
-    delete from $S$ every clause containing $L$
-    \\
-    \hspace*{1.0cm}
-    /* unit resolution */
-    \\
-    \hspace*{1.0cm}
-    delete $L$ from every clause of $S$ in which it occurs
-    \\
-  \hspace*{0.5cm}
-  od
-  \\
-  \hspace*{0.5cm}
-  if $S$ is empty then
-  \\
-    \hspace*{1.0cm}
-    return true
-    \\
-  \hspace*{0.5cm}
-  else if a clause becomes $\{\}$ in $S$ then
-  \\
-    \hspace*{1.0cm}
-    return false
-    \\
-  \hspace*{0.5cm}
-  fi
-  \\
-  \hspace*{0.5cm}
-  until no further changes result
-  \\
-  \hspace*{0.5cm}
-  /* splitting */
-  \\
-  \hspace*{0.5cm}
-  choose a literal $L$ occurring in $S$
-  \\
-  \hspace*{0.5cm}
-  if Satisfiable ($S \cup \{\{\neg L\}\}$) then
-  \\
-    \hspace*{1.0cm}
-    return true
-    \\
-  \hspace*{0.5cm}
-  else if Satisfiable ($S \cup \{\{L\}\}$) then
-  \\
-    \hspace*{1.0cm}
-    return true
-    \\
-  \hspace*{0.5cm}
-  else
-  \\
-    \hspace*{1.0cm}
-    return false
-    \\
-  \hspace*{0.5cm}
-  fi
-  \\
-end function
+  \textbf{function} Satisfiable( clause set $S$ ) \textbf{return} boolean\\
+    \hspace*{0.5cm}
+    \textit{/* unit propagation */}\\
+    \hspace*{0.5cm}
+    \textbf{repeat} for each unit clause $L$ in $S$ \textbf{do}\\
+      \hspace*{1.0cm}
+      \textit{/* unit subsumption */}\\
+      \hspace*{1.0cm}
+      delete from $S$ every clause containing $L$\\
+      \hspace*{1.0cm}
+      \textit{/* unit resolution */}\\
+      \hspace*{1.0cm}
+      delete $L$ from every clause of $S$ in which it occurs\\
+    \hspace*{0.5cm}
+    \textbf{od}\\
+    \hspace*{0.5cm}
+    \textbf{if} $S$ is empty \textbf{then}\\
+      \hspace*{1.0cm}
+      \textbf{return} true\\
+    \hspace*{0.5cm}
+    \textbf{else if} a clause becomes $\{\}$ in $S$ \textbf{then}\\
+      \hspace*{1.0cm}
+      \textbf{return} false\\
+    \hspace*{0.5cm}
+    \textbf{fi}\\
+    \hspace*{0.5cm}
+    \textbf{until} no further changes result\\
+    \hspace*{0.5cm}
+    \textit{/* splitting */}\\
+    \hspace*{0.5cm}
+    choose a literal $L$ occurring in $S$\\
+    \hspace*{0.5cm}
+    \textbf{if} Satisfiable ($S \cup \{\{\neg L\}\}$) \textbf{then}\\
+      \hspace*{1.0cm}
+      \textbf{return} true\\
+    \hspace*{0.5cm}
+    \textbf{else if} Satisfiable ($S \cup \{\{L\}\}$) \textbf{then}\\
+      \hspace*{1.0cm}
+      \textbf{return} true\\
+    \hspace*{0.5cm}
+    \textbf{else}\\
+      \hspace*{1.0cm}
+      \textbf{return} false\\
+    \hspace*{0.5cm}
+    \textbf{fi}\\
+  \textbf{end function}
   \caption{A simple Davis–Putnam algorithm \cite{Zhang2000}}
   \label{listing:1}
 \end{listing}  
