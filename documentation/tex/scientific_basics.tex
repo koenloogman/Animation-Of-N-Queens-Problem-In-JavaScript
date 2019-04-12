@@ -162,22 +162,22 @@ function Satisfiable( clause set S ) return boolean
     delete from S every clause containing L
     /* unit resolution */
     delete L from every clause of S in which it occurs
-  od
+  enddo
   if S is empty then
     return true
   else if a clause becomes null in S then
     return false
-  fi
+  endif
   until no further changes result
   /* splitting */
   choose a literal L occurring in S
-  if Satisfiable (S∪{L}) then
+  if Satisfiable (S union {{L}}) then
     return true
-  else if Satisfiable (S∪{L}) then
+  else if Satisfiable (S union {{L}}) then
     return true
   else
     return false
-  fi
+  endif
 end function
 \end{minted}
   \caption{A simple Davis–Putnam algorithm \cite{Zhang2000}}
