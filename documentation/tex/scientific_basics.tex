@@ -153,33 +153,32 @@ For simplification, a statement variable p is selected at the beginning, which o
 The theoretical foundation that was previously created now makes it possible to sketch the procedure of the Davis Putman algorithm. With the help of the intersection rule and the subsumption, the clause set $K$ is simplified as far as possible. If already after this step $K$ is trivial, the procedure is finished. Otherwise a statement logical variable p is selected, which occurs in K. Then a recursive attempt is made to solve the clause set $K \cup \bigl\{\{p\}\bigr\}$ in order to find a solution for K. If no solution was found here either, the same is tried with the negated $p$. If this attempt also fails, K is unsolvable.\cite{Zhang2000}, \cite{Stroetman2019}
 % TODO: find more sources
 
+% TODO: nicely format
 \begin{listing}[ht]
-\begin{minted}{pascal}
-function Satisfiable( clause set S ) return boolean
-  /* unit propagation */
-  repeat for each unit clause L in S do
-    /* unit subsumption */
-    delete from S every clause containing L
-    /* unit resolution */
-    delete L from every clause of S in which it occurs
-  enddo
-  if S is empty then
-    return true
-  else if a clause becomes null in S then
-    return false
-  endif
-  until no further changes result
-  /* splitting */
-  choose a literal L occurring in S
-  if Satisfiable (S union {{L}}) then
-    return true
-  else if Satisfiable (S union {{L}}) then
-    return true
-  else
-    return false
-  endif
+function Satisfiable( clause set $S$ ) return boolean\\
+  /* unit propagation */\\
+  repeat for each unit clause $L$ in $S$ do\\
+    /* unit subsumption */\\
+    delete from $S$ every clause containing $L$\\
+    /* unit resolution */\\
+    delete $L$ from every clause of $S$ in which it occurs\\
+  od\\
+  if $S$ is empty then\\
+    return true\\
+  else if a clause becomes $\{\}$ in $S$ then\\
+    return false\\
+  fi\\
+  until no further changes result\\
+  /* splitting */\\
+  choose a literal $L$ occurring in $S$\\
+  if Satisfiable ($S \cup \{\{\neg L\}\}$) then\\
+    return true\\
+  else if Satisfiable ($S \cup \{\{L\}\}$) then\\
+    return true\\
+  else\\
+    return false\\
+  fi\\
 end function
-\end{minted}
   \caption{A simple Davis–Putnam algorithm \cite{Zhang2000}}
   \label{listing:1}
 \end{listing}  
