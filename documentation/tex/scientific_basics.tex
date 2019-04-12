@@ -109,7 +109,7 @@ The result set of clauses will have the same amount of clauses as $K$. Only the 
 For further simplification of the set of clauses we will use subsumption. The idea is simple and can be shown with the following example:
 \\
 \hspace*{1.3cm}
-$K = \{\; \{\; l,\; p,\; \neg q \;\},\; \{\; l\; \}\; \} \cup M$
+$K = \{\; \{\; p,\; \neg q \;\},\; \{\; p\; \}\; \} \cup M$
 \\[0.2cm]
 It is clear that the clause $\{\; p\; \}$ implies the clause $\{\; p,\; \neg q \;\}$, because if $\{\; p\; \}$ is satisfied, then $\{\; p,\; \neg q \;\}$ will be satisfied too. That's because
 \\
@@ -154,7 +154,7 @@ The theoretical foundation that was previously created now makes it possible to 
 % TODO: find more sources
 
 % TODO: nicely format
-\begin{listing}[ht]
+\begin{listing}[h!]
   \textbf{function} Satisfiable( clause set $S$ ) \textbf{return} boolean\\
     \hspace*{0.5cm}
     \textit{/* unit propagation */}\\
