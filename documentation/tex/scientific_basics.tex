@@ -169,7 +169,7 @@ The theoretical foundation that was previously created now makes it possible to 
         \hspace*{1.5cm}
         \textit{/* unit resolution */}\\
         \hspace*{1.5cm}
-        delete $\neg L$ from every clause of $S$ in which it occurs\\
+        delete $\bar{L}$ from every clause of $S$ in which it occurs\\
       \hspace*{1.0cm}
       \textbf{od}\\
       \hspace*{1.0cm}
@@ -189,7 +189,7 @@ The theoretical foundation that was previously created now makes it possible to 
     \hspace*{0.5cm}
     choose a literal $L$ occurring in $S$\\
     \hspace*{0.5cm}
-    \textbf{if} Satisfiable ($S \cup \{\{\neg L\}\}$) \textbf{then}\\
+    \textbf{if} Satisfiable ($S \cup \{\{\bar{L}\}\}$) \textbf{then}\\
       \hspace*{1.0cm}
       \textbf{return} true\\
     \hspace*{0.5cm}
