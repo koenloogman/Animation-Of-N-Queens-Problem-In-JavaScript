@@ -86,7 +86,6 @@ In order for one of these two cases to occur, the clause sets must be simplified
 \item Case Differentiation
 \end{enumerate}
 
-% TODO: continue here
 \subsection{Simplification with the Cut Rule} 
 To simplify a set of clauses $K$ with $C_1 \cup \{\; p\; \}\, C_2 \cup \{\; \neg p\; \} \in K$ the cut rule can be used. Lets say we have two clauses $C_1$, $C_2$ and a variable $p$. A typical application of the cut rule is.
 \\
@@ -101,20 +100,21 @@ $\texttt{unitCut}: 2^{K} \times L \to 2^{K}$
 so that for a set of clauses $K$ and a literal $l$ the function $\texttt{unitCut}(K,\; l)$ will simplify the set of clauses as much as possible by using unit cuts:
 \\
 \hspace*{1.3cm}
-$\texttt{unitCut}(K,\; l) = \{\; C \setminus \{\; \neg l\; \}\; |\; C \in K\; \}$
+$\texttt{unitCut}(K,\; l) = \{\; C \setminus \{\; \bar{l}\; \}\; |\; C \in K\; \}$
 \\[0.2cm]
-The result set of clauses will have the same amount of clauses as $K$. Only the clauses $C \in K$ where $\neg l \in C$ were affected and got that element removed. \cite{Stroetman2019}
+The result set of clauses will have the same amount of clauses as $K$. Only the clauses $C \in K$ where $\bar{l} \in C$ were affected and got that element removed. \cite{Stroetman2019}
 
+% TODO: continue here
 \subsection{Simplification with Subsumption}
 For further simplification of the set of clauses we will use subsumption. The idea is simple and can be shown with the following example:
 \\
 \hspace*{1.3cm}
 $K = \{\; \{\; l,\; p,\; \neg q \;\},\; \{\; l\; \}\; \} \cup M$
 \\[0.2cm]
-It is clear that the clause $\{\; l\; \}$ implies the clause $\{\; l,\; p,\; \neg q \;\}$, because if $\{\; l\; \}$ is satisfied, then $\{\; l,\; p,\; \neg q \;\}$ will be satisfied too. That's because
+It is clear that the clause $\{\; p\; \}$ implies the clause $\{\; p,\; \neg q \;\}$, because if $\{\; p\; \}$ is satisfied, then $\{\; p,\; \neg q \;\}$ will be satisfied too. That's because
 \\
 \hspace*{1.3cm}
-$\models l \to l \lor p \lor \neg q$
+$\models p \to p \lor \neg q$
 \\[0.2cm]
 is given. With that in mind we can say that we can subsume a clause $C$ with a unit clause $U$ if $U \subseteq C$. That means if we have a set of clauses $K$ with $C \in K \land U \in K$ and $U$ can subsume $C$, we can remove the clause $C$ from $K$ to reduce its size. We define a function
 \\
@@ -144,13 +144,13 @@ The set of clauses $K$ can only be satisfied if $K \cup \bigl\{\{p\}\bigr\}$ or 
 % Für die Vereinfachung wird zu Beginn also eine Aussagenvariable p ausgewählt, die in der Klauselmenge vorkommt. Danach werden die beiden oben genannten Klauselmengen gebildet und versucht, für eine der beiden eine Lösung zu finden. Ist dieser Versuch erfolgreich, ist das Ergebnis automatisch die Lösung von $K$. Falls keine gefunden wird, ist $K$ unlösbar.
 % TODO: Keine Ahnung ob hier Beweis einfügen soll
 % cSpell:enable
-For simplification, a statement variable p is selected at the beginning, which occurs in the clause set. Then the two clause sets mentioned above are formed and an attempt is made to find a solution for one of them. If this attempt is successful, the result is automatically a solution of $K$. If none is found, $K$ is unsolvable.
+For simplification, a statement variable $p$ is selected at the beginning, which occurs in the clause set. Then the two clause sets mentioned above are formed and an attempt is made to find a solution for one of them. If this attempt is successful, the result is automatically a solution of $K$. If none is found, $K$ is unsatisfiable.
 
 \subsection{The Davis-Putnam Method}
 % cSpell:disable
 % Durch die Wissensgrundlage, die zuvor geschaffen wurde, ist es nun möglich, das Vorgehen des Davis Putman Algorithmus zu skizzieren. Mit der Hilfe der Schnittregel und der Subsumption wird die Klauselmenge $K$ soweit es möglich ist, vereinfacht. Falls bereits nach diesem Schritt $K$ trivial ist, ist das Verfahren beendet. Andernfalls wird eine aussagelogische Variable p ausgewählt, die in K vorkommt. Dann wird rekursiv versucht, die Klauselmenge $K \cup \bigl\{\{p\}\bigr\}$ zu lösen, um eine Lösung für K zu finden. Wenn auch hier keine Lösung gefunden wurde, wird dasselbe mit dem negierten $p$ versucht. Scheitert auch dieser Versuch, ist K unlösbar.
 % cSpell:enable
-The theoretical foundation that was previously created now makes it possible to sketch the procedure of the Davis Putman algorithm. With the help of the intersection rule and the subsumption, the clause set $K$ is simplified as far as possible. If already after this step $K$ is trivial, the procedure is finished. Otherwise a statement logical variable p is selected, which occurs in K. Then a recursive attempt is made to solve the clause set $K \cup \bigl\{\{p\}\bigr\}$ in order to find a solution for K. If no solution was found here either, the same is tried with the negated $p$. If this attempt also fails, K is unsolvable.\cite{Zhang2000}, \cite{Stroetman2019}
+The theoretical foundation that was previously created now makes it possible to sketch the procedure of the Davis Putman algorithm. With the help of the intersection rule and the subsumption, the clause set $K$ is simplified as far as possible. If already after this step $K$ is trivial, the procedure is finished. Otherwise a statement logical variable p is selected, which occurs in $K$. Then a recursive attempt is made to solve the clause set $K \cup \bigl\{\{p\}\bigr\}$ in order to find a solution for $K$. If no solution was found here either, the same is tried with the negated $p$. If this attempt also fails, $K$ is unsatisfiable.\cite{Zhang2000}, \cite{Stroetman2019}
 % TODO: find more sources
 
 % TODO: nicely format
