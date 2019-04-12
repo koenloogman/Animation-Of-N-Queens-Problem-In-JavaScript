@@ -155,29 +155,74 @@ The theoretical foundation that was previously created now makes it possible to 
 
 % TODO: nicely format
 \begin{listing}[ht]
-function Satisfiable( clause set $S$ ) return boolean\\
-  /* unit propagation */\\
-  repeat for each unit clause $L$ in $S$ do\\
-    /* unit subsumption */\\
-    delete from $S$ every clause containing $L$\\
-    /* unit resolution */\\
-    delete $L$ from every clause of $S$ in which it occurs\\
-  od\\
-  if $S$ is empty then\\
-    return true\\
-  else if a clause becomes $\{\}$ in $S$ then\\
-    return false\\
-  fi\\
-  until no further changes result\\
-  /* splitting */\\
-  choose a literal $L$ occurring in $S$\\
-  if Satisfiable ($S \cup \{\{\neg L\}\}$) then\\
-    return true\\
-  else if Satisfiable ($S \cup \{\{L\}\}$) then\\
-    return true\\
-  else\\
-    return false\\
-  fi\\
+function Satisfiable( clause set $S$ ) return boolean
+\\
+  \hspace*{0.5cm}
+  /* unit propagation */
+  \\
+  \hspace*{0.5cm}
+  repeat for each unit clause $L$ in $S$ do
+  \\
+    \hspace*{1.0cm}
+    /* unit subsumption */
+    \\
+    \hspace*{1.0cm}
+    delete from $S$ every clause containing $L$
+    \\
+    \hspace*{1.0cm}
+    /* unit resolution */
+    \\
+    \hspace*{1.0cm}
+    delete $L$ from every clause of $S$ in which it occurs
+    \\
+  \hspace*{0.5cm}
+  od
+  \\
+  \hspace*{0.5cm}
+  if $S$ is empty then
+  \\
+    \hspace*{1.0cm}
+    return true
+    \\
+  \hspace*{0.5cm}
+  else if a clause becomes $\{\}$ in $S$ then
+  \\
+    \hspace*{1.0cm}
+    return false
+    \\
+  \hspace*{0.5cm}
+  fi
+  \\
+  \hspace*{0.5cm}
+  until no further changes result
+  \\
+  \hspace*{0.5cm}
+  /* splitting */
+  \\
+  \hspace*{0.5cm}
+  choose a literal $L$ occurring in $S$
+  \\
+  \hspace*{0.5cm}
+  if Satisfiable ($S \cup \{\{\neg L\}\}$) then
+  \\
+    \hspace*{1.0cm}
+    return true
+    \\
+  \hspace*{0.5cm}
+  else if Satisfiable ($S \cup \{\{L\}\}$) then
+  \\
+    \hspace*{1.0cm}
+    return true
+    \\
+  \hspace*{0.5cm}
+  else
+  \\
+    \hspace*{1.0cm}
+    return false
+    \\
+  \hspace*{0.5cm}
+  fi
+  \\
 end function
   \caption{A simple Davis–Putnam algorithm \cite{Zhang2000}}
   \label{listing:1}
