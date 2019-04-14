@@ -154,58 +154,58 @@ The theoretical foundation that was previously created now makes it possible to 
 % TODO: find more sources
 
 % TODO: nicely format
-\begin{listing}[h!]
-  \textbf{function} Satisfiable( clause set $S$ ) \textbf{return} boolean\\
-    \hspace*{0.5cm}
-    \textit{/* unit propagation */}\\
-    \hspace*{0.5cm}
-    \textbf{repeat}\\
-      \hspace*{1.0cm}
-      \textbf{for each} unit clause $L$ in $S$ \textbf{do}\\
-        \hspace*{1.5cm}
-        \textit{/* unit subsumption */}\\
-        \hspace*{1.5cm}
-        delete from $S$ every clause containing $L$\\
-        \hspace*{1.5cm}
-        \textit{/* unit resolution */}\\
-        \hspace*{1.5cm}
-        delete $\bar{L}$ from every clause of $S$ in which it occurs\\
-      \hspace*{1.0cm}
-      \textbf{od}\\
-      \hspace*{1.0cm}
-      \textbf{if} $S$ is empty \textbf{then}\\
-        \hspace*{1.5cm}
-        \textbf{return} true\\
-      \hspace*{1.0cm}
-      \textbf{else if} a clause becomes $\{\}$ in $S$ \textbf{then}\\
-        \hspace*{1.5cm}
-        \textbf{return} false\\
-      \hspace*{1.0cm}
-      \textbf{fi}\\
-    \hspace*{0.5cm}
-    \textbf{until} no further changes result\\
-    \hspace*{0.5cm}
-    \textit{/* splitting */}\\
-    \hspace*{0.5cm}
-    choose a literal $L$ occurring in $S$\\
-    \hspace*{0.5cm}
-    \textbf{if} Satisfiable ($S \cup \{\{\bar{L}\}\}$) \textbf{then}\\
-      \hspace*{1.0cm}
-      \textbf{return} true\\
-    \hspace*{0.5cm}
-    \textbf{else if} Satisfiable ($S \cup \{\{L\}\}$) \textbf{then}\\
-      \hspace*{1.0cm}
-      \textbf{return} true\\
-    \hspace*{0.5cm}
-    \textbf{else}\\
-      \hspace*{1.0cm}
-      \textbf{return} false\\
-    \hspace*{0.5cm}
-    \textbf{fi}\\
-  \textbf{end function}
-  \caption{A simple Davis–Putnam algorithm \cite{Zhang2000}}
-  \label{listing:1}
-\end{listing}  
+%\begin{listing}[h!]
+%  \textbf{function} Satisfiable( clause set $S$ ) \textbf{return} boolean\\
+%    \hspace*{0.5cm}
+%    \textit{/* unit propagation */}\\
+%    \hspace*{0.5cm}
+%    \textbf{repeat}\\
+%      \hspace*{1.0cm}
+%      \textbf{for each} unit clause $L$ in $S$ \textbf{do}\\
+%        \hspace*{1.5cm}
+%        \textit{/* unit subsumption */}\\
+%        \hspace*{1.5cm}
+%        delete from $S$ every clause containing $L$\\
+%        \hspace*{1.5cm}
+%        \textit{/* unit resolution */}\\
+%        \hspace*{1.5cm}
+%        delete $\bar{L}$ from every clause of $S$ in which it occurs\\
+%      \hspace*{1.0cm}
+%      \textbf{od}\\
+%      \hspace*{1.0cm}
+%      \textbf{if} $S$ is empty \textbf{then}\\
+%        \hspace*{1.5cm}
+%        \textbf{return} true\\
+%      \hspace*{1.0cm}
+%      \textbf{else if} a clause becomes $\{\}$ in $S$ \textbf{then}\\
+%        \hspace*{1.5cm}
+%        \textbf{return} false\\
+%      \hspace*{1.0cm}
+%      \textbf{fi}\\
+%    \hspace*{0.5cm}
+%    \textbf{until} no further changes result\\
+%    \hspace*{0.5cm}
+%    \textit{/* splitting */}\\
+%    \hspace*{0.5cm}
+%    choose a literal $L$ occurring in $S$\\
+%    \hspace*{0.5cm}
+%    \textbf{if} Satisfiable ($S \cup \{\{\bar{L}\}\}$) \textbf{then}\\
+%      \hspace*{1.0cm}
+%      \textbf{return} true\\
+%    \hspace*{0.5cm}
+%    \textbf{else if} Satisfiable ($S \cup \{\{L\}\}$) \textbf{then}\\
+%      \hspace*{1.0cm}
+%      \textbf{return} true\\
+%    \hspace*{0.5cm}
+%    \textbf{else}\\
+%      \hspace*{1.0cm}
+%      \textbf{return} false\\
+%    \hspace*{0.5cm}
+%    \textbf{fi}\\
+%  \textbf{end function}
+%  \caption{A simple Davis–Putnam algorithm \cite{Zhang2000}}
+%  \label{listing:1}
+%\end{listing}  
 
 
 \section{N Queens Problem}
