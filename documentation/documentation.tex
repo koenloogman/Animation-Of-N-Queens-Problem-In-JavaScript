@@ -1,38 +1,174 @@
-% Preambel mit Einstellungen importieren
-\input{tex/preambel}
+%% Preambel mit Einstellungen importieren
+%\input{tex/preambel}
+%
+%% Dokumenteninfos importieren
+%\input{tex/docinfo.tex}
+%
+%% Literatur-Datenbank
+%\addbibresource{literatur.bib}   % BibLaTeX-Datei mit Literaturquellen einbinden
+%
+%\begin{document}
+%\frontmatter
+%
+%% Römische Ziffern für die "Front-Matter"
+%\setcounter{page}{0}
+%\changefont{ptm}{m}{n}  % Times New Roman für den Fließtext
+%\renewcommand{\rmdefault}{ptm}
+%
+%% Titelblatt
+%\input{tex/titelblatt}
+%
+%% Inhaltsverzeichnis erzeugen
+%\cleardoublepage
+%\pdfbookmark{\contentsname}{Contents}
+%\tableofcontents
+%
+%% Korrigiert Nummerierung bei mehrseitigem Inhaltsverzeichnis
+%\cleardoublepage
+%\newcounter{frontmatterpage}
+%\setcounter{frontmatterpage}{\value{page}}
+%
+%% Arabische Zahlen für den Hauptteil
+%\mainmatter
+%
+%% Den Hauptteil mit vergrößertem Zeilenabstand setzen
+%\onehalfspacing
+%
+%% ------------------------------------------------------------------
+%% Hauptteil der Arbeit
+%    \include{tex/introduction}
+%    \include{tex/scientific_basics}
+%    \include{tex/technical_basics}
+%    \include{tex/conception}
+%    \include{tex/implementation}
+%    \include{tex/prospect}
+%% ------------------------------------------------------------------
+%
+%\label{lastpage}
+%
+%% Neue Seite
+%\cleardoublepage
+%
+%% Backmatter mit normalem Zeilenabstand setzen
+%\singlespacing
+%
+%% Römische Ziffern für die "Back-Matter", fortlaufend mit "Front-Matter"
+%\pagenumbering{roman}
+%\setcounter{page}{\value{frontmatterpage}}
+%
+%% Abkürzungsverzeichnis
+%\addchap{\dhbwabbreviations}
+%%\input{tex/abkuerzungen}
+%
+%% Tabellenverzeichnis erzeugen
+%\cleardoublepage
+%\phantomsection
+%\addcontentsline{toc}{chapter}{\dhbwlistoftables}
+%\listoftables
+%
+%% Abbildungsverzeichnis erzeugen
+%\cleardoublepage
+%\phantomsection
+%\addcontentsline{toc}{chapter}{\dhbwlistoffigures}
+%\listoffigures
+%
+%%% Listingverzeichnis erzeugen
+%%\cleardoublepage
+%%\phantomsection
+%%\addcontentsline{toc}{chapter}{\dhbwlistings}
+%%\lstlistoflistings
+%
+%% Literaturverzeichnis erzeugen
+%\begin{flushleft}
+%\printbibliography
+%\end{flushleft}
+%
+%% Index ausgeben. Wenn Sie keinen Index haben, entfernen Sie einfach
+%% diesen Teil.
+%\cleardoublepage
+%\phantomsection
+%\addcontentsline{toc}{chapter}{\dhbwindex}
+%\printindex
+%
+%% Anhang. Wenn Sie keinen Anhang haben, entfernen Sie einfach
+%% diesen Teil.
+%%\appendix
+%%\input{tex/anhang-a}
+%%\input{tex/anhang-b}
+%
+%\end{document}
 
-% Dokumenteninfos importieren
-\input{tex/docinfo.tex}
+%%%%%%%%%%%%%%    Jessi PA Template 		%%%%%%%%%%%%%%%%%%%%%%%
 
-% Literatur-Datenbank
-\addbibresource{literatur.bib}   % BibLaTeX-Datei mit Literaturquellen einbinden
+
+\input{ads/header}
+\bibliography{literatur.bib}
 
 \begin{document}
-\frontmatter
 
-% Römische Ziffern für die "Front-Matter"
-\setcounter{page}{0}
-\changefont{ptm}{m}{n}  % Times New Roman für den Fließtext
-\renewcommand{\rmdefault}{ptm}
+	% Deckblatt
+	\begin{spacing}{1}
+		\input{ads/deckblatt}
+	\end{spacing}
 
-% Titelblatt
-\input{tex/titelblatt}
+	\pagestyle{fancyplain}
+	\fancyhf{}
+%	\fancyhead[L]{\includegraphics[height=1.2cm]{images/logo.png}}
+	\fancyhead[R]{\includegraphics[height=1.2cm]{img/dhbw.png}}
+	\renewcommand{\headrulewidth}{0pt}
+	\newpage
+	
+%	%Sperrvermerk
+%	\input{ads/sperrvermerk}
+%	\newpage
+	
+	% Erklärung
+	\input{ads/erklaerung}
 
-% Inhaltsverzeichnis erzeugen
-\cleardoublepage
-\pdfbookmark{\contentsname}{Contents}
-\tableofcontents
+	%\includepdf{ads/deckblatt.pdf}
+	%\includepdf{ads/erklaerung.pdf}
 
-% Korrigiert Nummerierung bei mehrseitigem Inhaltsverzeichnis
-\cleardoublepage
-\newcounter{frontmatterpage}
-\setcounter{frontmatterpage}{\value{page}}
+	\cleardoublepage
+	
+	\pagenumbering{Roman}
+	\fancyfoot[C]{\thepage}
+	
+	% Abstract
+	\input{ads/abstract}
+	\newpage
 
-% Arabische Zahlen für den Hauptteil
-\mainmatter
 
-% Den Hauptteil mit vergrößertem Zeilenabstand setzen
-\onehalfspacing
+	% Inhaltsverzeichnis
+	\begin{spacing}{1.1}
+		\begingroup
+			\setcounter{tocdepth}{1}
+			%für die Anzeige von Unterkapiteln im Inhaltsverzeichnis
+			%\setcounter{tocdepth}{2}
+			\tableofcontents
+			\clearpage
+		\endgroup
+	\end{spacing}
+	\newpage
+	\RedeclareSectionCommand[beforeskip=\kapitelabstand]{chapter} % stellt Abstand vor Kapitelüberschriften ein
+	% Abkürzungsverzeichnis
+	%	\cleardoublepage
+	%	\input{ads/acronym}
+	
+	% Abbildungsverzeichnis
+	\cleardoublepage
+	\listoffigures
+	
+	%Tabellenverzeichnis
+	%\cleardoublepage
+	%\listoftables
+	
+	% Quellcodeverzeichnis
+	%\cleardoublepage
+	%\lstlistoflistings
+	
+	\cleardoublepage
+	
+	\pagenumbering{arabic}
 
 % ------------------------------------------------------------------
 % Hauptteil der Arbeit
@@ -44,63 +180,27 @@
     \include{tex/prospect}
 % ------------------------------------------------------------------
 
-\label{lastpage}
+	\clearpage
 
-% Neue Seite
-\cleardoublepage
+	\pagenumbering{Roman}
+	\setcounter{page}{4}
 
-% Backmatter mit normalem Zeilenabstand setzen
-\singlespacing
-
-% Römische Ziffern für die "Back-Matter", fortlaufend mit "Front-Matter"
-\pagenumbering{roman}
-\setcounter{page}{\value{frontmatterpage}}
-
-% Abkürzungsverzeichnis
-\addchap{\dhbwabbreviations}
-%\input{tex/abkuerzungen}
-
-% Tabellenverzeichnis erzeugen
-\cleardoublepage
-\phantomsection
-\addcontentsline{toc}{chapter}{\dhbwlistoftables}
-\listoftables
-
-% Abbildungsverzeichnis erzeugen
-\cleardoublepage
-\phantomsection
-\addcontentsline{toc}{chapter}{\dhbwlistoffigures}
-\listoffigures
-
-%% Listingverzeichnis erzeugen
-%\cleardoublepage
-%\phantomsection
-%\addcontentsline{toc}{chapter}{\dhbwlistings}
-%\lstlistoflistings
-
-% Literaturverzeichnis erzeugen
-\begin{flushleft}
-\printbibliography
-\end{flushleft}
-
-% Index ausgeben. Wenn Sie keinen Index haben, entfernen Sie einfach
-% diesen Teil.
-\cleardoublepage
-\phantomsection
-\addcontentsline{toc}{chapter}{\dhbwindex}
-\printindex
-
-% Anhang. Wenn Sie keinen Anhang haben, entfernen Sie einfach
-% diesen Teil.
-%\appendix
-%\input{tex/anhang-a}
-%\input{tex/anhang-b}
-
+	% Literaturverzeichnis
+	\cleardoublepage
+	\printbibliography
+	%\bibliography{lit}
+	%\input{ads/appendix}
+	\phantomsection
+	%\addcontentsline{toc}{chapter}{Appendix}
+	%\appendix
+	%\input{tex/anhang-a}
+	%\input{tex/anhang-b}
+	%\input{tex/anhang-c}
+	%\input{tex/anhang-d}
 \end{document}
 
 
-
-
+%%%%%%%%%%%%%%   First template    %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\documentclass{report}
 %\usepackage[utf8]{inputenc}
