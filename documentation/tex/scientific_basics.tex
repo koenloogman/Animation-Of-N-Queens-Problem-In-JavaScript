@@ -12,6 +12,24 @@ Therefore a general understanding of this algorithm and the mathematical problem
 This chapter summarizes the fundamental knowledge that is needed in order to create a basis for further development. 
 %TODO: rephrase following sentence:
 Among other things, the definition of the mathematical problem plays a role here, so that it can be solved by the Davis Putman algorithm.
+\section{Basics of propositional logic}
+%TODO Koen: Spell and definition checking,if you have more definitions to add, add it
+Before the algorithm can be examined in more detail, a few mathematical terms must first be briefly explained.
+\paragraph{Propositional logic interpretation}
+The function $\mathcal{I}:\mathcal{P} \rightarrow \mathbb{B}$ is called propositional logic interpretation, which assigns a truth value $\mathcal{I}(p) \in \mathbb{B}$ to each proposition-logical variable $p\in \mathcal{P}$
+\paragraph{Satisfiable} There is a set of propositional logic formulas. If there is an interpretation $i$ so that all formulas are satisfied and the formula $\mathcal{I}(f) = \texttt{True}$ \quad for all propositional logic formulas in the set is given, so this set is satisfiable. If this is not the case, then is this set unsatisfiable.
+\paragraph{Tautology}It is the case, when a propositional logic formula for every interpretation $\mathcal{I}$ always true is: $\mathcal{I}(f) = \texttt{True}$. In this case it is written as $\models f$.
+\paragraph{literal}
+A propositional logic formula $f$ is called literal, if one of the following cases is true and $p$ is a propositional-logical variable.
+\begin{enumerate}
+%TODO Koen Make T great again, didnt found opposite of \bot
+\item $f =$T or $f = \bot$
+\item $f = p$ If this is the case, it is called as a positive literal.
+\item $f = \neg p$ So it is called as a negative literal.
+\end{enumerate}
+\paragraph{clause} A propositional logic formula $K$ is called clause if it has the following structure.
+\\[0.2cm]
+  \hspace*{1.3cm} $K = l_1 \vee \cdots \vee l_r$ \\[0.2cm] At this formula, $l$ is a literal for every value $i=1,...,r$.
 
 \section{The Algorithm of Davis \& Putnam}
 % cSpell:disable
@@ -48,7 +66,7 @@ $r \land \bot \land t$.
 % cSpell:disable
 % Eine leere Klammer bedeutet in der Aussagelogik ein Falsum, wodurch $K_2$ unerfüllbar ist. Bei sehr großen Klauselmengen ist es meist nicht mehr auf dem ersten Blick zu sehen, so dass Algorithmen wie dieser eingesetzt werden. Doch um nun einen Schritt tiefer setzen zu können, müssen zwei Definitionen zuvor eingeführt werden.
 % cSpell:enable
-The empty set in the set of clauses $K_2$ is interpreted as a $\bot$ in the propositional logic, making it impossible to satisfy $K_2$. It is possible to satisfy smaller sets of less complex clauses by first glance, but it gets more difficult for larger and complexer sets of clauses. For these algorithms like the Davis Putman algorithm are used.
+The empty set in the set of clauses $K_2$ is interpreted as a $\bot$ in the propositional logic, making it impossible to satisfy $K_2$. It is possible to satisfy smaller sets of less complex clauses by first glance, but it gets more difficult for larger and more complex sets of clauses. For these algorithms like the Davis Putman algorithm are used.
 % TODO: rephrase following sentence:
 But to be able to set a step lower, two definitions have to be introduced first. \cite{Zhang2000}
 
@@ -68,7 +86,7 @@ A trivial set of clauses can only occur if one of the following two cases occurs
 % cSpell:disable
 % $K$ enthält die leere Klausel und ist somit unerfüllbar
 % cSpell:enable
-\item A set of clauses $K$ contains the empty set and is therefore unsatisfiable
+\item A set of clauses $K$ contains the empty set and is therefore unsatisfiable.
 % cSpell:disable
 % Die Unit-Klauseln beinhalten immer verschiedene Aussagevariablen, so dass entweder nur die Klausel $\{p\}$ oder $\{\neg p\}$ vorkommen kann. Ist dies der Fall, kann eine Lösung für die Klauselmenge bestimmt werden.
 % cSpell:enable
