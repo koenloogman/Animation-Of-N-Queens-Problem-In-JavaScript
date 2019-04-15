@@ -4,7 +4,7 @@ const { Set } = require('immutable');
  * The Util object helps handling simple operations with sets and clauses.
  * Like negating a literal or turning those structures into HTML formatted strings.
  * 
- * @author Koen Loogman
+ * @author Koen Loogman <koen@loogman.de>
  */
 const Util = {
     /**
