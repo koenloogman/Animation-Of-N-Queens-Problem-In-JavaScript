@@ -1,3 +1,37 @@
 % !TeX root = ./documentation.tex
 
 \chapter{Implementation}
+\label{ch:implementation}
+As mentioned before in the chapter \ref{ch:tecBasics} we will be using Node.js with Parcel as a module bundler. This way we can use Node.js modules and build an HTML page that does not require a Node.js server running in the background, making it portable and executable without any prerequisites except for a browser. The implementation in JavaScript will be object orientated approach using the with ECMAScript 2015 introduced class syntax, which will make it more pleasing for the eye and less confusing.
+% Class Syntax https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
+
+\section{Util Class}
+\label{sec:impUtil}
+
+\section{Implementing the Algorithm of Davis \& Putnam}
+\label{sec:impDavisPutnam}
+The original algorithm of Davis \& Putnam is recursive and so are most of its implementations. If you were to calculate everything at one till you find a possible solution or the response that the given problem can not be satisfied, then a recursive implementation is not an issue. For our purposes, which is the visualization of the algorithm as it solves the given problem step by step, we prefer to use a iterative implementation. Because an iterative implementation can be paused at any point depending on how its implemented.
+
+One of the challenges here is the double recursive call of the algorithm
+
+\subsection{Davis Putnam Class}
+
+\subsection{Davis Putnam Consumer Class}
+
+\subsection{Davis Putnam Worker Class}
+
+\section{Implementing N-Qeens Problem}
+\label{sec:impQueens}
+
+\subsection{Queens Clauses Function}
+
+\subsection{Chessboard Class}
+
+\section{Implementing User Interaction}
+\label{sec:impUI}
+
+\subsection{HTML Document}
+
+\subsection{CSS Document}
+
+\subsection{Frame Class}
