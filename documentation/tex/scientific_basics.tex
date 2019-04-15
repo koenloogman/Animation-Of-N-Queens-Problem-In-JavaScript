@@ -3,7 +3,7 @@
 % Davis Putnam in own word
 
 \chapter{Scientific Basics}
-\ref{ch:sciBasics}
+\label{ch:sciBasics}
 % cSpell:disable
 % Das Ziel dieser Arbeit besteht in der Visualisierung des Davis Putman Algorithmus, der das sogenannte N damen Problem lösen soll. Dafür muss zuerst ein allgemeines Verständnis zu diesem Algorithmus und dem mathematischen Problem geschaffen werden. In diesem Kapitel wird aus diesem Grund dieses fundamentale Wissen zusammengefasst, um eine Basis für die weiterführende Entwicklung zu schaffen. Dafür spielt unter anderem die Deklarierung des mathematischen Problems eine Rolle, damit dieses vom Davis Putman Algorithmus gelöst werden kann.
 % cSpell:enable
@@ -15,7 +15,7 @@ This chapter summarizes the fundamental knowledge that is needed in order to cre
 Among other things, the definition of the mathematical problem plays a role here, so that it can be solved by the Davis Putman algorithm.
 
 \section{Basics of Propositional Logic}
-\ref{sec:sciProLogic}
+\label{sec:sciProLogic}
 % TODO: Koen: Spell and definition checking, if you have more definitions to add, add it
 Before the algorithm can be examined in more detail, a few mathematical terms must first be briefly explained.
 
@@ -43,7 +43,7 @@ A propositional logic formula $K$ is called clause if it has the following struc
 \hspace*{1.3cm} $K = l_1 \vee \cdots \vee l_r$ \\[0.2cm] At this formula, $l$ is a literal for every value $i=1,...,r$.
 
 \section{The Algorithm of Davis \& Putnam}
-\ref{sec:sciDavisPutnam}
+\label{sec:sciDavisPutnam}
 % cSpell:disable
 % Der Davis Putman Algorithmus ist ein Verfahren zur Berechnung einer Lösung von aussagelogischen Klauselmengen. Bei sehr kleinen Klauselmengen kann dies leicht bestimmt werden, wie in den zwei folgenden Beispielen zu sehen ist.
 % cSpell:enable
@@ -114,7 +114,7 @@ In order for one of these two cases to occur, the clause sets must be simplified
 \end{enumerate}
 
 \subsection{Simplification with the Cut Rule}
-\ref{sub:sciDavisPutnamCutRule}
+\label{sub:sciDavisPutnamCutRule}
 To simplify a set of clauses $K$ with $C_1 \cup \{\; p\; \}\, C_2 \cup \{\; \neg p\; \} \in K$ the cut rule can be used. Lets say we have two clauses $C_1$, $C_2$ and a variable $p$. A typical application of the cut rule is.
 \\
 \hspace*{1.3cm} $\dfrac{C_1 \cup \{\; p\; \} \;\;\;\;\;\; C_2 \cup \{\; \neg p\; \}}{C_1 \cup C_2}$
@@ -131,7 +131,7 @@ The result set of clauses will have the same amount of clauses as $K$. Only the 
 
 % TODO: continue here
 \subsection{Simplification with Subsumption}
-\ref{sub:sciDavisPutnamSubsumption}
+\label{sub:sciDavisPutnamSubsumption}
 For further simplification of the set of clauses we will use subsumption. The idea is simple and can be shown with the following example:
 \\
 \hspace*{1.3cm} $K = \{\; \{\; p,\; \neg q \;\},\; \{\; p\; \}\; \} \cup M$
@@ -151,7 +151,7 @@ that receives a set of clauses $K$ and a literal $l$. It will simplify $K$ by su
 We have to add the unit clause to the set of clauses, because $l \in U$ is the case. Resulting in $U$ being removed from $K$ at first too. \cite{Stroetman2019}
 
 \subsection{Simplification with Case Differentiation}
-\ref{sub:sciDavisPutnamCaseDiv}
+\label{sub:sciDavisPutnamCaseDiv}
 % cSpell:disable
 % Die Basis für das Prinzip der Fallunterscheidung bildet folgender Satz.
 % cSpell:enable
@@ -170,7 +170,7 @@ The set of clauses $K$ can only be satisfied if $K \cup \bigl\{\{p\}\bigr\}$ or 
 For simplification, a statement variable $p$ is selected at the beginning, which occurs in the clause set. Then the two clause sets mentioned above are formed and an attempt is made to find a solution for one of them. If this attempt is successful, the result is automatically a solution of $K$. If none is found, $K$ is unsatisfiable.
 
 \subsection{The Davis-Putnam Method}
-\ref{sub:sciDavisPutnamMethod}
+\label{sub:sciDavisPutnamMethod}
 % cSpell:disable
 % Durch die Wissensgrundlage, die zuvor geschaffen wurde, ist es nun möglich, das Vorgehen des Davis Putman Algorithmus zu skizzieren. Mit der Hilfe der Schnittregel und der Subsumption wird die Klauselmenge $K$ soweit es möglich ist, vereinfacht. Falls bereits nach diesem Schritt $K$ trivial ist, ist das Verfahren beendet. Andernfalls wird eine aussagelogische Variable p ausgewählt, die in K vorkommt. Dann wird rekursiv versucht, die Klauselmenge $K \cup \bigl\{\{p\}\bigr\}$ zu lösen, um eine Lösung für K zu finden. Wenn auch hier keine Lösung gefunden wurde, wird dasselbe mit dem negierten $p$ versucht. Scheitert auch dieser Versuch, ist K unlösbar.
 % cSpell:enable
@@ -210,11 +210,11 @@ The theoretical foundation that was previously created now makes it possible to 
 
 
 \section{N-Queens Problem}
-\ref{sec:sciQueens}
+\label{sec:sciQueens}
 % cSpell:disable
-% Das n Königinnen Problem ist das verallgemeinerte mathematische Problem bezogen auf ein Schachbrett, dass n \times n Felder besitzt. Ein spezielles Beispiel dazu wäre das 8 Damen Problem, welches auf dem standardisierten Schachbrett abgebildet wird. Allgemein handelt das Problem davon, n Damen auf einem n \times n Schachbrett so zu platzieren, dass keine in ihrem Zug behindert werden würde. Eine Königin in einem normalen Schachspiel kann sowohl diagonal, als auch vertikal und horizontal ihre Züge ziehen. Dieses Zugmuster kann in Figure \ref{fig:queens-problem} genauer angeschaut werden. Zusammengefasst heißt dies also, dass immer nur eine Dame auf ihrer vertikalen, horizontalen und diagonalen Linie sein darf, um sich nicht gegenseitig zu behindern. Dabei wird in diesem Problem davon ausgegangen, dass jede Dame jede andere angreifen kann und die Feldfarben ignoriert werden. 
+% Das n Königinnen Problem ist das verallgemeinerte mathematische Problem bezogen auf ein Schachbrett, dass n \times n Felder besitzt. Ein spezielles Beispiel dazu wäre das 8 Damen Problem, welches auf dem standardisierten Schachbrett abgebildet wird. Allgemein handelt das Problem davon, n Damen auf einem n \times n Schachbrett so zu platzieren, dass keine in ihrem Zug behindert werden würde. Eine Königin in einem normalen Schachspiel kann sowohl diagonal, als auch vertikal und horizontal ihre Züge ziehen. Dieses Zugmuster kann in Figure \label{fig:queens-problem} genauer angeschaut werden. Zusammengefasst heißt dies also, dass immer nur eine Dame auf ihrer vertikalen, horizontalen und diagonalen Linie sein darf, um sich nicht gegenseitig zu behindern. Dabei wird in diesem Problem davon ausgegangen, dass jede Dame jede andere angreifen kann und die Feldfarben ignoriert werden. 
 % cSpell:enable
-The n queen problem is the generalized mathematical problem related to a chessboard that consists of $n \times n$ squares. A special example would be the 8 queens problem, which is related to the standardized chessboard. In general, the problem is to place n queens on an $n \times n$ chessboard so that none would be obstructed in their turn. A queen in a normal game of chess can move diagonally, vertically and horizontally. This move pattern can be seen in Figure \ref{fig:queens-problem}. In summary, this means that there is only one queen allowed on her vertical, horizontal and diagonal line at a time so that they do not interfere with each other. In this problem it is assumed that any queen can attack any other queen and the field colors are ignored. This problem can be solved by several algorithms such as the Davis Putman algorithm. \cite{Bell2009}, \cite{Watkins2012}, \cite[146\psq]{Nudelman1995}, \cite{Stroetman2019}
+The n queen problem is the generalized mathematical problem related to a chessboard that consists of $n \times n$ squares. A special example would be the 8 queens problem, which is related to the standardized chessboard. In general, the problem is to place n queens on an $n \times n$ chessboard so that none would be obstructed in their turn. A queen in a normal game of chess can move diagonally, vertically and horizontally. This move pattern can be seen in Figure \label{fig:queens-problem}. In summary, this means that there is only one queen allowed on her vertical, horizontal and diagonal line at a time so that they do not interfere with each other. In this problem it is assumed that any queen can attack any other queen and the field colors are ignored. This problem can be solved by several algorithms such as the Davis Putman algorithm. \cite{Bell2009}, \cite{Watkins2012}, \cite[146\psq]{Nudelman1995}, \cite{Stroetman2019}
 
 \begin{figure}[!ht]
   \centering
