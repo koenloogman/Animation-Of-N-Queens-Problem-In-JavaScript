@@ -1,0 +1,696 @@
+%!TEX root = ../dokumentation.tex
+
+%
+% Nahezu alle Einstellungen koennen hier getaetigt werden
+%
+
+\RequirePackage[l2tabu, orthodox]{nag}	% weist in Commandozeile bzw. log auf veraltete LaTeX Syntax hin
+
+\documentclass[%
+	pdftex,	
+	oneside,			% Einseitiger Druck.
+	12pt,				% Schriftgroesse
+	parskip=half,		% Halbe Zeile Abstand zwischen Absätzen.
+%	topmargin = 10pt,	% Abstand Seitenrand (Std:1in) zu Kopfzeile [laut log: unused]
+	headheight = 14pt,	% Höhe der Kopfzeile
+%	headsep = 30pt,	% Abstand zwischen Kopfzeile und Text Body  [laut log: unused]
+	headsepline,		% Linie nach Kopfzeile.
+	footsepline,		% Linie vor Fusszeile.
+	footheight = 16pt,	% Höhe der Fusszeile
+	abstracton,		% Abstract Überschriften
+	DIV=calc,		% Satzspiegel berechnen
+	BCOR=8mm,		% Bindekorrektur links: 8mm
+	headinclude=false,	% Kopfzeile nicht in den Satzspiegel einbeziehen
+	footinclude=false,	% Fußzeile nicht in den Satzspiegel einbeziehen
+	listof=totoc,		% Abbildungs-/ Tabellenverzeichnis im Inhaltsverzeichnis darstellen
+	toc=bibliography,   % Literaturverzeichnis im Inhaltsverzeichnis darstellen
+]{scrreprt}	% Koma-Script report-Klasse, fuer laengere Bachelorarbeiten alternativ auch: scrbook scrreprt
+
+% Einstellungen laden
+\usepackage{xstring}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsbsy}
+\usepackage{amssymb} 
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{booktabs}
+
+\newcommand{\einstellung}[1]{%
+  \expandafter\newcommand\csname #1\endcsname{}
+  \expandafter\newcommand\csname setze#1\endcsname[1]{\expandafter\renewcommand\csname#1\endcsname{##1}}
+}
+\newcommand{\langstr}[1]{\einstellung{lang#1}}
+
+\input{ads/einstellungen_liste} % verfügbare Einstellungen
+\input{ads/einstellungen} % lese Einstellungen
+
+\input{lang/strings} % verfügbare Strings
+\input{lang/\sprache} % Übersetzung einlesen
+
+% Einstellung der Sprache des Paketes Babel und der Verzeichnisüberschriften
+\iflang{de}{\usepackage[english, ngerman]{babel}}
+\iflang{en}{\usepackage[ngerman, english]{babel}} 
+
+%%%%%%% Package Includes %%%%%%%
+
+\usepackage[margin=\seitenrand,foot=1cm]{geometry}	% Seitenränder und Abstände
+\usepackage[activate]{microtype} %Zeilenumbruch und mehr
+\usepackage[onehalfspacing]{setspace}
+\usepackage{makeidx}
+\usepackage[autostyle=true,german=quotes]{csquotes}
+\usepackage{longtable}
+\usepackage{enumitem}	% mehr Optionen bei Aufzählungen
+\usepackage{graphicx}
+\usepackage{pdfpages}   % zum Einbinden von PDFs
+\usepackage{xcolor}
+%\usepackage[dvipsnames]{xcolor} 	% für HTML-Notation
+\usepackage{float}
+\usepackage{array}
+\usepackage{calc}		% zum Rechnen (Bildtabelle in Deckblatt)
+\usepackage[right]{eurosym}
+\usepackage{wrapfig}
+\usepackage{pgffor} % für automatische Kapiteldateieinbindung
+\usepackage[perpage, hang, multiple, stable]{footmisc} % Fussnoten
+\usepackage[printonlyused]{acronym} % falls gewünscht kann die Option footnote eingefügt werden, dann wird die Erklärung nicht inline sondern in einer Fußnote dargestellt
+\usepackage{listings}
+\usepackage{minted}
+\usepackage{fancyhdr}
+%\usepackage{slashbox}
+\usepackage[hang,font={sf,footnotesize},labelfont={footnotesize,bf}]{caption} % Beschriftungen
+\usepackage{subfigure}				% Mehrere Bilder in einem
+
+
+\newfont{\chess}{chess20}
+\newfont{\bigchess}{chess30}
+\newcommand{\chf}{\baselineskip20pt\lineskip0pt\chess}
+
+% Notizen. Einsatz mit \todo{Notiz} oder \todo[inline]{Notiz}. 
+\usepackage[obeyFinal,backgroundcolor=yellow,linecolor=black]{todonotes}
+% Alle Notizen ausblenden mit der Option "final" in \documentclass[...] oder durch das auskommentieren folgender Zeile
+% \usepackage[disable]{todonotes}
+
+% Kommentarumgebung. Einsatz mit \comment{}. Alle Kommentare ausblenden mit dem Auskommentieren der folgenden und dem aktivieren der nächsten Zeile.
+\newcommand{\comment}[1]{\par {\bfseries \color{blue} #1 \par}} %Kommentar anzeigen
+% \newcommand{\comment}[1]{} %Kommentar ausblenden
+
+% Author mit komplettem Name zitieren
+\newrobustcmd*{\citefirstlastauthor}{\AtNextCite{\DeclareNameAlias{labelname}{first-last}}\citeauthor}
+
+
+%%%%%% Configuration %%%%%
+
+%% Anwenden der Einstellungen
+
+\usepackage{\schriftart}
+\ladefarben{}
+
+% Titel, Autor und Datum
+\title{\titel}
+\author{\autor}
+\date{\datum}
+
+% PDF Einstellungen
+\usepackage[%
+	pdftitle={\titel},
+	pdfauthor={\autor},
+	pdfsubject={\arbeit},
+	pdfcreator={pdflatex, LaTeX with KOMA-Script},
+	pdfpagemode=UseOutlines, 		% Beim Oeffnen Inhaltsverzeichnis anzeigen
+	pdfdisplaydoctitle=true, 		% Dokumenttitel statt Dateiname anzeigen.
+	pdflang={\sprache}, 			% Sprache des Dokuments.
+]{hyperref}
+
+% (Farb-)einstellungen für die Links im PDF
+\hypersetup{%
+	colorlinks=true, 		% Aktivieren von farbigen Links im Dokument
+	linkcolor=LinkColor, 	% Farbe festlegen
+	citecolor=LinkColor,
+	filecolor=LinkColor,
+	menucolor=LinkColor,
+	urlcolor=LinkColor,
+	linktocpage=false, 		% Nicht der Text sondern die Seitenzahlen in Verzeichnissen klickbar
+	bookmarksnumbered=true 	% Überschriftsnummerierung im PDF Inhalt anzeigen.
+}
+% Workaround um Fehler in Hyperref, muss hier stehen bleiben
+\usepackage{bookmark} %nur ein latex-Durchlauf für die Aktualisierung von Verzeichnissen nötig
+
+% Schriftart in Captions etwas kleiner
+\addtokomafont{caption}{\small}
+
+
+% Literaturverweise (sowohl deutsch als auch englisch)
+\iflang{de}{%
+\usepackage[
+	backend=biber,		% empfohlen. Falls biber Probleme macht: bibtex
+	bibwarn=true,
+	bibencoding=utf8,	% wenn .bib in utf8, sonst ascii
+	sortlocale=de_DE,
+	style=\zitierstil,
+]{biblatex}
+}
+\iflang{en}{%
+\usepackage[
+	backend=biber,		% empfohlen. Falls biber Probleme macht: bibtex
+	bibwarn=true,
+	bibencoding=utf8,	% wenn .bib in utf8, sonst ascii
+	sortlocale=en_US,
+	style=\zitierstil,
+]{biblatex}
+}
+
+\ladeliteratur{}
+
+% Glossar
+\usepackage[nonumberlist,toc]{glossaries}
+
+%%%%%% Additional settings %%%%%%
+
+% Hurenkinder und Schusterjungen verhindern
+% http://projekte.dante.de/DanteFAQ/Silbentrennung
+\clubpenalty = 10000 % schließt Schusterjungen aus (Seitenumbruch nach der ersten Zeile eines neuen Absatzes)
+\widowpenalty = 10000 % schließt Hurenkinder aus (die letzte Zeile eines Absatzes steht auf einer neuen Seite)
+\displaywidowpenalty=10000
+
+% Bildpfad
+\graphicspath{{images/}}
+
+% Einige häufig verwendete Sprachen
+%\lstloadlanguages{PHP,Python,Java,C,C++,bash}
+%\listingsettings{}
+
+% Farben Code-higlighten
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mydarkgray}{rgb}{0.3,0.3,0.3}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\definecolor{mypurple}{RGB}{128,0,192}
+\definecolor{mymagenta}{rgb}{1,0,1}
+\definecolor{myClassBlue}{RGB}{43,145,175}
+\definecolor{myClassBrown}{RGB}{152,104,1}
+\definecolor{myStringRed}{RGB}{163,21,21}
+\definecolor{myCommentGreen}{RGB}{0,128,0}
+\definecolor{mymagenta}{rgb}{1,0,1}
+
+
+% CSS
+\lstdefinelanguage{CSS}{
+  keywords={color,background-image:,margin,padding,font,weight,display,position, %
+  top,left,right,bottom,list,style,border,size,white,space,min,width, transition:,
+  transform:, transition-property, transition-duration, transition-timing-function, repeate, row, translateX, calc, var}, 
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]",
+  alsoletter={:.-}
+  %alsodigit={-, px, fr},
+  %alsodigit={-}
+}
+
+% Markdown
+\lstdefinelanguage{MarkDown}{
+  morekeywords={},
+  morecomment=[s]{/*}{*/},
+  morecomment=[l]//,
+  morestring=[b]",
+  morestring=[b]'
+}
+
+% JavaScript
+\lstdefinelanguage{JavaScript}{
+  morekeywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, for, ease, const},
+  morecomment=[s]{/*}{*/},
+  morecomment=[l]//,
+  morestring=[b]",
+  morestring=[b]'
+}
+
+% Pug JS
+\lstdefinelanguage{PugJs}{
+  morekeywords={html, body, h1, p},
+  morecomment=[s]{/*}{*/},
+  morecomment=[l]//,
+  morestring=[b]",
+  morestring=[b]'
+}
+
+% HTML5 + Liquid
+\lstdefinelanguage{HTML5}{
+  language=html,
+  sensitive=true,   
+  alsoletter={<>=-},    
+  morecomment=[s]{<!-}{-->},
+  tag=[s],
+  otherkeywords={
+  % General
+  >,
+  % Standard tags
+    <!DOCTYPE,
+  </html, <html, <head, <title, </title, <style, </style, <link, </head, <meta, />,
+    % body
+    </body, <body,
+    % Divs
+    </div, <div, </div>, 
+    % Paragraphs
+    </p, <p, </p>,
+    % scripts
+    </script, <script,
+  % More tags...
+  <canvas, /canvas>, <svg, <rect, <animateTransform, </rect>, </svg>, <video, <source, <iframe, </iframe>, </video>, <image, </image>, <header, </header, <article, </article, <h1, </h1, endfor, include
+  },
+  ndkeywords={
+  % General
+  =,
+  % HTML attributes
+  charset=, src=, id=, width=, height=, style=, type=, rel=, href=,
+  % SVG attributes
+  fill=, attributeName=, begin=, dur=, from=, to=, poster=, controls=, x=, y=, repeatCount=, xlink:href=,
+  % properties
+  margin:, padding:, background-image:, border:, top:, left:, position:, width:, height:, margin-top:, margin-bottom:, font-size:, line-height:,
+    % CSS3 properties
+  transform:, -moz-transform:, -webkit-transform:,
+  animation:, -webkit-animation:,
+  transition:,  transition-duration:, transition-property:, transition-timing-function:,
+  }
+}
+
+% Vorlage 
+\lstdefinestyle{htmlcssjs} {%
+  % General design
+%  backgroundcolor=\color{editorGray},
+  basicstyle={\footnotesize\ttfamily},   
+  frame=b,
+  % line-numbers
+  xleftmargin={0.75cm},
+  numbers=left,
+  stepnumber=1,
+  firstnumber=1,
+  numberfirstline=true, 
+  % Code design
+  identifierstyle=\color{black},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywordstyle=\color{myClassBlue}\bfseries,
+  stringstyle=\color{myStringRed}\ttfamily,
+  commentstyle=\color{mygreen}\ttfamily,
+  % Code
+  language=HTML5,
+  alsolanguage=JavaScript,
+  alsodigit={.:;},  
+  tabsize=2,
+  showtabs=false,
+  showspaces=false,
+  showstringspaces=false,
+  extendedchars=true,
+  breaklines=true,
+  % German umlauts
+  literate=%
+  {Ö}{{\"O}}1
+  {Ä}{{\"A}}1
+  {Ü}{{\"U}}1
+  {ß}{{\ss}}1
+  {ü}{{\"u}}1
+  {ä}{{\"a}}1
+  {ö}{{\"o}}1
+}
+
+%Formatieren von SCSS Code
+\lstdefinestyle{SCSS}{
+	% General Design
+	% Background
+	backgroundcolor=\color{white}, % 	
+	basicstyle=\ttfamily\scriptsize,	
+	%frame=single, % 
+	frame=trBL,
+	framexleftmargin=5mm,
+	% line-numbers
+	numbers=left, % 
+	numberstyle=\tiny\color{mygray}, % 
+	% Code-highlighting	
+	identifierstyle=\color{blue}, % 
+	keywordstyle=\color{blue}, %  
+	stringstyle=\color{myStringRed}, % 
+    commentstyle=\color{mygreen}, % 
+    showspaces=false, % 
+    showstringspaces=false, %    
+	% Code
+	language=CSS,
+	tabsize=2, % 
+	extendedchars=true, % 
+	breaklines=true, % 
+	%float=hbp,% 
+    %columns=flexible, %     
+    breakautoindent=true, % 
+    captionpos=b, %
+    sensitive=false, 
+	morecomment=[l]{//}, 
+	morecomment=[s]{/*}{*/}, 
+	morestring=[b]',
+	%Hinzufügen von Klassen Namen
+	emph=[1]{.grid, .grid__title, .grid__hamburger, .grid__collection, .grid__main, .grid__nav, .grid__links, .sidebar, .sidebar__label, .has-open-sidebar, .sidebar__items, .sidebar__item},
+	emphstyle=[1]{\color{myClassBlue}},
+	% Hinzufügen von zu markierenden Enums und defines	
+	emph=[2]{--sidebar-width, \$Color__gray--100, --right-space, \$links-height},
+	emphstyle=[2]{\color{mypurple}},
+	%	
+	emph=[3]{repeat, minmax},
+	emphstyle=[3]{\color{mydarkgray}},
+	% Sonstiges
+	emph=[4]{px, fr, .5s, grid},
+	emphstyle=[4]{\color{black}},	
+	literate =%
+	{Ä}{{\"A}}1
+	{Ö}{{\"O}}1
+	{Ü}{{\"U}}1
+	{ä}{{\"a}}1
+	{ö}{{\"o}}1
+	{ü}{{\"u}}1
+	{ß}{{\ss}}1
+}
+
+
+%Formatieren von Markdown Code
+\lstdefinestyle{MARKDOWN}{
+	% General Design
+	% Background
+	backgroundcolor=\color{white}, % 	
+	basicstyle=\ttfamily\scriptsize,	
+	%frame=single, % 
+	frame=trBL,
+	framexleftmargin=5mm,
+	% line-numbers
+	numbers=left, % 
+	numberstyle=\tiny\color{mygray}, % 
+	% Code-highlighting	
+	%identifierstyle=\color{red}, % 
+	keywordstyle=\color{blue},
+	stringstyle=\color{myStringRed}, % 
+    commentstyle=\color{mygreen}, % 
+    showspaces=false, % 
+    showstringspaces=false, %    
+	% Code
+	language=MarkDown,
+	tabsize=2, % 
+	extendedchars=true, % 
+	breaklines=true, % 
+	%float=hbp,% 
+    %columns=flexible, %     
+    breakautoindent=true, % 
+    captionpos=b, %
+    sensitive=false, 
+	morecomment=[l]{//}, 
+	morecomment=[s]{/*}{*/}, 
+	morestring=[b]',
+	% Klassen/Modul Namen 
+	emph=[1]{layout, title, date, categories, author, image},
+	emphstyle=[1]{\color{myClassBlue}},	
+	% Anweißungen
+%	emph=[2]{--sidebar-width, },
+%	emphstyle=[2]{\color{mypurple}},
+	% Attribute	
+	emph=[3]{Inhalt},
+	emphstyle=[3]{\color{mydarkgray}},
+	% Zusätzliche keywords
+%	emph=[4]{new},
+%	emphstyle=[4]{\color{blue}},		
+	literate =%
+	{Ä}{{\"A}}1
+	{Ö}{{\"O}}1
+	{Ü}{{\"U}}1
+	{ä}{{\"a}}1
+	{ö}{{\"o}}1
+	{ü}{{\"u}}1
+	{ß}{{\ss}}1
+}
+
+
+%Formatieren von pug.js Code
+\lstdefinestyle{PUGJS}{
+	% General Design
+	% Background
+	backgroundcolor=\color{white}, % 	
+	basicstyle=\ttfamily\scriptsize,	
+	%frame=single, % 
+	frame=trBL,
+	framexleftmargin=5mm,
+	% line-numbers
+	numbers=left, % 
+	numberstyle=\tiny\color{mygray}, % 
+	% Code-highlighting	
+	%identifierstyle=\color{red}, % 
+	keywordstyle=\color{blue},
+	stringstyle=\color{myStringRed}, % 
+    commentstyle=\color{mygreen}, % 
+    showspaces=false, % 
+    showstringspaces=false, %    
+	% Code
+	language=PugJs,
+	tabsize=2, % 
+	extendedchars=true, % 
+	breaklines=true, % 
+	%float=hbp,% 
+    %columns=flexible, %     
+    breakautoindent=true, % 
+    captionpos=b, %
+    sensitive=false, 
+	morecomment=[l]{//}, 
+	morecomment=[s]{/*}{*/}, 
+	morestring=[b]',
+	% Klassen/Modul Namen 
+%	emph=[1]{},
+%	emphstyle=[1]{\color{myClassBlue}},	
+	% Anweißungen
+	emph=[2]{include },
+	emphstyle=[2]{\color{mypurple}},
+	% Attribute/Methoden
+	emph=[3]{doctype},
+	emphstyle=[3]{\color{mydarkgray}},
+	% Zusätzliche keywords
+%	emph=[4]{new},
+%	emphstyle=[4]{\color{blue}},		
+	literate =%
+	{Ä}{{\"A}}1
+	{Ö}{{\"O}}1
+	{Ü}{{\"U}}1
+	{ä}{{\"a}}1
+	{ö}{{\"o}}1
+	{ü}{{\"u}}1
+	{ß}{{\ss}}1
+}
+
+%Formatieren von Bash Code
+\lstdefinestyle{BASH}{
+	% General Design
+	% Background
+	backgroundcolor=\color{white}, % 	
+	basicstyle=\ttfamily\scriptsize,	
+	%frame=single, % 
+	frame=trBL,
+	framexleftmargin=5mm,
+	% line-numbers
+	numbers=left, % 
+	numberstyle=\tiny\color{mygray}, % 
+	% Code-highlighting	
+	%identifierstyle=\color{red}, % 
+	keywordstyle=\color{blue},
+	stringstyle=\color{myStringRed}, % 
+    commentstyle=\color{mygreen}, % 
+    showspaces=false, % 
+    showstringspaces=false, %    
+	% Code
+	language=Bash,
+	tabsize=2, % 
+	extendedchars=true, % 
+	breaklines=true, % 
+	%float=hbp,% 
+    %columns=flexible, %     
+    breakautoindent=true, % 
+    captionpos=b, %
+    sensitive=false, 
+	morecomment=[l]{//}, 
+	morecomment=[s]{/*}{*/}, 
+	morestring=[b]',
+	% Klassen/Modul Namen 
+%	emph=[1]{ghost, npm, jekyll, gem},
+%	emphstyle=[1]{\color{myClassBlue}},	
+	% Anweißungen
+%	emph=[2]{--sidebar-width, },
+%	emphstyle=[2]{\color{mypurple}},
+	% Attribute	
+%	emph=[3]{hamburger, title, search, grid},
+%	emphstyle=[3]{\color{mydarkgray}},
+	% Zusätzliche keywords
+%	emph=[4]{new},
+%	emphstyle=[4]{\color{blue}},		
+	literate =%
+	{Ä}{{\"A}}1
+	{Ö}{{\"O}}1
+	{Ü}{{\"U}}1
+	{ä}{{\"a}}1
+	{ö}{{\"o}}1
+	{ü}{{\"u}}1
+	{ß}{{\ss}}1
+}
+
+%Formatieren von HTML Code mit Liquid
+\lstdefinestyle{HTML}{
+	% General Design
+	% Background
+	backgroundcolor=\color{white}, % 	
+	basicstyle=\ttfamily\scriptsize,	
+	%frame=single, % 
+	frame=trBL,
+	framexleftmargin=5mm,
+	% line-numbers
+	numbers=left, % 
+	numberstyle=\tiny\color{mygray}, % 
+	% Code-highlighting	
+	%identifierstyle=\color{red}, % 
+	keywordstyle=\color{blue}, 
+	stringstyle=\color{myStringRed}, % 
+    commentstyle=\color{mygreen}, % 
+    showspaces=false, % 
+    showstringspaces=false, %    
+	% Code
+	language=HTML5,
+	tabsize=2, % 
+	extendedchars=true, % 
+	breaklines=true, % 
+	%float=hbp,% 
+    %columns=flexible, %     
+    breakautoindent=true, % 
+    captionpos=b, %
+    sensitive=false,  
+	morecomment=[s]{<!--}{-->}, 
+	morestring=[b]',
+	% Klassen Namen aus Liquid
+	emph=[1]{body, page, post, site, article, footer, links, header, sidebar, head, navigation, title},
+	emphstyle=[1]{\color{myClassBlue}},
+	% Anweisungen in Liquid
+	emph=[2]{for, endfor, in, include },
+	emphstyle=[2]{\color{mypurple}},
+	%Attribute von Liquid
+	emph=[3]{content, html, posts},
+	emphstyle=[3]{\color{mydarkgray}},
+	literate =%
+	{Ä}{{\"A}}1
+	{Ö}{{\"O}}1
+	{Ü}{{\"U}}1
+	{ä}{{\"a}}1
+	{ö}{{\"o}}1
+	{ü}{{\"u}}1
+	{ß}{{\ss}}1
+}
+
+%Formatieren von HTML Code mit Liquid zweite variante wegen doppeltem Name als Klasse und Attribut
+\lstdefinestyle{HTML2}{
+	% General Design
+	% Background
+	backgroundcolor=\color{white}, % 	
+	basicstyle=\ttfamily\scriptsize,	
+	%frame=single, % 
+	frame=trBL,
+	framexleftmargin=5mm,
+	% line-numbers
+	numbers=left, % 
+	numberstyle=\tiny\color{mygray}, % 
+	% Code-highlighting	
+	%identifierstyle=\color{red}, % 
+	keywordstyle=\color{blue}, 
+	stringstyle=\color{myStringRed}, % 
+    commentstyle=\color{mygreen}, % 
+    showspaces=false, % 
+    showstringspaces=false, %    
+	% Code
+	language=HTML5,
+	tabsize=2, % 
+	extendedchars=true, % 
+	breaklines=true, % 
+	%float=hbp,% 
+    %columns=flexible, %     
+    breakautoindent=true, % 
+    captionpos=b, %
+    sensitive=false,  
+	morecomment=[s]{<!--}{-->}, 
+	morestring=[b]',
+	% Klassen Namen aus Liquid
+	emph=[1]{body, page, post, site, article, footer, links, header, sidebar, head, navigation, content},
+	emphstyle=[1]{\color{myClassBlue}},
+	% Anweisungen in Liquid
+	emph=[2]{for, endfor, in, include },
+	emphstyle=[2]{\color{mypurple}},
+	%Attribute von Liquid
+	emph=[3]{ html, posts, title},
+	emphstyle=[3]{\color{mydarkgray}},
+%	emph=[4]{px, fr, .5s},
+%	emphstyle=[4]{\color{black}},	
+	literate =%
+	{Ä}{{\"A}}1
+	{Ö}{{\"O}}1
+	{Ü}{{\"U}}1
+	{ä}{{\"a}}1
+	{ö}{{\"o}}1
+	{ü}{{\"u}}1
+	{ß}{{\ss}}1
+}
+
+
+%Formatieren von JS Code
+\lstdefinestyle{JS}{
+	% General Design
+	% Background
+	backgroundcolor=\color{white}, % 	
+	basicstyle=\ttfamily\scriptsize,	
+	%frame=single, % 
+	frame=trBL,
+	framexleftmargin=5mm,
+	% line-numbers
+	numbers=left, % 
+	numberstyle=\tiny\color{mygray}, % 
+	% Code-highlighting	
+	%identifierstyle=\color{red}, % 
+	keywordstyle=\color{blue}, 
+	stringstyle=\color{myStringRed}, % 
+    commentstyle=\color{mygreen}, % 
+    showspaces=false, % 
+    showstringspaces=false, %    
+	% Code
+	language=JavaScript,
+	tabsize=2, % 
+	extendedchars=true, % 
+	breaklines=true, % 
+	%float=hbp,% 
+    %columns=flexible, %     
+    breakautoindent=true, % 
+    captionpos=b, %
+    sensitive=false, 
+	% Klassen Namen 
+	emph=[1]{Math, document, classList},
+	emphstyle=[1]{\color{myClassBlue}},
+	% Anweisungen
+	emph=[2]{style, document},
+	emphstyle=[2]{\color{mypurple}},
+	% Methoden
+	emph=[3]{min, setProperty, length, display, toggle, onclick, querySelector},
+	emphstyle=[3]{\color{mydarkgray}},
+	literate =%
+	{Ä}{{\"A}}1
+	{Ö}{{\"O}}1
+	{Ü}{{\"U}}1
+	{ä}{{\"a}}1
+	{ö}{{\"o}}1
+	{ü}{{\"u}}1
+	{ß}{{\ss}}1
+}
+
+
+% Umbennung des Listings
+\renewcommand\lstlistingname{\langlistingname}
+\renewcommand\lstlistlistingname{\langlistlistingname}
+\def\lstlistingautorefname{\langlistingautorefname}
+
+% Abstände in Tabellen
+\setlength{\tabcolsep}{\spaltenabstand}
+\renewcommand{\arraystretch}{\zeilenabstand}
