@@ -21,27 +21,43 @@ The original algorithm of Davis \& Putnam is recursive and so are most of its im
 
 One of the challenges here is the double recursive call of the algorithm and splitting it into single unit cuts per iteration for the micro steps.
 
+- tasks to be handled by one iteration
+
+- needed data for those tasks (stack, clauses, literals, used, literal)
+
+- pseudo code
+
 \subsection{Davis Putnam Class}
 \label{sub:impDavisPutnam}
 This class handles the iterations of the Davis \& Putnam algorithm and stores its state.
 
+
+
 \subsection{Davis Putnam Consumer Class}
 \label{sub:impDavisPutnamConsumer}
-This class is for handling the events of the Davis Putnam class
+This class is for handling the events of the Davis Putnam class. It could also be done with event listeners, but we decided to go for an class that contains the methods to be invoked on those events. These events are as follows:
+
+- list of events
+
+Those methods are basically placeholders, since the class is supposed to be extended by a subclass. The subclass should alter these methods to their needs.
 
 \subsection{Davis Putnam Worker Class}
 \label{sub:impDavisPutnamWorker}
-This class is used as a worker from the main script to handle all the calculations. It extends the Davis Putnam Consumer from the previous chapter \ref{sub:impDavisPutnamConsumer}.
+This class initializes a worker for the main script to handle all the calculations. It extends the Davis Putnam Consumer from the previous chapter \ref{sub:impDavisPutnamConsumer}.
 
 \section{Implementing N-Qeens Problem}
 \label{sec:impQueens}
-To be able to solve a problem with the Davis \& Putnam algorithm, one needs to be defined. Therefor we will create a function to return for a given number $n$ a set of clauses that defines a the N-Queens Problem for said $n$. The queens will be represented by a literal of the form ``col,row'' and the negated literal will mean that no queen can be placed there. Lets say for example we have $\texttt{col} := 3 \land \texttt{row} := 4$ then the literal for the queen would be as follows ``3,4''.
+To be able to solve a problem with the Davis \& Putnam algorithm, one needs to be defined. Therefor we will create a function to return for a given number $n$ a set of clauses that defines a the N-Queens Problem for said $n$. The queens will be represented by a literal of the form ``row,col'' and the negated literal will mean that no queen can be placed there. Lets say for example we have $\texttt{row} := 3 \land \texttt{col} := 4$ then the literal for the queen would be as follows ``3,4'' and the negation would be ``!3,4''. This makes it easy to transform the string back into coordinates for the chessboard.
 
 \subsection{Queens Clauses Function}
 \label{sub:impQueensClauses}
+This function returns a set of clauses for the N-Queens Problem.
 
 \subsection{Chessboard Class}
 \label{sub:impChessboard}
+This class uses Two.js to visualize the state of the current set of clauses.
+
+- Two.js structure
 
 \section{Implementing User Interaction}
 \label{sec:impUI}
@@ -49,8 +65,16 @@ To be able to solve a problem with the Davis \& Putnam algorithm, one needs to b
 \subsection{HTML Document}
 \label{sub:impHTML}
 
+- brief description (important ids)
+
 \subsection{CSS Document}
 \label{sub:impCSS}
 
+- using css grid
+
 \subsection{Frame Class}
 \label{sub:impFrame}
+
+- setup (worker and chessboard)
+
+- event listeners
