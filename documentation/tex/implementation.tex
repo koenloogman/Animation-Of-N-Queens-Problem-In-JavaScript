@@ -5,33 +5,52 @@
 As mentioned before in the chapter \ref{ch:tecBasics} we will be using Node.js with Parcel as a module bundler. This way we can use Node.js modules and build an HTML page that does not require a Node.js server running in the background, making it portable and executable without any prerequisites except for a browser. The implementation in JavaScript will be object orientated approach using the with ECMAScript 2015 introduced class syntax, which will make it more pleasing for the eye and less confusing.
 % Class Syntax https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
 
-\section{Util Class}
+- split tasks to animation and computing
+
+- handling literals and clauses
+
+\section{Util Object}
 \label{sec:impUtil}
+Because some functions like negating a literal will be used in multiple parts of the script, we will create an object to host these functions. This object will be called the Util Object. By doing so it can be imported when those functions are needed and prevent redundant code, making it easy to maintain or change.
+
+It contains the function to negate a literal and functions for formatting clauses and literals to HTML strings. It can be expanded further in future, but for now those will do.
 
 \section{Implementing the Algorithm of Davis \& Putnam}
 \label{sec:impDavisPutnam}
 The original algorithm of Davis \& Putnam is recursive and so are most of its implementations. If you were to calculate everything at one till you find a possible solution or the response that the given problem can not be satisfied, then a recursive implementation is not an issue. For our purposes, which is the visualization of the algorithm as it solves the given problem step by step, we prefer to use a iterative implementation. Because an iterative implementation can be paused at any point depending on how its implemented.
 
-One of the challenges here is the double recursive call of the algorithm
+One of the challenges here is the double recursive call of the algorithm and splitting it into single unit cuts per iteration for the micro steps.
 
 \subsection{Davis Putnam Class}
+\label{sub:impDavisPutnam}
+This class handles the iterations of the Davis \& Putnam algorithm and stores its state.
 
 \subsection{Davis Putnam Consumer Class}
+\label{sub:impDavisPutnamConsumer}
+This class is for handling the events of the Davis Putnam class
 
 \subsection{Davis Putnam Worker Class}
+\label{sub:impDavisPutnamWorker}
+This class is used as a worker from the main script to handle all the calculations. It extends the Davis Putnam Consumer from the previous chapter \ref{sub:impDavisPutnamConsumer}.
 
 \section{Implementing N-Qeens Problem}
 \label{sec:impQueens}
+To be able to solve a problem with the Davis \& Putnam algorithm, one needs to be defined. Therefor we will create a function to return for a given number $n$ a set of clauses that defines a the N-Queens Problem for said $n$. The queens will be represented by a literal of the form ``col,row'' and the negated literal will mean that no queen can be placed there. Lets say for example we have $\texttt{col} := 3 \land \texttt{row} := 4$ then the literal for the queen would be as follows ``3,4''.
 
 \subsection{Queens Clauses Function}
+\label{sub:impQueensClauses}
 
 \subsection{Chessboard Class}
+\label{sub:impChessboard}
 
 \section{Implementing User Interaction}
 \label{sec:impUI}
 
 \subsection{HTML Document}
+\label{sub:impHTML}
 
 \subsection{CSS Document}
+\label{sub:impCSS}
 
 \subsection{Frame Class}
+\label{sub:impFrame}
