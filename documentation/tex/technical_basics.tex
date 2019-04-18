@@ -7,7 +7,7 @@
 % cSpell:disable
 % Im vorherigen Kapitel wurden die Grundlagen zum Davis Putman Algorithmus und des N Damen Problems genauer analysiert und definiert. Nun folgt eine Sammlung von Bibliotheken und Technologien, die für die Implementierung benötigt werden. Dabei wird vor allem auf den Einsatz dieser und der Vergleich zu eventuellen Alternativen eingegangen.
 % cSpell:enable
-In the previous chapter, the basics of the \textit{Davis Putman algorithm} and the \textit{N-Queens Problem} were analyzed and defined in more detail. Now follows a collection of libraries and technologies needed for the implementation. The use of these and the comparison to possible alternatives will be discussed. 
+In the previous chapter, the basics of the Davis Putman algorithm and the N-Queens Problem were analyzed and defined in more detail. Now follows a collection of libraries and technologies needed for the implementation. The use of these and the comparison to possible alternatives will be discussed. 
 
 \section{Parcel}
 \label{sec:tecParcel}
@@ -56,7 +56,7 @@ Also after this comparison the decision was made to use Parcel, because Rollup l
 % cSpell:enable
 \section{Immutable.js}
 \label{sec:tecImmutable}
-In the later implementation of the \textit{Davis Putman algorithm}, a known problem will occur when using Javascript. This is the comparison between sets. The native set compares objects via Object by Object Reference. Comparisons with mutable objects are usually very difficult, because when an object changes, the location of the object in a collection also changes. The Immutable.js library enables the creation of immutable objects that cannot be changed once they have been created. It also provides several persistent immutable data structures such as stack, set and range for developers. Thus this library solves the problem of comparisons between objects. \cite{Immutable.jsAuthors2019}, \cite{Rauschmayer2015}
+In the later implementation of the Davis Putman algorithm, a known problem will occur when using Javascript. This is the comparison between sets. The native set compares objects via Object by Object Reference. Comparisons with mutable objects are usually very difficult, because when an object changes, the location of the object in a collection also changes. The Immutable.js library enables the creation of immutable objects that cannot be changed once they have been created. It also provides several persistent immutable data structures such as stack, set and range for developers. Thus this library solves the problem of comparisons between objects. \cite{Immutable.jsAuthors2019}, \cite{Rauschmayer2015}
 
 % cSpell:disable
 %\section{Two.js}
