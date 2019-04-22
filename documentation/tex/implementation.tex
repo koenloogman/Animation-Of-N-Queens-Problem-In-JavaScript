@@ -5,40 +5,113 @@
 As mentioned before in the chapter \ref{ch:tecBasics} we will be using Node.js with Parcel as a module bundler. This way we can use Node.js modules and build an HTML page that does not require a Node.js server running in the background, making it portable and executable without any prerequisites except for a browser. The implementation in JavaScript will be object orientated approach using the with ECMAScript 2015 introduced class syntax, which will make it more pleasing for the eye and less confusing.
 % Class Syntax https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
 
-Since the Davis Putnam algorithm can have tasks with a high computational effort, we decided to use separate threads to compute and animate. So we can display all the changes to the problem as it is being solved and prevent the GUI from freezing on long lasting computations. As previously explained in chapter \ref{sec:tecWorker} this is possible with a so-called worker in JavaScript. It is important to mention here, that because the worker and main script communicate with each other via messages, we need to make sure that while computing no unwanted messages are send. Such messages could be multiple computing request being send simultaneously to the worker, because the worker will still receive messages and respond to them after finishing the all previous tasks. This could lead to problems if for example during a long lasting computation task additional computations are requested, then no other requests could be handled before all those computation tasks have been finished nor could those be interrupted. Our approach here will be to tell the main script when a computational task started and ended. This way certain UI elements can be locked while the worker computes and unlocked when the worker finished the given task.
+Since the Davis Putnam algorithm can have tasks with a high computational effort, we decided to use separate threads to compute and animate. So we can display all the changes to the problem as it is being satisfied and prevent the GUI from freezing on long lasting computations. As previously explained in chapter \ref{sec:tecWorker} this is possible with a so-called worker in JavaScript. It is important to mention here, that because the worker and main script communicate with each other via messages, we need to make sure that while computing no unwanted messages are send. Such messages could be multiple computing request being send simultaneously to the worker, because the worker will still receive messages and respond to them after finishing the all previous tasks. This could lead to problems if for example during a long lasting computation task additional computations are requested, then no other requests could be handled before all those computation tasks have been finished nor could those be interrupted. Our approach here will be to tell the main script when a computational task started and ended. This way certain UI elements can be locked while the worker computes and unlocked when the worker finished the given task.
 
 Next we need to take a look at the mathematical part of the script. Because in JavaScript uses when comparing objects with each other their references, we will use Immutable.js as said in chapter \ref{sec:tecImmutable} to counter this problem when working with sets. Since we will have a set of clauses for the algorithm to satisfy with those clauses being sets of literals, we would need to implement a deep compare ourselves if we were to use native JavaScript. That said Immutable.js solves the set comparison, but we still need to implement literals somehow. We decided to use simple strings for the literals with the restriction of the first character not being allowed to be an ``!'', as we will use that character to indicate that the literal is negated. The choice to use strings is based on the same reason for using Immutable.js for the sets. Immutable.js has immutable structures that are compared by value, but for other objects Immutable.js compares them just like native JavaScript by their object references. This means if we were to use custom classes for literals we would need to come up with our own way of comparing them, but strings on the other hand are compared by length and character order by default. Resulting in less effort when implementing the mathematical part of the algorithm.
 % Equal operator https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Comparison_Operators#Equality_operators
 % Object is https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
 % Immutable is https://immutable-js.github.io/immutable-js/docs/#/is
-So for example the formula $(\; p\; \lor\; \neg q\; )\; \land\; s\; \land\; (\; \neg s\; \lor\; r\; )$ would be implemented as the following listing \ref{code:setOfClauses} with Set being the Set class of Immutable.js and not the native one.
+
+So for example the formula $(\; p\; \lor\; \neg q\; )\; \land\; (\; s\; \lor\; r\; )$ would be implemented as the following listing \ref{code:setOfClauses} with Set being the Set class of Immutable.js and not the native one.
 
 \begin{listing}[h!]
 \begin{minted}{javascript}
-let set_of_clauses = new Set(new Set('p', '!q'), new Set('s'), new Set('!s', 'r'));
-// represents (p or not q) and s and (not s or r)
+let set_of_clauses = new Set(new Set('p', '!q'), new Set('s', 'r'));
+// represents (p or not q) and (s or r)
 \end{minted}
     \caption{Example for a set of clauses in JavaScript}
     \label{code:setOfClauses}
 \end{listing}
 
+Now that it is clear how a set of clauses will be implemented in JavaScript and the decision to use two threads has been made, we can start getting into the classes and their tasks.
+
 \section{Util Object}
 \label{sec:impUtil}
-Because some functions like negating a literal will be used in multiple parts of the script, we will create an object to host these functions. This object will be called the Util Object. By doing so it can be imported when those functions are needed and prevent redundant code, making it easy to maintain or change.
+Because some functions like negating a literal will be used in multiple parts of the script, we will use an object to host these functions. This object will be called the Util Object. By doing so it can be imported when those functions are needed and prevent redundant code, making it easy to maintain or change.
 
-It contains the function to negate a literal and functions for formatting clauses and literals to HTML strings. It can be expanded further in future, but for now those will do.
+It contains the function to negate a literal and functions for formatting sets and literals to HTML strings. It can be expanded further in future, but for now these will do.
+Because we are using strings for literals we can negate them by adding a ``!'' and applying a simple RegEx operation afterwards as shown in the following listing \ref{code:negateLiteral}.
+
+\begin{listing}[h!]
+\begin{minted}{javascript}
+// negates a literal p to !p or !p to p
+('!' + literal).replace(/^!!/, '');
+\end{minted}
+    \caption{Example for negating a literal in JavaScript}
+    \label{code:negateLiteral}
+\end{listing}
+
+Formatting sets and literals to HTML, using the span element and adding classes to it, will allow us to color code them in the GUI. This will make it easier for the user to interpret the visuals of the animation.
 
 \section{Implementing the Algorithm of Davis \& Putnam}
 \label{sec:impDavisPutnam}
-The original algorithm of Davis \& Putnam is recursive and so are most of its implementations. If you were to calculate everything at one till you find a possible solution or the response that the given problem can not be satisfied, then a recursive implementation is not an issue. For our purposes, which is the visualization of the algorithm as it solves the given problem step by step, we prefer to use a iterative implementation. Because an iterative implementation can be paused at any point depending on how its implemented.
+The original algorithm of Davis \& Putnam is recursive and so are most of its implementations. If you were to calculate everything till you find a possible solution or the response that the given problem can not be satisfied, then a recursive implementation is not an issue. For our purposes, which is the visualization of the algorithm as it solves the given problem step by step, we prefer to use a iterative implementation. If we use a recursive implementation we would need to calculate everything upfront, which is not the case for a iterative implementation. These can be paused at any point and because of that we can calculate the step when we need it to be calculated. This means only the creation of the problem that will be satisfied by the algorithm will affect the initial loading time.
 
-One of the challenges here is the double recursive call of the algorithm and splitting it into single unit cuts per iteration for the micro steps.
+One of the challenges here is the double recursive call of the algorithm and splitting it into single unit cuts per iteration for the micro steps. The basic idea will be a class that holds the current state of the problem with a step function that does either a macro or micro step further satisfying the problem till it is satisfied or not satisfiable. One macro step will include all micro steps till the algorithm guesses the next literal, with micro steps being single unit cuts. To be able to do this the class also needs to know what has been done previously to continue from that point. With that in mind following points will be able to describe the state of the algorithm, so that it can continue from where it stopped.
 
+\begin{enumerate}
+    \item The set of clauses describing the current state of the problem
+    \item The literals it has guessed previously
+    \item The unit clauses it has already used for further satisfaction
+    \item The unit clause or literal it is currently in use for unit cuts
+\end{enumerate}
+
+The last point is important for the micro steps, because we need to do all possible unit cuts before using the next unit clause. Because it is possible to represent the state of the algorithm, we can also use this to simulate the double recursive call. By pushing the current state with the negation of the guessed literal to the stack and adding the guessed literal to the current state for further satisfaction, we can pop a state from the stack to continue from that point if the current state is not satisfiable.
+
+Because we will use an iterative implementation, we need to think about everything that needs to be done in one step of the iteration. Since we will have macro and micro steps, we will use two loops one for the macro steps and one for the micro steps, so that one macro step will execute all micro steps that it includes.
 - tasks to be handled by one iteration
 
-- needed data for those tasks (stack, clauses, literals, used, literal)
-
 - pseudo code
+\begin{listing}[h!]
+    \textbf{function} step( number of steps $n$ ) \textbf{return}\\
+        \hspace*{0.5cm} \textit{/* macro step loop */}\\
+        \hspace*{0.5cm} \textbf{repeat}\\
+            \hspace*{1.0cm} \textit{/* micro step loop for subsume and unit cuts */}\\
+            \hspace*{1.0cm} \textbf{repeat}\\
+                \hspace*{1.5cm} \textit{/* select a new literal and subsume till unit cuts can be done with said literal */}\\
+                \hspace*{1.5cm} \textbf{repeat}\\
+                    \hspace*{2cm} pick a unit clause $U$ that has not been used yet\\
+                    \hspace*{2cm} add $U$ to used unit clauses\\
+                    \hspace*{2cm} extract literal $L$ from $U$\\
+                    \hspace*{2cm} \textit{/* subsume */}\\
+                    \hspace*{2cm} delete from $S$ every clause containing $L$\\
+                \hspace*{1.5cm} \textbf{until} all unit clauses have been used or unit cuts can be done with $L$\\
+                \hspace*{1.5cm} \textit{/* check if cuts can be done before trying to do a unit cut */}\\
+                \hspace*{1.5cm} \textbf{if} a unit cut can be done \textbf{then}\\
+                    \hspace*{2cm} pick a clause $C$ that contains $\bar{L}$\\
+                    \hspace*{2cm} cut $C$ with literal $L$\\
+                    \hspace*{2cm} \textbf{if} it is a micro step \textbf{then}\\
+                        \hspace*{2.5cm} set $n = n - 1$\\
+                    \hspace*{2cm} \textbf{fi}\\
+                \hspace*{1.5cm} \textbf{fi}\\
+            \hspace*{1.0cm} \textbf{until} all unit clauses have been used or $n = 0$\\
+            \hspace*{1.0cm} \textit{/* check if satisfied */}\\
+            \hspace*{1.0cm} \textbf{if} set of clauses $S$ is satisfied \textbf{then}\\
+                \hspace*{1.5cm} \textit{/* is satisfied */}\\
+                \hspace*{1.5cm} \textbf{continue}\\
+            \hspace*{1.0cm} \textbf{else if} $n = 0$ \textbf{then}\\
+                \hspace*{1.5cm} \textbf{continue}\\
+            \hspace*{1.0cm} \textbf{fi}\\
+            \hspace*{1.0cm} set $n = n - 1$\\
+            \hspace*{1.0cm} \textit{/* check if current state is not satisfiable */}\\
+            \hspace*{1.0cm} \textbf{if} set of clauses $S$ contains $\{\}$ \textbf{then}\\
+                \hspace*{1.5cm} \textbf{if} stack is empty \textbf{then}\\
+                    \hspace*{2cm} \textit{/* is not satisfiable */}\\
+                    \hspace*{2cm} set $S = \{\;\{\}\;\}$\\
+                    \hspace*{2cm} \textbf{continue}\\
+                \hspace*{1.5cm} \textbf{fi}\\
+                \hspace*{1.5cm} pop state from the stack\\
+                \hspace*{1.5cm} \textbf{continue}\\
+            \hspace*{1.0cm} \textbf{fi}\\
+            \hspace*{1.0cm} guess a literal $L$\\
+            \hspace*{1.0cm} push state with literal $\bar{L}$ to the stack\\
+            \hspace*{1.0cm} add literal $L$ to the state of the algorithm\\
+        \hspace*{0.5cm} \textbf{until} no further steps can be made or $n = 0$\\
+        \hspace*{0.5cm} \textbf{return}\\
+    \textbf{end function}\\
+    \caption{Iterative step for Davis \& Putnam algorithm}
+    \label{code:stepDavisPutnam}
+\end{listing}  
 
 \subsection{Davis Putnam Class}
 \label{sub:impDavisPutnam}
