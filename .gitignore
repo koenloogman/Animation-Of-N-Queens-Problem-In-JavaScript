@@ -5,6 +5,7 @@
 .DS_Store
 node_modules/
 dist/
+_minted-documentation/
 
 # Logs
 logs
