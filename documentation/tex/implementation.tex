@@ -16,8 +16,8 @@ So for example the formula $(\; p\; \lor\; \neg q\; )\; \land\; (\; s\; \lor\; r
 
 \begin{listing}[h!]
 \begin{minted}{javascript}
+// (p or not q) and (s or r) as a set of clauses in JavaScript
 let set_of_clauses = new Set(new Set('p', '!q'), new Set('s', 'r'));
-// represents (p or not q) and (s or r)
 \end{minted}
     \caption{Example for a set of clauses in JavaScript}
     \label{code:setOfClauses}
@@ -34,8 +34,9 @@ Because we are using strings for literals we can negate them by adding a ``!'' a
 
 \begin{listing}[h!]
 \begin{minted}{javascript}
-// negates a literal p to !p or !p to p
-('!' + literal).replace(/^!!/, '');
+Util.negateLiteral = (literal) => return ('!' + literal).replace(/^!!/, '');
+Util.negateLiteral('p');  // result: !p
+Util.negateLiteral('!p'); // result: p
 \end{minted}
     \caption{Example for negating a literal in JavaScript}
     \label{code:negateLiteral}
@@ -58,10 +59,8 @@ One of the challenges here is the double recursive call of the algorithm and spl
 
 The last point is important for the micro steps, because we need to do all possible unit cuts before using the next unit clause. Because it is possible to represent the state of the algorithm, we can also use this to simulate the double recursive call. By pushing the current state with the negation of the guessed literal to the stack and adding the guessed literal to the current state for further satisfaction, we can pop a state from the stack to continue from that point if the current state is not satisfiable.
 
-Because we will use an iterative implementation, we need to think about everything that needs to be done in one step of the iteration. Since we will have macro and micro steps, we will use two loops one for the macro steps and one for the micro steps, so that one macro step will execute all micro steps that it includes.
-- tasks to be handled by one iteration
+Because we will use an iterative implementation, we need to think about everything that needs to be done in one step of the iteration. Since we will have macro and micro steps, we will use two loops one for the macro steps and one for the micro steps, so that one macro step will execute all micro steps that it includes. Lets say we have a function step that receives a number of steps $n$ so that it will do $n$ micro or macro steps on the state. Then we need to reduce the step count when a guessed literal $L$ has been added to the state, incase of macro steps, or a unit cut has been calculated, for micro steps. The function step would look like the pseudo code of listing \ref{code:stepDavisPutnam}. Doing all micro steps at the start of a macro step then checking if it is satisfied followed by a backtrack if not satisfiable and the guessing of a new literal.
 
-- pseudo code
 \begin{listing}[h!]
     \textit{/* do step(s) on a state that contains a set of clauses $S$ */}
     \textbf{function} step( number of steps $n$ ) \textbf{return}\\
@@ -83,7 +82,7 @@ Because we will use an iterative implementation, we need to think about everythi
                     \hspace*{2cm} choose a clause $C$ that contains $\bar{L}$\\
                     \hspace*{2cm} delete $\bar{L}$ from $C$\\
                     \hspace*{2cm} \textbf{if} it is a micro step \textbf{then}\\
-                        \hspace*{2.5cm} set $n = n - 1$\\
+                        \hspace*{2.5cm} $n -= 1$\\
                     \hspace*{2cm} \textbf{fi}\\
                 \hspace*{1.5cm} \textbf{fi}\\
             \hspace*{1.0cm} \textbf{until} all unit clauses have been used or $n = 0$\\
@@ -94,7 +93,7 @@ Because we will use an iterative implementation, we need to think about everythi
             \hspace*{1.0cm} \textbf{else if} $n = 0$ \textbf{then}\\
                 \hspace*{1.5cm} \textbf{continue}\\
             \hspace*{1.0cm} \textbf{fi}\\
-            \hspace*{1.0cm} set $n = n - 1$\\
+            \hspace*{1.0cm} $n -= 1$\\
             \hspace*{1.0cm} \textit{/* check if current state is not satisfiable */}\\
             \hspace*{1.0cm} \textbf{if} a clause becomes $\{\}$ in $S$ \textbf{then}\\
                 \hspace*{1.5cm} \textbf{if} stack is empty \textbf{then}\\
@@ -105,7 +104,7 @@ Because we will use an iterative implementation, we need to think about everythi
                 \hspace*{1.5cm} pop state from the stack\\
                 \hspace*{1.5cm} \textbf{continue}\\
             \hspace*{1.0cm} \textbf{fi}\\
-            \hspace*{1.0cm} choose a literal $L$ occurring in $S$\\
+            \hspace*{1.0cm} choose and remember a literal $L$ occurring in $S$\\
             \hspace*{1.0cm} push state with literal $\bar{L}$ to the stack\\
             \hspace*{1.0cm} add literal $L$ to the current state\\
         \hspace*{0.5cm} \textbf{until} no further steps can be done or $n = 0$\\
@@ -113,25 +112,94 @@ Because we will use an iterative implementation, we need to think about everythi
     \textbf{end function}\\
     \caption{Iterative step for Davis \& Putnam algorithm}
     \label{code:stepDavisPutnam}
-\end{listing}  
+\end{listing}
 
 \subsection{Davis Putnam Class}
 \label{sub:impDavisPutnam}
-This class handles the iterations of the Davis \& Putnam algorithm and stores its state.
+As previously explained we need a stack of states and a state to implement an iterative Davis \& Putnam algorithm. For this purpose we create a DavisPutnam class. Its primary features are that it contains a state, a stack of states and a function to execute a macro or micro step on the state. Because the algorithm is supposed to be animated we have to pass the operations on the set of clauses and the unit clauses of the set of clauses to represent the state. This can be done with event listeners, that are called on the important operations of the algorithm. Since there are a number of events we decided to use a class that contains functions to be called when those events happen. These events are as follows:
 
+\begin{enumerate}
+    \item set of clauses satisfied
+    \item set of clauses not satisfiable
+    \item backtrack
+    \item choose a literal
+    \item subsume
+    \item unit cut
+\end{enumerate}
 
+Each of those events calls will receive the important information needed to describe the operation and state of the set of clauses. They all receive the literals of the unit clauses, so we can represent the state at those points. The first three do not need any additional information, but the later do. When a literal is chosen said literal will also be handed to the function for the event. The function for subsume will receive all removed clauses and the function for unit cut receives the used literal and the clause before and after the operation. This way all operations during one step can affect the animation.
+
+Since the animation is for educational purposes, it is also important to be able to replicate the results. Therefor we will be using Seedrandom.js as mentioned in chapter \ref{sec:tecSeed} at this point. When choosing a random element in this class we will use our own random number generator that we initialize with a seed. This way each seed has their unique repeatable calculation. It is important to mention here that this is also only possible because of the way the Set class from Immutable.js works. ``When iterating a Set, the entries will be (value, value) pairs. Iteration order of a Set is undefined, however is stable. Multiple iterations of the same Set will iterate in the same order.'' % Immutable.js Set https://immutable-js.github.io/immutable-js/docs/#/Set
 
 \subsection{Davis Putnam Consumer Class}
 \label{sub:impDavisPutnamConsumer}
-This class is for handling the events of the Davis Putnam class. It could also be done with event listeners, but we decided to go for an class that contains the methods to be invoked on those events. These events are as follows:
+This class is for handling the events of the Davis Putnam class. It contains following functions:
 
-- list of events
+\begin{enumerate}
+    \item onSatisfied
+    \item onNotSatisfiable
+    \item onBacktrack
+    \item onChoose
+    \item onSubsume
+    \item onUnitCut
+\end{enumerate}
 
-Those methods are basically placeholders, since the class is supposed to be extended by a subclass. The subclass should alter these methods to their needs.
+Those functions are basically placeholders, since the class is supposed to be extended by a subclass. The subclass should alter these functions to their needs. Other than that this class has no further purpose.
 
 \subsection{Davis Putnam Worker Class}
 \label{sub:impDavisPutnamWorker}
-This class initializes a worker for the main script to handle all the calculations. It extends the Davis Putnam Consumer from the previous chapter \ref{sub:impDavisPutnamConsumer}.
+As said before we will have a worker for the calculations. This class initializes a worker for the main script to do all the calculations. It extends the Davis Putnam Consumer from the previous chapter \ref{sub:impDavisPutnamConsumer}. It will create its own DavisPutnam instance and add itself as a consumer, so that all events from said instance will call the functions of this class. When these functions are called the worker will send messages to the main script with all the information. In addition to those messages it will also tell the main script when it starts or stops calculating, because of the potential problem named previously in chapter \ref{ch:implementation}. These will be all outgoing messages. As for the incoming messages from the main script. We will accept requests for a new set of clauses, a seed for the DavisPutnam class, switching between micro and macro steps and to calculate the next step.
+
+Because the worker and main script communicate via messages only, there is only one listener for all those events. To be able to distinguish between the different requests we will define a default message structure as shown following listing \ref{code:workerMessage}.
+
+\begin{listing}[h!]
+\begin{minted}{javascript}
+// message example
+let message = {
+    'cmd': command_name,
+    'options': {
+        'option_1': value_1,
+        'option_2': value_2
+    }
+}
+\end{minted}
+    \caption{Worker message example}
+    \label{code:workerMessage}
+\end{listing}
+
+The ``cmd'' value will indicate what kind of request it is and the ``options'' object will contain all the information needed to fulfill that request. This way the listener can be implemented with a simple switch-case to handle the requests as shown in following listing \ref{code:workerListener}.
+
+\begin{listing}[h!]
+\begin{minted}{javascript}
+// listen to events
+self.addEventListener('message', event => {
+    let cmd = event.data.cmd;
+    let options = event.data.options;
+
+    // handle commands
+    switch(cmd) {
+        case 'seed':
+            // handle seed change
+            break;
+        case 'clauses':
+            // handle clauses change
+            break;
+        case 'micro':
+            // handle micro/macro change
+            break;
+        case 'step':
+            // handle step
+            break;
+        default:
+            // undefined command
+    }
+});
+\end{minted}
+    \caption{Event listener of the DavisPutnamWorker class}
+    \label{code:workerListener}
+\end{listing}
+
+With the components of the calculation thread finished, we are only missing those of the animation thread.
 
 \section{Implementing N-Qeens Problem}
 \label{sec:impQueens}
@@ -139,7 +207,22 @@ To be able to solve a problem with the Davis \& Putnam algorithm, one needs to b
 
 \subsection{Queens Clauses Function}
 \label{sub:impQueensClauses}
-This function returns a set of clauses for the N-Queens Problem.
+This function returns a set of clauses for the N-Queens Problem, so that for a given $n$ the problem will be to place $n$ queens on a $n \times n$ board. To create this set of clauses following functions are used to help:
+
+\paragraph{AtMostOne}
+Returns a set of clauses that allows only one of the given literals to be true, for a given set of literals.
+
+\paragraph{atMostOneInRow}
+Returns a set of clauses where only one of the row can be true, for a given $n$ and $row$.
+
+\paragraph{oneInColumn}
+Returns a set of clauses where at least one in the column is true, for a given $n$ and $column$.
+
+\paragraph{atMostOneInUpperDiagonal}
+Returns a set of clauses where only one in the upper diagonal can be true, for a given $n$ and helper variable $k$.
+
+\paragraph{atMostOneInLowerDiagonal}
+Returns a set of clauses where only one in the lower diagonal can be true, for a given $n$ and helper variable $k$.
 
 \subsection{Chessboard Class}
 \label{sub:impChessboard}
