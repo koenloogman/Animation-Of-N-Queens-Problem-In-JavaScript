@@ -226,22 +226,24 @@ Returns a set of clauses where only one in the lower diagonal can be true, for a
 
 \subsection{Chessboard Class}
 \label{sub:impChessboard}
-This class uses Two.js to visualize the state of the current set of clauses.
+To visualize the N-Queens Problem, we will use Two.js as mentioned before in chapter \ref{sec:tecTwo}. The Chessboard class will receive a number $n$ and create a visual representation of a $n \times n$ chessboard. Since the state of the set of clauses will be represented by the literals of the unit clauses, we will need two different indicators per tile of the board. We decided to represent the queen by a green dot and a negative literal by a red cross.
 
-- Two.js structure
+The chessboard will have four layers the first being the board itself, the second for the $n \times n$ tiles of the board, the third for the queens and the last for the crosses. This way we can initialize the board with all needed Two.js objects and add or remove them from their specific layers. To only add or remove changes of one state to the other, the chessboard will remember the state to be able to compare it with the new state. This will result in a smoother animation and less visual changes.
+
+As for scaling of the chessboard, we will scale the Two.js scene to fit the HTML container with a listener that gets called when the window resizes.
 
 \section{Implementing User Interaction}
 \label{sec:impUI}
+Now that we have the Davis \& Putnam algorithm and N-Queens Problem set up in JavaScript, we need to enable the user to interact with it. In chapter \ref{ch:conception} we talked about the design. Said design will be used as a reference for the GUI of the animation. Therefor we need an HTML, CSS and JavaScript file for the webpage.
 
 \subsection{HTML Document}
 \label{sub:impHTML}
-
-- brief description (important ids)
+The HTML file contains all important elements needed for the GUI with their unique ids to access them via JavaScript. No additional GUI elements will be added with JavaScript except for populating the calculation log. For changing GUI elements, we will be using the ``checkbox hack''. This way we do not need to change the style of the GUI with JavaScript and additional listeners, focusing the JavaScript part only on the interaction with the worker and visual representation by the chessboard.
+% checkbox hack https://css-tricks.com/the-checkbox-hack/
 
 \subsection{CSS Document}
 \label{sub:impCSS}
-
-- using css grid
+For the layout we decided to use a grid based design, to be able to make it somewhat responsive. We added only one break-point for the smallest size we want the GUI to have, so that the chessboard has an acceptable minimal size. For larger screens it will scale up accordingly.
 
 \subsection{Frame Class}
 \label{sub:impFrame}
