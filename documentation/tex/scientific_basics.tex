@@ -246,3 +246,23 @@ The n queen problem is the generalized mathematical problem related to a chessbo
   \caption{The 8-Queens-Problem \cite{Stroetman2019}} 
   \label{fig:queens-problem}
 \end{figure}
+
+\subsection{Define N-Queens Problem for the Davis \& Putnam Algorithm}
+
+- some gibberish
+
+%TODO: mathematical form
+\paragraph{atMostOne}
+Returns a set of clauses that allows only one of the given literals to be true, for a given set of literals.
+
+\paragraph{atMostOneInRow}
+Returns a set of clauses where only one of the row can be true, for a given $n$ and $row$.
+
+\paragraph{oneInColumn}
+Returns a set of clauses where at least one in the column is true, for a given $n$ and $column$.
+
+\paragraph{atMostOneInUpperDiagonal}
+Returns a set of clauses where only one in the upper diagonal can be true, for a given $n$ and helper variable $k$.
+
+\paragraph{atMostOneInLowerDiagonal}
+Returns a set of clauses where only one in the lower diagonal can be true, for a given $n$ and helper variable $k$.
