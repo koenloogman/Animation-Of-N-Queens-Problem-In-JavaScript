@@ -14,30 +14,33 @@
 %Am Ende der Implementierungsphase wird das Programm anhand dieser Anforderungen gemessen und je nachdem als Erfolg oder eben als Nichterfolg deklariert. 
 % cSpell:enable
 In order to ensure that the program offers the desired functionality at the end of the development process, it is crucial to define the requirements at the beginning and evaluate the project after completion. 
-\section{Requirement Analysis}
-%TODO Koen: Wenn dir noch was einfällt, bitte ergänzen (und zwar direkt in den Text)
-The focus of this project is in the demonstration of the Davis Putman algorithm using the N Queens Problem. In order to achieve this in the best possible way, the following requirements must be met. 
-\begin{itemize}
-\item The size of N for the N Queens problem has to be modifiable via a user interface
-\item With every attempt to solve a certain N Queen problem, different calculation ways and thus also solutions are to develop. However, it must be guaranteed that there is always the possibility to show replicable results. 
-\item The process to solve the N Queens problem must be shown visually on a chessboard in individual steps on the one hand and reproduced as individual calculation steps on the other hand. The user must be able to choose between Macro or Micro steps. Depending on which mode was selected, the size of the intermediate steps changes.
-\item The simulation must be pausable.
-\end{itemize}
-At the end of the implementation phase, the program is measured against these requirements and declared as successful or unsuccessful, as the case may be. 
 
-\section{Architecture Sketch}
+\section{Requirement Analysis}
+%TODO: Koen: Wenn dir noch was einfällt, bitte ergänzen (und zwar direkt in den Text)
+The focus of this project is in the demonstration of the Davis Putman algorithm using the N Queens Problem. In order to achieve this in the best possible way, the following requirements must be met. 
+
+\begin{itemize}
+  \item The size of N for the N Queens problem has to be modifiable via a user interface
+  \item With every attempt to solve a certain N Queen problem, different calculation ways and thus also solutions are to develop. However, it must be guaranteed that there is always the possibility to show replicable results. 
+  \item The process to solve the N Queens problem must be shown visually on a chessboard in individual steps on the one hand and reproduced as individual calculation steps on the other hand. The user must be able to choose between Macro or Micro steps. Depending on which mode was selected, the size of the intermediate steps changes.
+  \item The simulation must be pausable.
+\end{itemize}
+
+At the end of the implementation phase, the program is measured against these requirements and declared as successful or unsuccessful, as the case may be. 
 
 \section{Layout Design}
 % cSpell:disable
 %Damit die Nutzer die Animation des Davis Putman Algorithmus bestmöglich betrachten können und diesen leicht verstehen können, ist es wichtig, ein anschauliches und übersichtliches Benutzer Interface bereitzustellen. Die Interaktionen und Einstellungsmöglichkeiten müssen selbsterklärend und verständlich sein. Bereits im Vorfeld wurden deshalb verschiedene Ideen zur einem möglichen Layout gesammelt und folgendes Design wurde daraus konzepiert. 
 % cSpell:enable
 In order for users to view and understand the animation of the Davis Putman algorithm in the best possible way, it is important to provide a clear and concise user interface. The interactions and settings must be self-explanatory and understandable. Therefore, different ideas for a possible layout were collected in advance and the following design was developed. 
+
 \begin{figure}[h]
   \centering
   \includegraphics[width=\textwidth]{img/Design_N_Queens}
   \caption{Final Design Sketch for User Interface}
   \label{fig:design}
 \end{figure}
+
 % cSpell:disable
 %Der Header dabei dient als Blickfang, so dass sofort das Thema der Website klar und verständlich heraussticht. Dabei nimmt er die Funktion einer Überschrift ein. 
 %\\
@@ -49,12 +52,13 @@ In order for users to view and understand the animation of the Davis Putman algo
 %\\
 %Wichtig ist, dass alle Komponenten schlüssig miteinander sind. Das bedeutet, dass die Positionierung, der Abstand und das Alignment konsistent sind. Nur dann entsteht am Ende ein stimmiges Gesamtbild. Auch die Farben wurden so gewählt, dass sie beruhigend und in einem einheitlichen Ton, aber mit unterschiedlichen Sättigungen erscheinen. Damit wirkt die Oberfläche harmonisch und nicht überladen. Das Braun des Schachbretts passt sehr gut zum Blauton in der Umgebung und sticht als einzig anderer Farbton aus der Masse hervor. Dieses Farbschema galt jedoch nur zu Demonstrationszwecken und Orientierung. Es kann im Laufe der Implementierung angepasst werden und durch ein passenderes Set ersetzt werden. Ein gut strukturiertes und übersichtliches Layout ist entstanden, welches für die Nutzer leicht verständlich und einfach zu benutzen ist.
 % cSpell:enable
-The header serves as an eye-catcher so that the topic of the website immediately stands out clearly and comprehensibly. It takes on the function of a heading. 
-\\
-Below, the user interface is visually divided into three parts. The chessboard is in the middle, because the main animation takes place here and should be the center. It immediately captures the view of the users and directs them to the main event. 
-\\
-To the left are the settings for the animation and execution of the algorithm. The result is a natural reading flow from left to right, from the settings via the chessboard to the calculations. The user is navigated through the system in an intuitive and self-explanatory way, without any conspicuous control elements. The settings contain only the most important elements with which the animation can be adjusted. Thus it does not appear overloaded anywhere, but clear and structured. Below are the buttons for controlling the animation. Depending on the situation, the functionality is adapted to it. In this design the settings take a fixed place on the surface, but there was also the idea to convert the settings into a sidemenu. However, the fact that the user has to interact permanently with the control buttons and that the fold-out menus are only suitable for one-time interactions, such as navigating through a page, spoke against this. 
-\\
+
+The header serves as an eye-catcher so that the topic of the website immediately stands out clearly and comprehensibly. It takes on the function of a heading.
+
+Below, the user interface is visually divided into three parts. The chessboard is in the middle, because the main animation takes place here and should be the center. It immediately captures the view of the users and directs them to the main event.
+
+To the left are the settings for the animation and execution of the algorithm. The result is a natural reading flow from left to right, from the settings via the chessboard to the calculations. The user is navigated through the system in an intuitive and self-explanatory way, without any conspicuous control elements. The settings contain only the most important elements with which the animation can be adjusted. Thus it does not appear overloaded anywhere, but clear and structured. Below are the buttons for controlling the animation. Depending on the situation, the functionality is adapted to it. In this design the settings take a fixed place on the surface, but there was also the idea to convert the settings into a sidemenu. However, the fact that the user has to interact permanently with the control buttons and that the fold-out menus are only suitable for one-time interactions, such as navigating through a page, spoke against this.
+
 On the right side of the user interface is the calculation, which shows the mathematical background process in individual steps. The individual steps are displayed in a scrollable box. Whether the top element always remains on top or the newer elements are placed on top is not defined in the design itself.
-\\
+
 It is important that all components are coherent with each other. This means that positioning, distance and alignment are consistent. This is the only way to create a coherent overall picture. The colours have also been chosen in such a way that they appear calming and in a uniform tone, but with different saturations. Thus the surface appears harmonious and not overloaded. The brown of the chessboard fits very well to the blue tone in the surroundings and stands out as the only other colour from the mass. However, this colour scheme was only used for demonstration purposes and orientation. It can be adapted in the course of implementation and replaced by a more suitable set. A well-structured and clear layout has been created, which is easy to understand and use for the users.
