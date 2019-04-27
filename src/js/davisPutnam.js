@@ -233,7 +233,7 @@ class DavisPutnam {
      * @returns {Boolean} true if not satisfiable
      */
     notSatisfiable() {
-        return this._clauses.has(new Set()) && this.stack.isEmpty();
+        return this._clauses.has(new Set()) && this.stack.length == 0;
     }
     
     /**
