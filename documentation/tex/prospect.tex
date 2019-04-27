@@ -2,6 +2,43 @@
 
 \chapter{Prospect}
 \section{Evaluation}
+Nach der Entwicklungsphase ist nun der Zeitpunkt gekommen, an dem das Programm an den in Kapitel \ref{ch:conception} definierten Anforderungen gemessen und evaluiert wird. Diese Kriterien wurden anhand der gewünschten Funktionen und der Ziele des Endnutzers spezifiziert und müssen alle erfüllt sein, damit das Programm als erfolgreich angesehen werden kann. Im Folgenden werden die vorher definierten Kriterien einzeln überprüft und entweder als erfüllt oder nicht bewertet.
+\paragraph{Modifiable Number N}
+Das zweite Inputfeld auf der Benutzeroberfläche gibt dem Nutzer die Möglichkeit, eine gewünschte Zahl N für das N Damen Problem einzustellen. Somit gilt diese Anforderung als erfüllt.
+\paragraph{Possibility to show replicable results}
+Mithilfe des Seeds, den man persönlich im ersten Inputfeld eintragen beziehungsweise ändern kann, ist es möglich, bestimmte Rechnungsreihenfolgen immer wieder zu replizieren, indem man das gleiche N und den gleichen Seed auswählt. Das kann ganz gut am folgenden Beispiel zu erkennen sein.
+\begin{listing}
+%TODO Koen: Make Code great again
+%Choose '2,1'
+%{ '2,1' }, { '!3,2', '!2,1' } ⊢ { '!3,2' }
+%{ '2,1' }, { '!2,1', '!1,2' } ⊢ { '!1,2' }
+%{ '2,1' }, { '!4,3', '!2,1' } ⊢ { '!4,3' }
+%{ '2,1' }, { '!2,4', '!2,1' } ⊢ { '!2,4' }
+%{ '2,1' }, { '!2,2', '!2,1' } ⊢ { '!2,2' }
+%{ '2,1' }, { '!2,3', '!2,1' } ⊢ { '!2,3' }
+%{ '!4,3' }, { '1,3', '2,3', '3,3', '4,3' } ⊢ { '1,3', '2,3', '3,3' }
+%{ '!2,3' }, { '1,3', '2,3', '3,3' } ⊢ { '1,3', '3,3' }
+%{ '!1,2' }, { '1,2', '2,2', '3,2', '4,2' } ⊢ { '4,2', '2,2', '3,2' }
+%{ '!2,2' }, { '4,2', '2,2', '3,2' } ⊢ { '4,2', '3,2' }
+%{ '!2,4' }, { '1,4', '2,4', '3,4', '4,4' } ⊢ { '1,4', '4,4', '3,4' }
+%{ '!3,2' }, { '4,2', '3,2' } ⊢ { '4,2' }
+%{ '4,2' }, { '!4,2', '!3,3' } ⊢ { '!3,3' }
+%{ '4,2' }, { '!4,4', '!4,2' } ⊢ { '!4,4' }
+%{ '4,2' }, { '!4,2', '!4,1' } ⊢ { '!4,1' }
+%{ '4,2' }, { '!4,2', '!3,1' } ⊢ { '!3,1' }
+%{ '!3,3' }, { '1,3', '3,3' } ⊢ { '1,3' }
+%{ '!4,4' }, { '1,4', '4,4', '3,4' } ⊢ { '1,4', '3,4' }
+%{ '1,3' }, { '!3,1', '!1,3' } ⊢ { '!3,1' }
+%{ '1,3' }, { '!1,4', '!1,3' } ⊢ { '!1,4' }
+%{ '1,3' }, { '!1,3', '!1,1' } ⊢ { '!1,1' }
+%{ '!1,4' }, { '1,4', '3,4' } ⊢ { '3,4' }
+%Problem satisfied
+\end{listing}
+Dieses Beispiel zeigt den Rechenweg des Algorithmus mit dem Seed \enquote{Exmatrikulator} beim 4 Damen Problem. Immer wenn dieser Seed bei diesem speziellen Problem verwendet wird, wird genau dieser Rechenweg befolgt. Somit ist es möglich, ein bestimmtes Ergebnis so häufig wie möglich und jederzeit zu replizieren. Damit gilt die Anforderung als erfüllt.
+\paragraph{Visualization of current progress}
+Hierbei bestand das Kriterium daraus, den aktuellen Lösungsprozess als visuelle Darstellung auf dem Schachbrett und als Kalkulationsschritte anzuzeigen. Auf der Benutzeroberfläche wird in der Mitte auf dem Schachbrett die Animation visuell dargestellt und rechts daneben sind die Kalkulationen in einer Box zu sehen. Hierbei ist auch zu erwähnen, dass dies entweder automatisch durchlaufen werden kann oder aber auch Schritt für Schritt mit einem einzelnen Knopfdruck jeweils. Die Schrittgröße kann auch eingestellt werden. Es steht zur Auswahl Micro und Macro. Somit ist auch diese Anforderung erfüllt.
+\paragraph{Pausable Progress}
+Die Anforderung war, dass die Simulation pausierbar ist. Wenn der Nutzer auf den Button \enquote{Play} gedrückt hat, startet die Simulation und gleichzeitig wandelt sich der Startknopf in einen \enquote{Stop} Button. Damit lässt sich die Animation stoppen, indem dieser betätigt wird. Dabei zu beachten ist jedoch, dass die Simulation erst nach Beenden des aktuellen Rechnungsschritt stoppt. Nachdem dieses dann gestoppt wurde, ändert sich der Button wieder zu \enquote{Play} und dadurch lässt sich die Animation an der entsprechenden Stelle fortsetzen.
 \section{Conclusion}
 Wie gerade im vorherigen Abschnitt gezeigt wurde, erfüllt dieses Programm alle zuvor definierten Anforderungen. Damit gilt das Programm als erfolgreich und das Projekt kann nun zufriedenstellend abgeschlossen werden. Zusammenfassend lässt sich sagen, dass es ein sehr spannendes Projekt mit keinen nennenswerten Problemen war. Immer wieder musste im Laufe der Implementierungsphase die Anforderungen erneut betrachtet und mithilfe dieser Entscheidungen getroffen werden. Das Programm sollte zu jeder Zeit leicht verwendbar und verständlich sein. Sowohl Usability als auch User Experience spielten in allen Bereichen des Entwicklungsprozesses eine Rolle. 
 \\
