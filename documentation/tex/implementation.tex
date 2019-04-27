@@ -62,12 +62,10 @@ The last point is important for the micro steps, because we need to do all possi
 Because we will use an iterative implementation, we need to think about everything that needs to be done in one step of the iteration. Since we will have macro and micro steps, we will use two loops one for the macro steps and one for the micro steps, so that one macro step will execute all micro steps that it includes. Lets say we have a function step that receives a number of steps $n$ so that it will do $n$ micro or macro steps on the state. Then we need to reduce the step count when a guessed literal $L$ has been added to the state, incase of macro steps, or a unit cut has been calculated, for micro steps. The function step would look like the pseudo code of listing \ref{code:stepDavisPutnam}. Doing all micro steps at the start of a macro step then checking if it is satisfied followed by a backtrack if not satisfiable and the guessing of a new literal.
 
 \begin{listing}[h!]
-    \textit{/* do step(s) on a state that contains a set of clauses $S$ */}
+    \textit{/* do step(s) on a state that contains a set of clauses $S$ */}\\
     \textbf{function} step( number of steps $n$ ) \textbf{return}\\
-        \hspace*{0.5cm} \textit{/* macro step loop */}\\
-        \hspace*{0.5cm} \textbf{repeat}\\
-            \hspace*{1.0cm} \textit{/* micro step loop for subsume and unit cuts */}\\
-            \hspace*{1.0cm} \textbf{repeat}\\
+        \hspace*{0.5cm} \textbf{repeat} \textit{/* macro step loop */}\\
+            \hspace*{1.0cm} \textbf{repeat} \textit{/* micro step loop for subsume and unit cuts */}\\
                 \hspace*{1.5cm} \textit{/* select a new literal and subsume till unit cuts can be done with said literal */}\\
                 \hspace*{1.5cm} \textbf{repeat}\\
                     \hspace*{2cm} choose a unit clause $U$ that has not been used yet\\
