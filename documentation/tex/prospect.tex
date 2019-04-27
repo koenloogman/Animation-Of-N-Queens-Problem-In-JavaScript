@@ -53,7 +53,14 @@ With the help of the seed, which can be entered or changed personally in the fir
 %\\
 %Durch die Verwendung von Javascript traten einige Erleichterungen in der Webentwicklung, aber auch einige Schwierigkeiten auf. Diese wurden aber durch hilfreiche Bibliotheken und Technologien wie beispielsweise die Web workers gelöst. 
 % cSpell:enable
-This example shows the calculation path of the algorithm with the seed \enquote{exmatrikulator} for the 4-Queens Problem. Whenever this seed is used for this particular problem, the exact calculation path is followed. Thus it is possible to replicate a certain result as often as possible and at any time. Thus the requirement is considered fulfilled.
+This example shows the calculation path of the algorithm with the seed \enquote{exmatrikulator} for the 4-Queens Problem. Whenever this seed is used for this particular problem, the exact calculation path is followed. At the chessboard, the solution can be seen in the following picture.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\textwidth]{img/Proof_Chessboard}
+  \caption{Final Solution for 4 Queen Problem with Seed Exmatrikulator}
+  \label{fig:design}
+\end{figure} 
+Thus it is possible to replicate a certain result as often as possible and at any time. Thus the requirement is considered fulfilled.
 \paragraph{Visualization of current progress}
 The criterion here was to display the current solution process as a visual representation on the chessboard and as calculation steps. On the user interface, the animation is displayed visually in the middle of the chessboard and the calculations are shown in a box to the right. It should also be mentioned that this can either be done automatically or step by step with a single push of a button. The step size can also be adjusted. You can choose between Micro and Macro. Thus this requirement is also fulfilled.
 \paragraph{Pausable Progress}
