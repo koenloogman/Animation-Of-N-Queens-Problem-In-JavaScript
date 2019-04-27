@@ -207,7 +207,7 @@ To be able to solve a problem with the Davis \& Putnam algorithm, one needs to b
 \label{sub:impQueensClauses}
 This function returns a set of clauses for the N-Queens Problem, so that for a given $n$ the problem will be to place $n$ queens on a $n \times n$ board. To create this set of clauses following functions are used to help:
 
-\paragraph{AtMostOne}
+\paragraph{atMostOne}
 Returns a set of clauses that allows only one of the given literals to be true, for a given set of literals.
 
 \paragraph{atMostOneInRow}
@@ -228,11 +228,25 @@ To visualize the N-Queens Problem, we will use Two.js as mentioned before in cha
 
 The chessboard will have four layers the first being the board itself, the second for the $n \times n$ tiles of the board, the third for the queens and the last for the crosses. This way we can initialize the board with all needed Two.js objects and add or remove them from their specific layers. To only add or remove changes of one state to the other, the chessboard will remember the state to be able to compare it with the new state. This will result in a smoother animation and less visual changes.
 
-As for scaling of the chessboard, we will scale the Two.js scene to fit the HTML container with a listener that gets called when the window resizes.
+As for scaling of the chessboard, we will scale the Two.js scene to fit the parent HTML container with a listener that gets called when the window resizes.
 
 \section{Implementing User Interaction}
 \label{sec:impUI}
 Now that we have the Davis \& Putnam algorithm and N-Queens Problem set up in JavaScript, we need to enable the user to interact with it. In chapter \ref{ch:conception} we talked about the design. Said design will be used as a reference for the GUI of the animation. Therefor we need an HTML, CSS and JavaScript file for the webpage.
+
+As for the interaction of the User with the animation, we will enable the user to do the following:
+
+\begin{enumerate}
+    \item Change the seed for the DavisPutnam class
+    \item Change the number $n$ for the N-Queens Problem affecting also the visualization
+    \item Toggle between micro and macro steps
+    \item Request the next step to be animated
+    \item Request to automatically animate all steps until requested to stop or no further steps can be done
+    \item Reset the whole animation to run it again from the start
+    \item Display previous calculated states of the shown steps
+\end{enumerate}
+
+For all points except the last one we got corresponding elements for interaction incorporated into the design. To enable the user to display previous states, we decided to make the elements of the calculation history clickable.
 
 \subsection{HTML Document}
 \label{sub:impHTML}
@@ -245,7 +259,6 @@ For the layout we decided to use a grid based design, to be able to make it some
 
 \subsection{Frame Class}
 \label{sub:impFrame}
+To initialize the animation and all its needed components, we created a Frame class. This class contains all the functions for the user interaction, the worker for the calculations and the chessboard object for visualization. It creates all the listeners for the UI elements and handles the communication with the worker. To synchronize the animation with the worker the UI elements that should not be triggered will be disabled during the calculation process of the worker and enabled at the end of said calculation. This way we prevent unwanted behavior of the worker. Whenever the worker sends a message containing an important step of the calculation a new entry will be created for the calculation history. New entries will be added before the previous entries, so that the top entry is the latest and the bottom one the first calculation step.
 
-- setup (worker and chessboard)
-
-- event listeners
+Each of the named possible user interactions receives their own listener, that handles the requested task. On top of those we need one more for the messages of the worker, because we will have a two way communication. This listener is very similar to the one for the worker as previously shown in listing \ref{code:workerListener}, only that it will handle all outgoing messages of the worker.
