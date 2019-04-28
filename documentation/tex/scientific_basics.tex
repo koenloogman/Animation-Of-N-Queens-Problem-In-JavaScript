@@ -167,7 +167,7 @@ The set of clauses $K$ can only be satisfied if $K \cup \bigl\{\{p\}\bigr\}$ or 
 % Für die Vereinfachung wird zu Beginn also eine Aussagenvariable p ausgewählt, die in der Klauselmenge vorkommt. Danach werden die beiden oben genannten Klauselmengen gebildet und versucht, für eine der beiden eine Lösung zu finden. Ist dieser Versuch erfolgreich, ist das Ergebnis automatisch die Lösung von $K$. Falls keine gefunden wird, ist $K$ unlösbar.
 % TODO: Keine Ahnung ob hier Beweis einfügen soll
 % cSpell:enable
-For simplification, a statement variable $p$ is selected at the beginning, which occurs in the clause set. Then the two clause sets mentioned above are formed and an attempt is made to find a solution for one of them. If this attempt is successful, the result is automatically a solution of $K$. If none is found, $K$ is unsatisfiable.
+For simplification, a statement variable $p$ is selected at the beginning, which occurs in the clause set. Then the two clause sets mentioned above are formed and an attempt is made to find a solution for one of them. If this attempt is successful, the result is automatically a solution of $K$. If none is found, $K$ is not satisfiable.
 
 \subsection{The Davis-Putnam Method}
 \label{sub:sciDavisPutnamMethod}
@@ -243,26 +243,51 @@ The n queen problem is the generalized mathematical problem related to a chessbo
     \multiput(4.5,5.75)(0,-1){5}{\vector(0,-1){0.5}}
   \end{picture}
   \vspace*{-1.0cm}
-  \caption{The 8-Queens-Problem \cite{Stroetman2019}} 
+  \caption{The 8-Queens-Problem with one queen placed \cite{Stroetman2019}} 
   \label{fig:queens-problem}
 \end{figure}
 
 \subsection{Define N-Queens Problem for the Davis \& Putnam Algorithm}
+Before we can find a solution for the N-Queens Problem, we need to define the problem as a propositional logic formula. Since we will use variables that are either true or false, we say that if a variable is true we place a queen and if it is false we are not able to place a queen. As for the naming of these variables we will think about that in the implementation in chapter \ref{ch:implementation}. For now we will say that $Q_{x,y}$ is the queen in row $x$ on column $y$. Now all that is left is the creation of the set of clauses $K$ that describes the N-Queens Problem. Therefore we create some functions to help us define the problem as such:
 
-- some gibberish
-
-%TODO: mathematical form
 \paragraph{atMostOne}
-Returns a set of clauses that allows only one of the given literals to be true, for a given set of literals.
+The function atMostOne will receive a set of literals $l$ and return a set of clauses $K$ so that only one of the literals $l \in L$ can be true.
+\\[0.2cm]
+\hspace*{1.3cm} $\texttt{atMostOne}: L \to K$
+\\[0.2cm]
+\hspace*{1.3cm} $\texttt{atMostOne}(L) := \{\; \{\; l_1,\; \bar{l_2} \}\; :\; l_1, l_2 \in L\; |\; l_1 \neq l_2\; \}$
 
 \paragraph{atMostOneInRow}
-Returns a set of clauses where only one of the row can be true, for a given $n$ and $row$.
+This function receives a number $n$ for the total amount of queens and a number $r \in \{1 .. n\}$ for the row and return a set of clauses $K$ where only one queen can be placed in row $r$.
+\\[0.2cm]
+\hspace*{1.3cm} $\texttt{atMostOneInRow}: \N \times \N \to K$
+\\[0.2cm]
+\hspace*{1.3cm} $\texttt{atMostOneInRow}(r,\; n) := \texttt{atMostOne}(\{\; Q_{r,i} :\; i \in \{1\; ..\; n\}\; \})$
 
 \paragraph{oneInColumn}
-Returns a set of clauses where at least one in the column is true, for a given $n$ and $column$.
+This function receives a number $n$ for the total amount of queens and a number $c$ where $c \leq n$ for the column and returns a set of clauses $K$ where at least one queen is placed in the column $c$.
+\\[0.2cm]
+\hspace*{1.3cm} $\texttt{oneInColumn}: \N \times \N \to K$
+\\[0.2cm]
+\hspace*{1.3cm} $\texttt{oneInColumn}(c,\; n) := \{\; \{\; Q_{i,c} :\; i \in \{1\; ..\; n\}\; \}\; \}$
 
 \paragraph{atMostOneInUpperDiagonal}
-Returns a set of clauses where only one in the upper diagonal can be true, for a given $n$ and helper variable $k$.
+This function returns a set of clauses $K$ where only one queen can be placed in the upper diagonal, for a given number $n$ and $k \in \{3\; ..\; 2 * n - 1\}$. The number $k$ helps with calculating which combination of row and column is part of the diagonal.
+\\[0.2cm]
+\hspace*{1.3cm} $\texttt{atMostOneInUpperDiagonal}: \N \times \N \to K$
+\\[0.2cm]
+\hspace*{1.3cm} $\texttt{atMostOneInUpperDiagonal}(k,\; n) := \texttt{atMostOne}(\{\; Q_{x,y} :\; x,y \in \{1\; ..\; n\}\; |\; x + y = k\; \})$
 
 \paragraph{atMostOneInLowerDiagonal}
-Returns a set of clauses where only one in the lower diagonal can be true, for a given $n$ and helper variable $k$.
+This function returns a set of clauses $K$ where only one queen can be placed in the lower diagonal, for a given number $n$ and $k \in \{-(n - 2)\; ..\; n - 2\}$. As before the number $k$ helps with calculating which combination of row and column is part of the diagonal.
+\\[0.2cm]
+\hspace*{1.3cm} $\texttt{atMostOneInLowerDiagonal}: \N \times \N \to K$
+\\[0.2cm]
+\hspace*{1.3cm} $\texttt{atMostOneInLowerDiagonal}(k,\; n) := \texttt{atMostOne}(\{\; Q_{x,y} :\; x,y \in \{1\; ..\; n\}\; |\; x - y = k\; \})$
+
+\paragraph{queensClauses}
+With the functions above, we finally can define the N-Queens problem as a propositional logic formula in form of a set of clauses $K$.
+\\[0.2cm]
+\hspace*{1.3cm} $\texttt{queensClauses}: \N \to K$
+\\[0.2cm]
+\hspace*{1.3cm} $\texttt{queensClauses}(n) := \bigcup\limits_{i=1}^{n}(\texttt{atMostOneInRow}(i, n)\; \cup\; \texttt{oneInColumn}(i, n))\; \cup\; \bigcup\limits_{i=3}^{2 * n - 1}\texttt{atMostOneInUpperDiagonal}(i, n) \cup\; \bigcup\limits_{i=-(n - 2)}^{n - 2}\texttt{atMostOneInLowerDiagonal}(i, n)$
