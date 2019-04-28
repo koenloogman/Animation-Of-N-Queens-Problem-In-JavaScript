@@ -15,7 +15,6 @@ Quick overview of what's planned for the documentation of the project.
     - Javascript and used Libraries
 4. Conception
     - Requirements
-    - Architecture
     - Layout Design
 5. Implementation
 6. Prospect
