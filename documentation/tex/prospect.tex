@@ -1,7 +1,10 @@
 % !TeX root = ./documentation.tex
 
 \chapter{Prospect}
+\label{ch:prospect}
+
 \section{Evaluation}
+\label{sec:proEvalutation}
 % cSpell:disable
 %Nach der Entwicklungsphase ist nun der Zeitpunkt gekommen, an dem das Programm an den in Kapitel \ref{ch:conception} definierten Anforderungen gemessen und evaluiert wird. Diese Kriterien wurden anhand der gewünschten Funktionen und der Ziele des Endnutzers spezifiziert und müssen alle erfüllt sein, damit das Programm als erfolgreich angesehen werden kann. Im Folgenden werden die vorher definierten Kriterien einzeln überprüft und entweder als erfüllt oder nicht bewertet.
 %\paragraph{Modifiable Number N}
@@ -10,13 +13,14 @@
 %Mithilfe des Seeds, den man persönlich im ersten Inputfeld eintragen beziehungsweise ändern kann, ist es möglich, bestimmte Rechnungsreihenfolgen immer wieder zu replizieren, indem man das gleiche N und den gleichen Seed auswählt. Das kann ganz gut am folgenden Beispiel zu erkennen sein.
 % cSpell:enable
 After the development phase, the time has come to measure and evaluate the program against the requirements defined in chapter \ref{ch:conception}. These criteria were specified according to the desired functions and objectives of the end user and must all be met for the program to be considered successful. In the following, the previously defined criteria are examined individually and either assessed as fulfilled or not.
+
 \paragraph{Modifiable Number N}
 The second input field on the user interface allows the user to set a desired number N for the N-Queens Problem. Thus, this requirement is considered fulfilled.
+
 \paragraph{Possibility to show replicable results}
 With the help of the seed, which can be entered or changed personally in the first input field, it is possible to replicate certain invoice sequences again and again by selecting the same N and the same seed. This can be seen quite well in the following example.
-%
+
 \begin{listing}
-%TODO Koen: Make Code great again
 Choose `2,1'\\
 \{ `2,1' \}, \{ `!3,2', `!2,1' \} $\vdash$ \{ `!3,2' \}\\
 \{ `2,1' \}, \{ `!2,1', `!1,2' \} $\vdash$ \{ `!1,2' \}\\
@@ -56,22 +60,30 @@ Problem satisfied
 %Durch die Verwendung von Javascript traten einige Erleichterungen in der Webentwicklung, aber auch einige Schwierigkeiten auf. Diese wurden aber durch hilfreiche Bibliotheken und Technologien wie beispielsweise die Web workers gelöst. 
 % cSpell:enable
 This example shows the calculation path of the algorithm with the seed \enquote{exmatrikulator} for the 4-Queens Problem. Whenever this seed is used for this particular problem, the exact calculation path is followed. At the chessboard, the solution can be seen in the following picture.
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.7\textwidth]{img/Proof_Chessboard}
   \caption{Final Solution for 4 Queen Problem with Seed Exmatrikulator}
   \label{fig:design}
-\end{figure} 
+\end{figure}
+
 Thus it is possible to replicate a certain result as often as possible and at any time. Thus the requirement is considered fulfilled.
+
 \paragraph{Visualization of current progress}
 The criterion here was to display the current solution process as a visual representation on the chessboard and as calculation steps. On the user interface, the animation is displayed visually in the middle of the chessboard and the calculations are shown in a box to the right. It should also be mentioned that this can either be done automatically or step by step with a single push of a button. The step size can also be adjusted. You can choose between Micro and Macro. Thus this requirement is also fulfilled.
+
 \paragraph{Pausable Progress}
 The requirement was that the simulation could be paused. If the user pressed the \enquote{Play} button, the simulation starts and at the same time the start button turns into a \enquote{Stop} button. This button can be used to stop the animation by pressing it. Please note, however, that the simulation only stops after the current calculation step has been completed. After this has been stopped, the button changes back to \enquote{Play} and the animation can be continued at the corresponding position.
+
 \section{Conclusion}
+\label{sec:proConclusion}
 As shown in the previous section, this program meets all previously defined requirements. The program is considered successful and the project can now be completed satisfactorily. In summary, it was a very exciting project with no significant problems. Again and again during the implementation phase, the requirements had to be re-examined and decisions had to be made with the help of these decisions. The program had to be easy to use and understand at all times. Both usability and user experience played a role in all areas of the development process. 
-\\
+
 The use of Javascript made web development a lot easier, but there were also some difficulties. But these were solved by helpful libraries and technologies like web workers. 
-\section{Outlook} 
+
+\section{Outlook}
+\label{sec:proOutlook}
 % cSpell:disable
 %TODO Koen. Du musst sagen, wie man die Berechnung optimieren könnte
 %Es gibt immer Bereiche eines Programms, die zukünftig noch verbessert werden können. Beispielsweise könnte die Berechnung der Lösung des N Damen Problems bestimmt noch weiter optimiert werden. Dadurch würde die Performanz eventuell verbessert werden, da vor allem bei großen Zahlen für N die Berechnung sehr lange dauert. 
@@ -79,5 +91,5 @@ The use of Javascript made web development a lot easier, but there were also som
 %Eine weitere Idee zur zukünftigen Weiterentwicklung wäre die Verwendung dieses Programms für weitere aussagelogische Probleme und nicht nur das N Damen Problem. Durch die Verwendung der web worker wäre dies durch aus denkbar und umsetzbar. Somit ist der Davis Putman Algorithmus in diesem Programm universell einsetzbar.
 % cSpell:enable
 There are always areas of a program that can be improved in the future. For example, the calculation of the solution to the N-Queens Problem could certainly be further optimized. This would possibly improve the performance, because especially with large numbers for N the calculation takes a very long time. 
-\\
+
 Another idea for future development would be the use of this program for further logical problems and not only the N-Queens Problem. By using the web worker this would be possible. Therefore the Davis Putman algorithm is universally applicable in this program.
