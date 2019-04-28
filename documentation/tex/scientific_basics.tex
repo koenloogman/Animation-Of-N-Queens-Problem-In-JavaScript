@@ -19,7 +19,7 @@ Before the algorithm can be examined in more detail, a few mathematical terms mu
 The function $\mathcal{I}:\mathcal{P} \rightarrow \mathbb{B}$ is called propositional logic interpretation, which assigns a true value $\mathcal{I}(p) \in \mathbb{B}$ to each proposition-logical variable $p\in \mathcal{P}$
 
 \paragraph{Satisfiable}
-There is a set of propositional logic formulas. If there is an interpretation $i$ so that all formulas are satisfied and the formula $\mathcal{I}(f) = \texttt{True}$ \quad for all propositional logic formulas in the set is given, so this set is satisfiable. If this is not the case, then is this set unsatisfiable.
+There is a set of propositional logic formulas. If there is an interpretation $i$ so that all formulas are satisfied and the formula $\mathcal{I}(f) = \texttt{True}$ \quad for all propositional logic formulas in the set is given, so this set is satisfiable. If this is not the case, then this set is not satisfiable.
 
 \paragraph{Tautology}
 It is the case, when a propositional logic formula for every interpretation $\mathcal{I}$ always true is: $\mathcal{I}(f) = \texttt{True}$. In this case it is written as $\models f$.
@@ -204,7 +204,7 @@ The theoretical foundation that was previously created now makes it possible to 
 % cSpell:disable
 % Das n Königinnen Problem ist das verallgemeinerte mathematische Problem bezogen auf ein Schachbrett, dass n \times n Felder besitzt. Ein spezielles Beispiel dazu wäre das 8 Damen Problem, welches auf dem standardisierten Schachbrett abgebildet wird. Allgemein handelt das Problem davon, n Damen auf einem n \times n Schachbrett so zu platzieren, dass keine in ihrem Zug behindert werden würde. Eine Königin in einem normalen Schachspiel kann sowohl diagonal, als auch vertikal und horizontal ihre Züge ziehen. Dieses Zugmuster kann in Figure \label{fig:queens-problem} genauer angeschaut werden. Zusammengefasst heißt dies also, dass immer nur eine Dame auf ihrer vertikalen, horizontalen und diagonalen Linie sein darf, um sich nicht gegenseitig zu behindern. Dabei wird in diesem Problem davon ausgegangen, dass jede Dame jede andere angreifen kann und die Feldfarben ignoriert werden. 
 % cSpell:enable
-The n queen problem is the generalized mathematical problem related to a chessboard that consists of $n \times n$ squares. A special example would be the 8 queens problem, which is related to the standardized chessboard. In general, the problem is to place n queens on an $n \times n$ chessboard so that none would be obstructed in their turn. A queen in a normal game of chess can move diagonally, vertically and horizontally. This move pattern can be seen in Figure \label{fig:queens-problem}. In summary, this means that there is only one queen allowed on her vertical, horizontal and diagonal line at a time so that they do not interfere with each other. In this problem it is assumed that any queen can attack any other queen and the field colors are ignored. This problem can be solved by several algorithms such as the \textit{Davis \& Putman algorithm}. \cite{Bell2009}, \cite{Watkins2012}, \cite[146\psq]{Nudelman1995}, \cite{Stroetman2019}
+The N-Queens Problem is the generalized mathematical problem related to a chessboard that consists of $n \times n$ squares. A special example would be the 8-Queens Problem, which is related to the standardized chessboard. In general, the problem is to place n queens on an $n \times n$ chessboard so that none would be obstructed in their turn. A queen in a normal game of chess can move diagonally, vertically and horizontally. This move pattern can be seen in Figure \ref{fig:queens-problem}. In summary, this means that there is only one queen allowed on her vertical, horizontal and diagonal line at a time so that they do not interfere with each other. In this problem it is assumed that any queen can attack any other queen and the field colors are ignored. This problem can be solved by several algorithms such as the \textit{Davis \& Putman algorithm}. \cite{Bell2009}, \cite{Watkins2012}, \cite[146\psq]{Nudelman1995}, \cite{Stroetman2019}
 
 \begin{figure}[!ht]
   \centering
@@ -278,7 +278,7 @@ This function returns a set of clauses $K$ where only one queen can be placed in
 \hspace*{11.5cm} $\ x - y = k\ \})$
 
 \paragraph{queensClauses}
-With the functions above, we finally can define the \textit{N-Queens Problem} for a given numer $n$ as a propositional logic formula in form of a set of clauses $K$.
+With the functions above, we finally can define the \textit{N-Queens Problem} for a given number $n$ as a propositional logic formula in form of a set of clauses $K$.
 \\[0.2cm]
 \hspace*{1.3cm} $\texttt{queensClauses}:  N \to K$
 \\[0.2cm]
