@@ -253,41 +253,50 @@ Before we can find a solution for the N-Queens Problem, we need to define the pr
 \paragraph{atMostOne}
 The function atMostOne will receive a set of literals $l$ and return a set of clauses $K$ so that only one of the literals $l \in L$ can be true.
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{atMostOne}: L \to K$
+\hspace*{1.3cm}$\texttt{atMostOne}:\ L \to K$
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{atMostOne}(L) := \{\; \{\; l_1,\; \bar{l_2} \}\; :\; l_1, l_2 \in L\; |\; l_1 \neq l_2\; \}$
+\hspace*{1.3cm}$\texttt{atMostOne}(L) := \{\ \{\ l_1,\ \bar{l_2} \}\ :\ l_1, l_2 \in L\ |\ l_1 \neq l_2\ \}$
 
 \paragraph{atMostOneInRow}
 This function receives a number $n$ for the total amount of queens and a number $r \in \{1 .. n\}$ for the row and return a set of clauses $K$ where only one queen can be placed in row $r$.
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{atMostOneInRow}: \N \times \N \to K$
+\hspace*{1.3cm} $\texttt{atMostOneInRow}:\ N \times N \to K$
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{atMostOneInRow}(r,\; n) := \texttt{atMostOne}(\{\; Q_{r,i} :\; i \in \{1\; ..\; n\}\; \})$
+\hspace*{1.3cm} $\texttt{atMostOneInRow}(r,\ n) := \texttt{atMostOne}(\{\ Q_{r,i} :\ i \in \{1\ ..\ n\}\ \})$
 
 \paragraph{oneInColumn}
 This function receives a number $n$ for the total amount of queens and a number $c$ where $c \leq n$ for the column and returns a set of clauses $K$ where at least one queen is placed in the column $c$.
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{oneInColumn}: \N \times \N \to K$
+\hspace*{1.3cm} $\texttt{oneInColumn}:\ N \times N \to K$
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{oneInColumn}(c,\; n) := \{\; \{\; Q_{i,c} :\; i \in \{1\; ..\; n\}\; \}\; \}$
+\hspace*{1.3cm} $\texttt{oneInColumn}(c,\ n) := \{\ \{\ Q_{i,c} :\ i \in \{1\ ..\ n\}\ \}\ \}$
 
 \paragraph{atMostOneInUpperDiagonal}
-This function returns a set of clauses $K$ where only one queen can be placed in the upper diagonal, for a given number $n$ and $k \in \{3\; ..\; 2 * n - 1\}$. The number $k$ helps with calculating which combination of row and column is part of the diagonal.
+This function returns a set of clauses $K$ where only one queen can be placed in the upper diagonal, for a given number $n$ and $k \in \{3\ ..\ 2 * n - 1\}$. The number $k$ helps with calculating which combination of row and column is part of the diagonal.
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{atMostOneInUpperDiagonal}: \N \times \N \to K$
+\hspace*{1.3cm} $\texttt{atMostOneInUpperDiagonal}:\ N \times N \to K$
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{atMostOneInUpperDiagonal}(k,\; n) := \texttt{atMostOne}(\{\; Q_{x,y} :\; x,y \in \{1\; ..\; n\}\; |\; x + y = k\; \})$
+\hspace*{1.3cm} $\texttt{atMostOneInUpperDiagonal}(k,\ n) := \texttt{atMostOne}(\{\ Q_{x,y} :\ x,y \in \{1\ ..\ n\}\ |$
+\hspace*{11.5cm} $\ x + y = k\ \})$
 
 \paragraph{atMostOneInLowerDiagonal}
-This function returns a set of clauses $K$ where only one queen can be placed in the lower diagonal, for a given number $n$ and $k \in \{-(n - 2)\; ..\; n - 2\}$. As before the number $k$ helps with calculating which combination of row and column is part of the diagonal.
+This function returns a set of clauses $K$ where only one queen can be placed in the lower diagonal, for a given number $n$ and $k \in \{-(n - 2)\ ..\ n - 2\}$. As before the number $k$ helps with calculating which combination of row and column is part of the diagonal.
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{atMostOneInLowerDiagonal}: \N \times \N \to K$
+\hspace*{1.3cm} $\texttt{atMostOneInLowerDiagonal}:\ N \times N \to K$
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{atMostOneInLowerDiagonal}(k,\; n) := \texttt{atMostOne}(\{\; Q_{x,y} :\; x,y \in \{1\; ..\; n\}\; |\; x - y = k\; \})$
+\hspace*{1.3cm} $\texttt{atMostOneInLowerDiagonal}(k,\ n) := \texttt{atMostOne}(\{\ Q_{x,y} :\ x,y \in \{1\ ..\ n\}\ |$
+\hspace*{11.5cm} $\ x - y = k\ \})$
 
 \paragraph{queensClauses}
 With the functions above, we finally can define the N-Queens problem as a propositional logic formula in form of a set of clauses $K$.
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{queensClauses}: \N \to K$
+\hspace*{1.3cm} $\texttt{queensClauses}:  N \to K$
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{queensClauses}(n) := \bigcup\limits_{i=1}^{n}(\texttt{atMostOneInRow}(i, n)\; \cup\; \texttt{oneInColumn}(i, n))\; \cup\; \bigcup\limits_{i=3}^{2 * n - 1}\texttt{atMostOneInUpperDiagonal}(i, n) \cup\; \bigcup\limits_{i=-(n - 2)}^{n - 2}\texttt{atMostOneInLowerDiagonal}(i, n)$
+\hspace*{1.3cm} $\texttt{queensClauses}(n) := \bigcup\limits_{i=1}^{n}(\texttt{atMostOneInRow}(i, n)\ \cup\ $
+%\\[0.1cm]
+%\hspace*{6.5cm}
+$\texttt{oneInColumn}(i, n))\ \cup\ $
+\\[0.1cm]
+\hspace*{6.1cm} $\bigcup\limits_{i=3}^{2 * n - 1}\ \texttt{atMostOneInUpperDiagonal}(i, n)\ \cup\ $
+\\[0.1cm]
+\hspace*{5.8cm} $\bigcup\limits_{i=-(n - 2)}^{n - 2}\texttt{atMostOneInLowerDiagonal}(i, n)$
