@@ -22,6 +22,7 @@ pids
 
 # Following ignore List for documentation
 */documentation.pdf
+*/T3201_TINF16AIBC_Loogman_Koen.pdf
 
 # Add any directories, files, or patterns you don't want to be tracked by version control
 *.aux
