@@ -5,11 +5,11 @@
 \chapter{Scientific Basics}
 \label{ch:sciBasics}
 % cSpell:disable
-% Das Ziel dieser Arbeit besteht in der Visualisierung des \textit{Davis \& Putman algorithm}us, der das sogenannte N damen Problem lösen soll. Dafür muss zuerst ein allgemeines Verständnis zu diesem Algorithmus und dem mathematischen Problem geschaffen werden. In diesem Kapitel wird aus diesem Grund dieses fundamentale Wissen zusammengefasst, um eine Basis für die weiterführende Entwicklung zu schaffen. Dafür spielt unter anderem die Deklarierung des mathematischen Problems eine Rolle, damit dieses vom \textit{Davis \& Putman algorithm}us gelöst werden kann.
+% Das Ziel dieser Arbeit besteht in der Visualisierung des \textit{Davis-Putman algorithm}us, der das sogenannte N damen Problem lösen soll. Dafür muss zuerst ein allgemeines Verständnis zu diesem Algorithmus und dem mathematischen Problem geschaffen werden. In diesem Kapitel wird aus diesem Grund dieses fundamentale Wissen zusammengefasst, um eine Basis für die weiterführende Entwicklung zu schaffen. Dafür spielt unter anderem die Deklarierung des mathematischen Problems eine Rolle, damit dieses vom \textit{Davis-Putman algorithm}us gelöst werden kann.
 % cSpell:enable
-The purpose of this work is to visualize the \textit{Davis \& Putman algorithm} solving the so-called \textit{N-Queens Problem}. Therefore a general understanding of this algorithm and the mathematical problem has to be created.
+The purpose of this work is to visualize the \textit{Davis-Putman algorithm} solving the so-called \textit{N-Queens Problem}. Therefore a general understanding of this algorithm and the mathematical problem has to be created.
 
-This chapter summarizes the fundamental knowledge that is needed in order to create a basis for further development. Among other things, the definition of the mathematical problem plays a role here, so that a possible solution can be found by the \textit{Davis \& Putman algorithm}.
+This chapter summarizes the fundamental knowledge that is needed in order to create a basis for further development. Among other things, the definition of the mathematical problem plays a role here, so that a possible solution can be found by the \textit{Davis-Putman algorithm}.
 
 \section{Basics of Propositional Logic}
 \label{sec:sciProLogic}
@@ -38,12 +38,12 @@ A propositional logic formula $C$ is called clause if it has the following struc
 \\[0.2cm]
 \hspace*{1.3cm} $C = l_1 \vee \cdots \vee l_r$ \\[0.2cm] At this formula, $l$ is a literal for every value $i \in \{1,\; ...,\; r\}$.
 
-\section{The Algorithm of Davis \& Putnam}
+\section{The Algorithm of Davis-Putnam}
 \label{sec:sciDavisPutnam}
 % cSpell:disable
-% Der \textit{Davis \& Putman algorithm}us ist ein Verfahren zur Berechnung einer Lösung von aussagelogischen Klauselmengen. Bei sehr kleinen Klauselmengen kann dies leicht bestimmt werden, wie in den zwei folgenden Beispielen zu sehen ist.
+% Der \textit{Davis-Putman algorithm}us ist ein Verfahren zur Berechnung einer Lösung von aussagelogischen Klauselmengen. Bei sehr kleinen Klauselmengen kann dies leicht bestimmt werden, wie in den zwei folgenden Beispielen zu sehen ist.
 % cSpell:enable
-The \textit{Davis \& Putman algorithm} is a method for calculating a solution a set of propositional clauses. With very small clause sets this can be easily determined, as can be seen in the following two examples.
+The \textit{Davis-Putman algorithm} is a method for calculating a solution a set of propositional clauses. With very small clause sets this can be easily determined, as can be seen in the following two examples.
 \\[0.2cm]
 \hspace*{1.3cm} $K_1 = \bigl\{\; \{r\},\; \{\neg s\},\; \{t\},\; \{\neg u\}, \; \{\neg v\} \;\bigr\}$ 
 \\[0.2cm]
@@ -70,7 +70,7 @@ $r \land \bot \land t$.
 % cSpell:disable
 % Eine leere Klammer bedeutet in der Aussagelogik ein Falsum, wodurch $K_2$ unerfüllbar ist. Bei sehr großen Klauselmengen ist es meist nicht mehr auf dem ersten Blick zu sehen, so dass Algorithmen wie dieser eingesetzt werden. Doch um nun einen Schritt tiefer setzen zu können, müssen zwei Definitionen zuvor eingeführt werden.
 % cSpell:enable
-The empty set in the set of clauses $K_2$ is interpreted as a $\bot$ in the propositional logic, making it impossible to satisfy $K_2$. It is possible to satisfy smaller sets of less complex clauses by first glance, but it gets more difficult for larger and more complex sets of clauses. For these algorithms like the \textit{Davis \& Putman algorithm} are used. But before we get to the details, two definitions have to be introduced first. \cite{Zhang2000}
+The empty set in the set of clauses $K_2$ is interpreted as a $\bot$ in the propositional logic, making it impossible to satisfy $K_2$. It is possible to satisfy smaller sets of less complex clauses by first glance, but it gets more difficult for larger and more complex sets of clauses. For these algorithms like the \textit{Davis-Putman algorithm} are used. But before we get to the details, two definitions have to be introduced first. \cite{Zhang2000}
 
 \paragraph{Unit clause}
 % cSpell:disable
@@ -164,9 +164,9 @@ For simplification, a statement variable $p$ is selected at the beginning, which
 \subsection{The Davis-Putnam Method}
 \label{sub:sciDavisPutnamMethod}
 % cSpell:disable
-% Durch die Wissensgrundlage, die zuvor geschaffen wurde, ist es nun möglich, das Vorgehen des \textit{Davis \& Putman algorithm}us zu skizzieren. Mit der Hilfe der Schnittregel und der Subsumption wird die Klauselmenge $K$ soweit es möglich ist, vereinfacht. Falls bereits nach diesem Schritt $K$ trivial ist, ist das Verfahren beendet. Andernfalls wird eine aussagelogische Variable p ausgewählt, die in K vorkommt. Dann wird rekursiv versucht, die Klauselmenge $K \cup \bigl\{\{p\}\bigr\}$ zu lösen, um eine Lösung für K zu finden. Wenn auch hier keine Lösung gefunden wurde, wird dasselbe mit dem negierten $p$ versucht. Scheitert auch dieser Versuch, ist K unlösbar.
+% Durch die Wissensgrundlage, die zuvor geschaffen wurde, ist es nun möglich, das Vorgehen des \textit{Davis-Putman algorithm}us zu skizzieren. Mit der Hilfe der Schnittregel und der Subsumption wird die Klauselmenge $K$ soweit es möglich ist, vereinfacht. Falls bereits nach diesem Schritt $K$ trivial ist, ist das Verfahren beendet. Andernfalls wird eine aussagelogische Variable p ausgewählt, die in K vorkommt. Dann wird rekursiv versucht, die Klauselmenge $K \cup \bigl\{\{p\}\bigr\}$ zu lösen, um eine Lösung für K zu finden. Wenn auch hier keine Lösung gefunden wurde, wird dasselbe mit dem negierten $p$ versucht. Scheitert auch dieser Versuch, ist K unlösbar.
 % cSpell:enable
-The theoretical foundation that was previously created now makes it possible to sketch the procedure of the \textit{Davis \& Putman algorithm}. With the help of the intersection rule and the subsumption, the clause set $K$ is simplified as far as possible. If already after this step $K$ is trivial, the procedure is finished. Otherwise a statement logical variable p is selected, which occurs in $K$. Then a recursive attempt is made to solve the clause set $K \cup \bigl\{\{p\}\bigr\}$ in order to find a solution for $K$. If no solution was found here either, the same is tried with the negated $p$. If this attempt also fails, $K$ is unsatisfiable.\cite{Zhang2000}, \cite{Stroetman2019}
+The theoretical foundation that was previously created now makes it possible to sketch the procedure of the \textit{Davis-Putman algorithm}. With the help of the intersection rule and the subsumption, the clause set $K$ is simplified as far as possible. If already after this step $K$ is trivial, the procedure is finished. Otherwise a statement logical variable p is selected, which occurs in $K$. Then a recursive attempt is made to solve the clause set $K \cup \bigl\{\{p\}\bigr\}$ in order to find a solution for $K$. If no solution was found here either, the same is tried with the negated $p$. If this attempt also fails, $K$ is unsatisfiable.\cite{Zhang2000}, \cite{Stroetman2019}
 % TODO: find more sources
 
 \begin{listing}[h!]
@@ -204,7 +204,7 @@ The theoretical foundation that was previously created now makes it possible to 
 % cSpell:disable
 % Das n Königinnen Problem ist das verallgemeinerte mathematische Problem bezogen auf ein Schachbrett, dass n \times n Felder besitzt. Ein spezielles Beispiel dazu wäre das 8 Damen Problem, welches auf dem standardisierten Schachbrett abgebildet wird. Allgemein handelt das Problem davon, n Damen auf einem n \times n Schachbrett so zu platzieren, dass keine in ihrem Zug behindert werden würde. Eine Königin in einem normalen Schachspiel kann sowohl diagonal, als auch vertikal und horizontal ihre Züge ziehen. Dieses Zugmuster kann in Figure \label{fig:queens-problem} genauer angeschaut werden. Zusammengefasst heißt dies also, dass immer nur eine Dame auf ihrer vertikalen, horizontalen und diagonalen Linie sein darf, um sich nicht gegenseitig zu behindern. Dabei wird in diesem Problem davon ausgegangen, dass jede Dame jede andere angreifen kann und die Feldfarben ignoriert werden. 
 % cSpell:enable
-The N-Queens Problem is the generalized mathematical problem related to a chessboard that consists of $n \times n$ squares. A special example would be the 8-Queens Problem, which is related to the standardized chessboard. In general, the problem is to place n queens on an $n \times n$ chessboard so that none would be obstructed in their turn. A queen in a normal game of chess can move diagonally, vertically and horizontally. This move pattern can be seen in Figure \ref{fig:queens-problem}. In summary, this means that there is only one queen allowed on her vertical, horizontal and diagonal line at a time so that they do not interfere with each other. In this problem it is assumed that any queen can attack any other queen and the field colors are ignored. This problem can be solved by several algorithms such as the \textit{Davis \& Putman algorithm}. \cite{Bell2009}, \cite{Watkins2012}, \cite[146\psq]{Nudelman1995}, \cite{Stroetman2019}
+The N-Queens Problem is the generalized mathematical problem related to a chessboard that consists of $n \times n$ squares. A special example would be the 8-Queens Problem, which is related to the standardized chessboard. In general, the problem is to place n queens on an $n \times n$ chessboard so that none would be obstructed in their turn. A queen in a normal game of chess can move diagonally, vertically and horizontally. This move pattern can be seen in Figure \ref{fig:queens-problem}. In summary, this means that there is only one queen allowed on her vertical, horizontal and diagonal line at a time so that they do not interfere with each other. In this problem it is assumed that any queen can attack any other queen and the field colors are ignored. This problem can be solved by several algorithms such as the \textit{Davis-Putman algorithm}. \cite{Bell2009}, \cite{Watkins2012}, \cite[146\psq]{Nudelman1995}, \cite{Stroetman2019}
 
 \begin{figure}[!ht]
   \centering
@@ -237,7 +237,7 @@ The N-Queens Problem is the generalized mathematical problem related to a chessb
   \label{fig:queens-problem}
 \end{figure}
 
-\subsection{Define N-Queens Problem for the Davis \& Putnam Algorithm}
+\subsection{Define N-Queens Problem for the Davis-Putnam Algorithm}
 Before we can find a solution for the \textit{N-Queens Problem}, we need to define the problem as a propositional logic formula. Since we will use variables that are either true or false, we say that if a variable is true we place a queen and if it is false we are not able to place a queen. As for the naming of these variables we will think about that in the implementation in chapter \ref{ch:implementation}. For now we will say that $Q_{x,y}$ is the queen in row $x$ on column $y$. Now all that is left is the creation of the set of clauses $K$ that describes the \textit{N-Queens Problem}. Therefore we create some functions to help us define the problem as such:
 
 \paragraph{atMostOne}
