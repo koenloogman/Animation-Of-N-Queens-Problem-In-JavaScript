@@ -230,6 +230,15 @@ h2 {
             opacity: 0.75;
         }
 
+        .selected {
+            border-left: 0.5rem solid $lc;
+            cursor: default;
+        }
+
+        .selected:hover {
+            opacity: 1.0;
+        }
+
         // highlight different entries
         .unitCut {
             color: $hc;
@@ -238,12 +247,14 @@ h2 {
             background: $fc;
         }
         .satisfied {
+            border-color: $hc;
             background: $lc;
         }
         .backtrack {
             background: $hc;
         }
         .notSatisfiable {
+            border-color: $hc;
             background: $wc;
         }
 
