@@ -22,15 +22,15 @@ The function $\mathcal{I}:\mathcal{P} \rightarrow \mathbb{B}$ is called proposit
 There is a set of propositional logic formulas. If there is an interpretation $i$ so that all formulas are satisfied and the formula $\mathcal{I}(f) = \texttt{True}$ \quad for all propositional logic formulas in the set is given, so this set is satisfiable. If this is not the case, then this set is not satisfiable.
 
 \paragraph{Tautology}
-It is the case, when a propositional logic formula for every interpretation $\mathcal{I}$ always true is: $\mathcal{I}(f) = \texttt{True}$. In this case it is written as $\models f$.
+A propositional logic formula $f$ is a tautology iff $\mathcal{I}(f) = \texttt{True}$ for every interpretation $\mathcal{I}$. In this case it is written as $\models f$.
 
 \paragraph{literal}
-A propositional logic formula $f$ is called literal, if one of the following cases is true and $p$ is a propositional-logical variable.
+A propositional logic formula $f$ is called a literal, if one of the following cases is true.
 
 \begin{enumerate}
   \item $f = \top$ or $f = \bot$
-  \item $f = p$ If this is the case, it is called as a positive literal.
-  \item $f = \neg p$ So it is called as a negative literal.
+  \item $f = p$, where $p$ is a propositional variable. If this is the case, it is called a positive literal.
+  \item $f = \neg p$, where $p$ is a propositional variable. Then it is called a negative literal.
 \end{enumerate}
 
 \paragraph{clause}
