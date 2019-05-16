@@ -22,9 +22,9 @@ The function $\mathcal{I}:\mathcal{P} \rightarrow \mathbb{B}$ is called proposit
 There is a set of propositional logic formulas. If there is an interpretation $i$ so that all formulas are satisfied and the formula $\mathcal{I}(f) = \texttt{True}$ \quad for all propositional logic formulas in the set is given, so this set is satisfiable. If this is not the case, then this set is not satisfiable.
 
 \paragraph{Tautology}
-A propositional logic formula $f$ is a tautology iff $\mathcal{I}(f) = \texttt{True}$ for every interpretation $\mathcal{I}$. In this case it is written as $\models f$.
+A propositional logic formula $f$ is a tautology if and only if $\mathcal{I}(f) = \texttt{True}$ for every interpretation $\mathcal{I}$. In this case it is written as $\models f$.
 
-\paragraph{literal}
+\paragraph{Literal}
 A propositional logic formula $f$ is called a literal, if one of the following cases is true.
 
 \begin{enumerate}
@@ -33,17 +33,17 @@ A propositional logic formula $f$ is called a literal, if one of the following c
   \item $f = \neg p$, where $p$ is a propositional variable. Then it is called a negative literal.
 \end{enumerate}
 
-\paragraph{clause}
-A propositional logic formula $C$ is called clause if it has the following structure.
+\paragraph{Clause}
+A propositional logic formula $C$ is called a clause if it has the following structure.
 \\[0.2cm]
-\hspace*{1.3cm} $C = l_1 \vee \cdots \vee l_r$ \\[0.2cm] At this formula, $l$ is a literal for every value $i \in \{1,\; ...,\; r\}$.
+\hspace*{1.3cm} $C = l_1 \vee \cdots \vee l_r$ \\[0.2cm] Here, $l_i$ is a literal for every value $i \in \{1,\; ...,\; r\}$.
 
 \section{The Algorithm of Davis-Putnam}
 \label{sec:sciDavisPutnam}
 % cSpell:disable
 % Der \textit{Davis-Putman algorithm}us ist ein Verfahren zur Berechnung einer Lösung von aussagelogischen Klauselmengen. Bei sehr kleinen Klauselmengen kann dies leicht bestimmt werden, wie in den zwei folgenden Beispielen zu sehen ist.
 % cSpell:enable
-The \textit{Davis-Putnam algorithm} is a method for calculating a solution a set of propositional clauses. With very small clause sets this can be easily determined, as can be seen in the following two examples.
+The \textit{Davis-Putnam algorithm} is a method for calculating a solution of a set of propositional clauses. With very small clause sets this can be easily determined, as can be seen in the following two examples.
 \\[0.2cm]
 \hspace*{1.3cm} $K_1 = \bigl\{\; \{r\},\; \{\neg s\},\; \{t\},\; \{\neg u\}, \; \{\neg v\} \;\bigr\}$ 
 \\[0.2cm]
@@ -57,8 +57,8 @@ $K_1$ can also be written as a propositional logic formula.
 % cSpell:disable
 % Es ist erkennbar, dass diese Formel lösbar ist, indem $r$ und $t$ \enquote{wahr} und $s$, $u$ und $v$ den Wert \enquote{falsch} haben. Als Gegenbeispiel dazu ist $K_2$ zu betrachten.
 % cSpell:enable
-It is recognizable that this formula is solvable by $r$ and $t$ \enquote{true} and $s$, $u$ and $v$ having the value \enquote{false}.
-As a counter example $K_2$ is to be considered.
+It is obvious that this formula is solvable by $r$ and $t$ \enquote{true} and $s$, $u$ and $v$ having the value \enquote{false}.
+As a negative example we consider the set $K_2$, which is defined as follows:
 \\[0.2cm]
 \hspace*{1.3cm} $K_2 = \bigl\{\; \{r\},\; \{\},\; \{t\} \;\bigr\}$
 \\[0.2cm]
@@ -76,13 +76,13 @@ The empty set in the set of clauses $K_2$ is interpreted as a $\bot$ in the prop
 % cSpell:disable
 % Eine Klausel $C$ ist eine Unit-Klausel, wenn diese nur aus einem Literal, also aus einer Aussagevariablen besteht.
 % cSpell:enable
-A clause $C$ is a unit clause if it consists of only one literal, i.e. a variable or a negated variable.
+A clause $C$ is a unit clause if it contains of only a single literal, i.e. a variable or a negated variable.
 
-\paragraph{trivial clause sets}
+\paragraph{Trivial clause sets}
 % cSpell:disable
 % Eine triviale Klauselmenge kann nur vorkommen, wenn einer der beiden Fälle eintritt.
 % cSpell:enable
-A trivial set of clauses can only occur if one of the following two cases occurs.
+A set of clauses is trivial if and only if one of the following two cases occurs.
 
 \begin{enumerate}
   % cSpell:disable
@@ -112,7 +112,7 @@ To simplify a set of clauses $K$ with $C_1 \cup \{\; p\; \}\, C_2 \cup \{\; \neg
 \\[0.2cm]
 \hspace*{1.3cm} $\dfrac{C_1 \cup \{\; p\; \} \;\;\;\;\;\; C_2 \cup \{\; \neg p\; \}}{C_1 \cup C_2}$
 \\[0.2cm]
-In this case the result clause will in general have more literals than $C_1 \cup \{\; p\; \}$ or $C_2 \cup \{\; \neg p\; \}$ alone. Because if the clause $C_1 \cup \{\; p\; \}$ contains $m + 1$ literals and $C_1 \cup \{\; p\; \}$ contains $n + 1$ literals, then the union $C_1 \cup C_2$ can have upto $m + n$ literals in total. In general $m + n$ is bigger than $m + 1$ or $n + 1$. The clause can be smaller than previously if both sets contain the same literals, but it is only granted to be smaller if $m = 0 \lor n = 0$. This is the case for unit clauses. Therefore we will only allow the use of the cut rule if one of the clauses is a unit clause. These cuts will be called unit cuts. To be able to do those unit cuts with a unit clause $\{\; l\; \}$ on all clauses of a set of clauses $K$, we define the function
+In this case the result clause will in general have more literals than $C_1 \cup \{\; p\; \}$ or $C_2 \cup \{\; \neg p\; \}$ alone. Because if the clause $C_1 \cup \{\; p\; \}$ contains $m + 1$ literals and $C_1 \cup \{\; p\; \}$ contains $n + 1$ literals, then the union $C_1 \cup C_2$ can have upto $m + n$ literals in total. In general $m + n$ may be bigger than $m + 1$ or $n + 1$. The clause can be smaller than previously if both sets contain the same literals, but it is only granted to be smaller if $m = 0 \lor n = 0$. This is the case for unit clauses. Therefore we will only allow the use of the cut rule if one of the clauses is a unit clause. These cuts will be called unit cuts. To be able to do those unit cuts with a unit clause $\{\; l\; \}$ on all clauses of a set of clauses $K$, we define the function
 \\[0.2cm]
 \hspace*{1.3cm} $\texttt{unitCut}: 2^{K} \times L \to 2^{K}$
 \\[0.2cm]
