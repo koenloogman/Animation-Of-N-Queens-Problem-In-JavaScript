@@ -19,7 +19,7 @@ Before the algorithm can be examined in more detail, a few mathematical terms mu
 The function $\mathcal{I}:\mathcal{P} \rightarrow \mathbb{B}$ is called propositional logic interpretation, which assigns a true value $\mathcal{I}(p) \in \mathbb{B}$ to each proposition-logical variable $p\in \mathcal{P}$
 
 \paragraph{Satisfiable}
-There is a set of propositional logic formulas. If there is an interpretation $i$ so that all formulas are satisfied and the formula $\mathcal{I}(f) = \texttt{True}$ \quad for all propositional logic formulas in the set is given, so this set is satisfiable. If this is not the case, then this set is not satisfiable.
+There is a set of propositional logic formulas. If there is an interpretation $I$ so that all formulas are satisfied and the formula $\mathcal{I}(f) = \texttt{True}$ \quad for all propositional logic formulas in the set is given, so this set is satisfiable. If this is not the case, then this set is not satisfiable.
 
 \paragraph{Tautology}
 A propositional logic formula $f$ is a tautology if and only if $\mathcal{I}(f) = \texttt{True}$ for every interpretation $\mathcal{I}$. In this case it is written as $\models f$.
@@ -70,7 +70,7 @@ $r \land \bot \land t$.
 % cSpell:disable
 % Eine leere Klammer bedeutet in der Aussagelogik ein Falsum, wodurch $K_2$ unerfüllbar ist. Bei sehr großen Klauselmengen ist es meist nicht mehr auf dem ersten Blick zu sehen, so dass Algorithmen wie dieser eingesetzt werden. Doch um nun einen Schritt tiefer setzen zu können, müssen zwei Definitionen zuvor eingeführt werden.
 % cSpell:enable
-The empty set in the set of clauses $K_2$ is interpreted as a $\bot$ in the propositional logic, making it impossible to satisfy $K_2$. It is possible to satisfy smaller sets of less complex clauses by first glance, but it gets more difficult for larger and more complex sets of clauses. For these algorithms like the \textit{Davis-Putnam algorithm} are used. But before we get to the details, two definitions have to be introduced first. \cite{Zhang2000}
+The empty set in the set of clauses $K_2$ is interpreted as a $\bot$ in the propositional logic, making it impossible to satisfy $K_2$. It is possible to satisfy smaller sets of less complex clauses by first glance, but it gets more difficult for larger and more complex sets of clauses. For these algorithms like the \textit{Davis-Putnam algorithm} are used. But before we get to the details, two definitions have to be introduced first \cite{Zhang2000}. 
 
 \paragraph{Unit clause}
 % cSpell:disable
@@ -92,7 +92,7 @@ A set of clauses is trivial if and only if one of the following two cases occurs
   % cSpell:disable
   % Die Unit-Klauseln beinhalten immer verschiedene Aussagevariablen, so dass entweder nur die Klausel $\{p\}$ oder $\{\neg p\}$ vorkommen kann. Ist dies der Fall, kann eine Lösung für die Klauselmenge bestimmt werden.
   % cSpell:enable
-  \item The unit clauses always contain different statement variables, so that only the clause $\{p\}$ or $\{\neg p\}$ can occur. If this is the case, a solution for the clause set can be determined.
+  \item The unit clauses always contain different propositional variables, so that only the clause $\{p\}$ or $\{\neg p\}$ can occur. If this is the case, a solution for the clause set can be determined.
 \end{enumerate}
 
 % cSpell:disable
@@ -108,7 +108,7 @@ In order for one of these two cases to occur, the clause sets must be simplified
 
 \subsection{Simplification with the Cut Rule}
 \label{sub:sciDavisPutnamCutRule}
-To simplify a set of clauses $K$ with $C_1 \cup \{\; p\; \}\, C_2 \cup \{\; \neg p\; \} \in K$ the cut rule can be used. Lets say we have two clauses $C_1$, $C_2$ and a variable $p$, then a typical application of the cut rule is.
+To simplify a set of clauses $K$ with $C_1 \cup \{\; p\; \}$, $C_2 \cup \{\; \neg p\; \} \in K$ the cut rule can be used. Let's say we have two clauses $C_1$, $C_2$ and a variable $p$, then a typical application of the cut rule is.
 \\[0.2cm]
 \hspace*{1.3cm} $\dfrac{C_1 \cup \{\; p\; \} \;\;\;\;\;\; C_2 \cup \{\; \neg p\; \}}{C_1 \cup C_2}$
 \\[0.2cm]
@@ -120,7 +120,7 @@ so that for a set of clauses $K$ and a literal $l$ the function $\texttt{unitCut
 \\[0.2cm]
 \hspace*{1.3cm} $\texttt{unitCut}(K,\; l) = \{\; C \setminus \{\; \bar{l}\; \}\; |\; C \in K\; \}$
 \\[0.2cm]
-The result set of clauses will have the same amount of clauses as $K$. Only the clauses $C \in K$ where $\bar{l} \in C$ were affected and got that element removed. \cite{Stroetman2019}
+The result set of clauses will have the same amount of clauses as $K$. Only the clauses $C \in K$ where $\bar{l} \in C$ were affected and got that element removed \cite{Stroetman2019}. 
 
 \subsection{Simplification with Subsumption}
 \label{sub:sciDavisPutnamSubsumption}
@@ -132,7 +132,7 @@ It is clear that the clause $\{\; p\; \}$ implies the clause $\{\; p,\; \neg q \
 \\[0.2cm]
 \hspace*{1.3cm} $\models p \to p \lor \neg q$
 \\[0.2cm]
-is given. With that in mind we can say that we can subsume a clause $C$ with a unit clause $U$ if $U \subseteq C$. That means if we have a set of clauses $K$ with $C \in K \land U \in K$ and $U$ can subsume $C$, we can remove the clause $C$ from $K$ to reduce its size. We define a function
+is given. With that in mind we can say that we can subsume a clause $C$ with a unit clause $U$ if $U \subseteq C$. That means if we have a set of clauses $K$ with $C \in K \land U \in K$ and $U$ subsumes $C$, we can remove the clause $C$ from $K$ to reduce its size. We define a function
 \\[0.2cm]
 \hspace*{1.3cm} $\texttt{subsume}: 2^{K} \times L \to 2^{K}$
 \\[0.2cm]
@@ -140,7 +140,7 @@ that receives a set of clauses $K$ and a literal $l$. It will simplify $K$ by su
 \\[0.2cm]
 \hspace*{1.3cm} $\texttt{subsume}(K,\; l) = \{\; C \in K\; |\; l \notin C\} \cup \{\{\; l\; \}\}$
 \\[0.2cm]
-We have to add the unit clause to the set of clauses, because $l \in U$ is the case. Resulting in $U$ being removed from $K$ at first too. \cite{Stroetman2019}
+We have to add the unit clause to the set of clauses, because $l \in U$ is the case. Resulting in $U$ being removed from $K$ at first too \cite{Stroetman2019}. 
 
 \subsection{Simplification with Case Differentiation}
 \label{sub:sciDavisPutnamCaseDiv}
@@ -153,20 +153,20 @@ The following theorem forms the basis for the principle of case differentiation.
 % cSpell:disable
 % Die Klauselmenge K ist genau dann erfüllbar, wenn die Klausel $K \cup \bigl\{\{p\}\bigr\}$ oder $K \cup \bigl\{\{\neg p\}\bigr\}$ erfüllbar ist.
 % cSpell:enable
-The set of clauses $K$ can only be satisfied if $K \cup \bigl\{\{p\}\bigr\}$ or $K \cup \bigl\{\{\neg p\}\bigr\}$ can be satisfied.
+The set of clauses $K$ can only be satisfied if and only if $K \cup \bigl\{\{p\}\bigr\}$ or $K \cup \bigl\{\{\neg p\}\bigr\}$ can be satisfied.
 
 % cSpell:disable
 % Für die Vereinfachung wird zu Beginn also eine Aussagenvariable p ausgewählt, die in der Klauselmenge vorkommt. Danach werden die beiden oben genannten Klauselmengen gebildet und versucht, für eine der beiden eine Lösung zu finden. Ist dieser Versuch erfolgreich, ist das Ergebnis automatisch die Lösung von $K$. Falls keine gefunden wird, ist $K$ unlösbar.
 % TODO: Keine Ahnung ob hier Beweis einfügen soll
 % cSpell:enable
-For simplification, a statement variable $p$ is selected at the beginning, which occurs in the clause set. Then the two clause sets mentioned above are formed and an attempt is made to find a solution for one of them. If this attempt is successful, the result is automatically a solution of $K$. If none is found, $K$ is not satisfiable.
+For simplification, a propositional variable $p$ is selected at the beginning, which occurs in the clause set. Then the two clause sets mentioned above are formed and an attempt is made to find a solution for one of them. If this attempt is successful, the result is automatically a solution of $K$. If none is found, $K$ is not satisfiable.
 
 \subsection{The Davis-Putnam Method}
 \label{sub:sciDavisPutnamMethod}
 % cSpell:disable
 % Durch die Wissensgrundlage, die zuvor geschaffen wurde, ist es nun möglich, das Vorgehen des \textit{Davis-Putman algorithm}us zu skizzieren. Mit der Hilfe der Schnittregel und der Subsumption wird die Klauselmenge $K$ soweit es möglich ist, vereinfacht. Falls bereits nach diesem Schritt $K$ trivial ist, ist das Verfahren beendet. Andernfalls wird eine aussagelogische Variable p ausgewählt, die in K vorkommt. Dann wird rekursiv versucht, die Klauselmenge $K \cup \bigl\{\{p\}\bigr\}$ zu lösen, um eine Lösung für K zu finden. Wenn auch hier keine Lösung gefunden wurde, wird dasselbe mit dem negierten $p$ versucht. Scheitert auch dieser Versuch, ist K unlösbar.
 % cSpell:enable
-The theoretical foundation that was previously created now makes it possible to sketch the procedure of the \textit{Davis-Putnam algorithm}. With the help of the intersection rule and the subsumption, the clause set $K$ is simplified as far as possible. If already after this step $K$ is trivial, the procedure is finished. Otherwise a statement logical variable p is selected, which occurs in $K$. Then a recursive attempt is made to solve the clause set $K \cup \bigl\{\{p\}\bigr\}$ in order to find a solution for $K$. If no solution was found here either, the same is tried with the negated $p$. If this attempt also fails, $K$ is unsatisfiable.\cite{Zhang2000}, \cite{Stroetman2019}
+The theoretical foundation that was previously created now makes it possible to sketch the procedure of the \textit{Davis-Putnam algorithm}. With the help of the intersection rule and the subsumption, the clause set $K$ is simplified as far as possible. If already after this step $K$ is trivial, the procedure is finished. Otherwise a propisitional logical variable p is selected, which occurs in $K$. Then a recursive attempt is made to solve the clause set $K \cup \bigl\{\{p\}\bigr\}$ in order to find a solution for $K$. If no solution was found here either, the same is tried with the negated $p$. If this attempt also fails, $K$ is unsatisfiable \cite{Zhang2000}, \cite{Stroetman2019}.
 % TODO: find more sources
 
 \begin{listing}[h!]
@@ -204,7 +204,7 @@ The theoretical foundation that was previously created now makes it possible to 
 % cSpell:disable
 % Das n Königinnen Problem ist das verallgemeinerte mathematische Problem bezogen auf ein Schachbrett, dass n \times n Felder besitzt. Ein spezielles Beispiel dazu wäre das 8 Damen Problem, welches auf dem standardisierten Schachbrett abgebildet wird. Allgemein handelt das Problem davon, n Damen auf einem n \times n Schachbrett so zu platzieren, dass keine in ihrem Zug behindert werden würde. Eine Königin in einem normalen Schachspiel kann sowohl diagonal, als auch vertikal und horizontal ihre Züge ziehen. Dieses Zugmuster kann in Figure \label{fig:queens-problem} genauer angeschaut werden. Zusammengefasst heißt dies also, dass immer nur eine Dame auf ihrer vertikalen, horizontalen und diagonalen Linie sein darf, um sich nicht gegenseitig zu behindern. Dabei wird in diesem Problem davon ausgegangen, dass jede Dame jede andere angreifen kann und die Feldfarben ignoriert werden. 
 % cSpell:enable
-The N-Queens Problem is the generalized mathematical problem related to a chessboard that consists of $n \times n$ squares. A special example would be the 8-Queens Problem, which is related to the standardized chessboard. In general, the problem is to place n queens on an $n \times n$ chessboard so that none would be obstructed in their turn. A queen in a normal game of chess can move diagonally, vertically and horizontally. This move pattern can be seen in Figure \ref{fig:queens-problem}. In summary, this means that there is only one queen allowed on her vertical, horizontal and diagonal line at a time so that they do not interfere with each other. In this problem it is assumed that any queen can attack any other queen and the field colors are ignored. This problem can be solved by several algorithms such as the \textit{Davis-Putnam algorithm}. \cite{Bell2009}, \cite{Watkins2012}, \cite[146\psq]{Nudelman1995}, \cite{Stroetman2019}
+The N-Queens Problem is the generalized mathematical problem related to a chessboard that consists of $n \times n$ squares. A special example would be the 8-Queens Problem, which is related to the standardized chessboard. In general, the problem is to place n queens on an $n \times n$ chessboard so that none would be obstructed in their turn. A queen in a normal game of chess can move diagonally, vertically and horizontally. This move pattern can be seen in Figure \ref{fig:queens-problem}. In summary, this means that there is only one queen allowed on her vertical, horizontal and diagonal line at a time so that they do not interfere with each other. In this problem it is assumed that any queen can attack any other queen and the field colors are ignored. This problem can be solved by several algorithms such as the \textit{Davis-Putnam algorithm} \cite{Bell2009}, \cite{Watkins2012}, \cite[146\psq]{Nudelman1995}, \cite{Stroetman2019}. 
 
 \begin{figure}[!ht]
   \centering
@@ -248,7 +248,7 @@ The function atMostOne will receive a set of literals $l$ and return a set of cl
 \hspace*{1.3cm}$\texttt{atMostOne}(L) := \{\ \{\ l_1,\ \bar{l_2} \}\ :\ l_1, l_2 \in L\ |\ l_1 \neq l_2\ \}$
 
 \paragraph{atMostOneInRow}
-This function receives a number $n$ for the total amount of queens and a number $r \in \{1 .. n\}$ for the row and return a set of clauses $K$ where only one queen can be placed in row $r$. Since only one queen can be placed per row.
+This function receives a number $n$ for the total amount of queens and a number $r \in \{1 .. n\}$ for the row and return a set of clauses $K$ that express the fact that only one queen can be placed in row $r$. Since only one queen can be placed per row.
 \\[0.2cm]
 \hspace*{1.3cm} $\texttt{atMostOneInRow}:\ N \times N \to K$
 \\[0.2cm]
