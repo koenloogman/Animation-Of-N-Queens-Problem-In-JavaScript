@@ -279,7 +279,7 @@ This function returns a set of clauses $K$ that express the fact that only one q
 \\[0.2cm]
 \hspace*{1.3cm} $\texttt{atMostOneInLowerDiagonal}(k,\ n) :=$
 \\
-\hspace*{11.5cm} $\texttt{atMostOne}(\{\ Q_{x,y} :\ x,y \in \{1\ ..\ n\}\ |\ x - y = k\ \})$
+\hspace*{2.6cm} $\texttt{atMostOne}(\{\ Q_{x,y} :\ x,y \in \{1\ ..\ n\}\ |\ x - y = k\ \})$
 
 \paragraph{queensClauses}
 With the functions above, we finally can define the complete propositional formula for the \textit{N-Queens Problem} for a given number $n$ in form of a set of clauses $K$. Here a set of clauses that express that only one queen can be placed per column is not needed, because that one has to be placed in combination with only one per row implies that only one per column is placed.
