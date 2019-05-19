@@ -43,7 +43,7 @@ A propositional logic formula $C$ is called a clause if it has the following str
 % cSpell:disable
 % Der \textit{Davis-Putman algorithm}us ist ein Verfahren zur Berechnung einer Lösung von aussagelogischen Klauselmengen. Bei sehr kleinen Klauselmengen kann dies leicht bestimmt werden, wie in den zwei folgenden Beispielen zu sehen ist.
 % cSpell:enable
-The \textit{Davis-Putnam algorithm} is a method for calculating a solution of a set of propositional clauses. With very small clause sets this can be easily determined, as can be seen in the following two examples.
+The \textit{Davis-Putnam algorithm} is a method for calculating a solution of a set of propositional clauses. With clause sets that contain just one literal per clause this can be easily determined, as can be seen in the following two examples.
 \\[0.2cm]
 \hspace*{1.3cm} $K_1 = \bigl\{\; \{r\},\; \{\neg s\},\; \{t\},\; \{\neg u\}, \; \{\neg v\} \;\bigr\}$ 
 \\[0.2cm]
@@ -166,7 +166,7 @@ For simplification, a propositional variable $p$ is selected at the beginning, w
 % cSpell:disable
 % Durch die Wissensgrundlage, die zuvor geschaffen wurde, ist es nun möglich, das Vorgehen des \textit{Davis-Putman algorithm}us zu skizzieren. Mit der Hilfe der Schnittregel und der Subsumption wird die Klauselmenge $K$ soweit es möglich ist, vereinfacht. Falls bereits nach diesem Schritt $K$ trivial ist, ist das Verfahren beendet. Andernfalls wird eine aussagelogische Variable p ausgewählt, die in K vorkommt. Dann wird rekursiv versucht, die Klauselmenge $K \cup \bigl\{\{p\}\bigr\}$ zu lösen, um eine Lösung für K zu finden. Wenn auch hier keine Lösung gefunden wurde, wird dasselbe mit dem negierten $p$ versucht. Scheitert auch dieser Versuch, ist K unlösbar.
 % cSpell:enable
-The theoretical foundation that was previously created now makes it possible to sketch the procedure of the \textit{Davis-Putnam algorithm}. With the help of the intersection rule and the subsumption, the clause set $K$ is simplified as far as possible. If already after this step $K$ is trivial, the procedure is finished. Otherwise a propisitional logical variable p is selected, which occurs in $K$. Then a recursive attempt is made to solve the clause set $K \cup \bigl\{\{p\}\bigr\}$ in order to find a solution for $K$. If no solution was found here either, the same is tried with the negated $p$. If this attempt also fails, $K$ is unsatisfiable \cite{Zhang2000}, \cite{Stroetman2019}.
+The theoretical foundation that was previously created now makes it possible to sketch the procedure of the \textit{Davis-Putnam algorithm}. With the help of the intersection rule and the subsumption, the clause set $K$ is simplified as far as possible. If already after this step $K$ is trivial, the procedure is finished. Otherwise a propositional logical variable p is selected, which occurs in $K$. Then a recursive attempt is made to solve the clause set $K \cup \bigl\{\{p\}\bigr\}$ in order to find a solution for $K$. If no solution was found here either, the same is tried with the negated $p$. If this attempt also fails, $K$ is unsatisfiable. A possible recursive implementation of the method can be seen in listing \ref{code:recursiveDavisPutnam} \cite{Zhang2000}, \cite{Stroetman2019}.
 % TODO: find more sources
 
 \begin{listing}[h!]
@@ -204,7 +204,7 @@ The theoretical foundation that was previously created now makes it possible to 
 % cSpell:disable
 % Das n Königinnen Problem ist das verallgemeinerte mathematische Problem bezogen auf ein Schachbrett, dass n \times n Felder besitzt. Ein spezielles Beispiel dazu wäre das 8 Damen Problem, welches auf dem standardisierten Schachbrett abgebildet wird. Allgemein handelt das Problem davon, n Damen auf einem n \times n Schachbrett so zu platzieren, dass keine in ihrem Zug behindert werden würde. Eine Königin in einem normalen Schachspiel kann sowohl diagonal, als auch vertikal und horizontal ihre Züge ziehen. Dieses Zugmuster kann in Figure \label{fig:queens-problem} genauer angeschaut werden. Zusammengefasst heißt dies also, dass immer nur eine Dame auf ihrer vertikalen, horizontalen und diagonalen Linie sein darf, um sich nicht gegenseitig zu behindern. Dabei wird in diesem Problem davon ausgegangen, dass jede Dame jede andere angreifen kann und die Feldfarben ignoriert werden. 
 % cSpell:enable
-The N-Queens Problem is the generalized mathematical problem related to a chessboard that consists of $n \times n$ squares. A special example would be the 8-Queens Problem, which is related to the standardized chessboard. In general, the problem is to place n queens on an $n \times n$ chessboard so that none would be obstructed in their turn. A queen in a normal game of chess can move diagonally, vertically and horizontally. This move pattern can be seen in Figure \ref{fig:queens-problem}. In summary, this means that there is only one queen allowed on her vertical, horizontal and diagonal line at a time so that they do not interfere with each other. In this problem it is assumed that any queen can attack any other queen and the field colors are ignored. This problem can be solved by several algorithms such as the \textit{Davis-Putnam algorithm} \cite{Bell2009}, \cite{Watkins2012}, \cite[146\psq]{Nudelman1995}, \cite{Stroetman2019}. 
+The N-Queens Problem is the generalized mathematical problem related to a chessboard that consists of $n \times n$ squares. A special example would be the 8-Queens Problem, which is related to the standardized chessboard. In general, the problem is to place n queens on an $n \times n$ chessboard so that none would be obstructed in their turn. A queen in a normal game of chess can move diagonally, vertically and horizontally. This move pattern can be seen in Figure \ref{fig:queens-problem}. In summary, this means that there is only one queen allowed on her vertical, horizontal and diagonal line at a time so that they do not interfere with each other. In this problem it is assumed that any queen can attack any other queen and the field colors are ignored. This problem can be solved by several algorithms such as the \textit{Davis-Putnam algorithm} \cite{Bell2009}, \cite{Watkins2012}, \cite[146\psq]{Nudelman1995}, \cite{Stroetman2019}.
 
 \begin{figure}[!ht]
   \centering
@@ -233,54 +233,56 @@ The N-Queens Problem is the generalized mathematical problem related to a chessb
     \multiput(4.5,5.75)(0,-1){5}{\vector(0,-1){0.5}}
   \end{picture}
   \vspace*{-1.0cm}
-  \caption{The 8-Queens Problem with one queen placed \cite{Stroetman2019}} 
+  \caption{Movement pattern of a queen on an 8 by 8 board \cite{Stroetman2019}} 
   \label{fig:queens-problem}
 \end{figure}
 
-\subsection{Define N-Queens Problem for the Davis-Putnam Algorithm}
-Before we can find a solution for the \textit{N-Queens Problem}, we need to define the problem as a propositional logic formula. Since we will use variables that are either true or false, we say that if a variable is true we place a queen and if it is false we are not able to place a queen. As for the naming of these variables we will think about that in the implementation in chapter \ref{ch:implementation}. For now we will say that $Q_{x,y}$ is the queen in row $x$ on column $y$. Now all that is left is the creation of the set of clauses $K$ that describes the \textit{N-Queens Problem}. Therefore we create some functions to help us define the problem as such:
+\subsection{N-Queens Problem as Propositional Formula}
+Before we can find a solution for the \textit{N-Queens Problem}, we need to define the problem as a propositional logic formula. For that we will say that the variable $Q_{x,y}$ is the queen in row $x$ on column $y$. If said variable is true a queen will be placed and if not a queen can not be placed. Now all that is left is the creation of the set of clauses $K$ that describes the \textit{N-Queens Problem}. Therefore we create some functions to help us define the problem as such:
 
 \paragraph{atMostOne}
-The function atMostOne will receive a set of literals $l$ and return a set of clauses $K$ so that only one of the literals $l \in L$ can be true. We define it to support following functions.
+The function atMostOne will receive a set of literals $L$ and return a set of clauses $K$ that express the fact that only one of the literals $l \in L$ can be true. We define it to support following functions.
 \\[0.2cm]
-\hspace*{1.3cm}$\texttt{atMostOne}:\ L \to K$
+\hspace*{1.3cm}$\texttt{atMostOne}:\ \mathcal{L} \to 2^{\mathcal{K}}$
 \\[0.2cm]
-\hspace*{1.3cm}$\texttt{atMostOne}(L) := \{\ \{\ l_1,\ \bar{l_2} \}\ :\ l_1, l_2 \in L\ |\ l_1 \neq l_2\ \}$
+\hspace*{1.3cm}$\texttt{atMostOne}(L) := \{\ \{\ \neg l_1,\ \neg l_2 \}\ :\ l_1, l_2 \in L\ |\ l_1 \neq l_2\ \}$
+\\[0.2cm]
+This works, because if one variable is said to be true then the other variable must be false, since either one or the other needs to be false.
 
 \paragraph{atMostOneInRow}
-This function receives a number $n$ for the total amount of queens and a number $r \in \{1 .. n\}$ for the row and return a set of clauses $K$ that express the fact that only one queen can be placed in row $r$. Since only one queen can be placed per row.
+This function receives a number $n$ for the total amount of queens and a number $r \in \{1 .. n\}$ for the row and return a set of clauses $K$ that express the fact that only one queen can be placed in row $r$.
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{atMostOneInRow}:\ N \times N \to K$
+\hspace*{1.3cm} $\texttt{atMostOneInRow}:\ \mathcal{N} \times \mathcal{N} \to 2^{\mathcal{K}}$
 \\[0.2cm]
 \hspace*{1.3cm} $\texttt{atMostOneInRow}(r,\ n) := \texttt{atMostOne}(\{\ Q_{r,i} :\ i \in \{1\ ..\ n\}\ \})$
 
 \paragraph{oneInColumn}
-This function receives a number $n$ for the total amount of queens and a number $c$ where $c \leq n$ for the column and returns a set of clauses $K$ where at least one queen is placed in the column $c$. Because if only one queen can be placed per row, every column needs at least one queen to have $n$ queens on the chessboard.
+This function receives a number $n$ for the total amount of queens and a number $c$ where $c \leq n$ for the column and returns a set of clauses $K$ that express the fact that at least one queen has to be placed in the column $c$. Because if only one queen can be placed per row, every column needs at least one queen to have $n$ queens on the chessboard.
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{oneInColumn}:\ N \times N \to K$
+\hspace*{1.3cm} $\texttt{oneInColumn}:\ \mathcal{N} \times \mathcal{N} \to 2^{\mathcal{K}}$
 \\[0.2cm]
 \hspace*{1.3cm} $\texttt{oneInColumn}(c,\ n) := \{\ \{\ Q_{i,c} :\ i \in \{1\ ..\ n\}\ \}\ \}$
 
 \paragraph{atMostOneInUpperDiagonal}
-This function returns a set of clauses $K$ where only one queen can be placed in the upper diagonal, for a given number $n$ and $k \in \{3\ ..\ 2 * n - 1\}$. The number $k$ helps with calculating which combination of row and column is part of the diagonal.
+This function returns a set of clauses $K$ that express the fact that only one queen can be placed in the upper diagonal, for a given number $n$ and $k \in \{3\ ..\ 2 * n - 1\}$. The number $k$ helps with calculating which combination of row and column is part of the diagonal.
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{atMostOneInUpperDiagonal}:\ N \times N \to K$
+\hspace*{1.3cm} $\texttt{atMostOneInUpperDiagonal}:\ \mathcal{N} \times \mathcal{N} \to 2^{\mathcal{K}}$
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{atMostOneInUpperDiagonal}(k,\ n) := \texttt{atMostOne}(\{\ Q_{x,y} :\ x,y \in \{1\ ..\ n\}\ |$
-\hspace*{11.5cm} $\ x + y = k\ \})$
+\hspace*{1.3cm} $\texttt{atMostOneInUpperDiagonal}(k,\ n) :=$
+\hspace*{2.6cm} $\texttt{atMostOne}(\{\ Q_{x,y} :\ x,y \in \{1\ ..\ n\}\ |\ x + y = k\ \})$
 
 \paragraph{atMostOneInLowerDiagonal}
-This function returns a set of clauses $K$ where only one queen can be placed in the lower diagonal, for a given number $n$ and $k \in \{-(n - 2)\ ..\ n - 2\}$. As before the number $k$ helps with calculating which combination of row and column is part of the diagonal.
+This function returns a set of clauses $K$ that express the fact that only one queen can be placed in the lower diagonal, for a given number $n$ and $k \in \{-(n - 2)\ ..\ n - 2\}$. As before the number $k$ helps with calculating which combination of row and column is part of the diagonal.
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{atMostOneInLowerDiagonal}:\ N \times N \to K$
+\hspace*{1.3cm} $\texttt{atMostOneInLowerDiagonal}:\ \mathcal{N} \times \mathcal{N} \to 2^{\mathcal{K}}$
 \\[0.2cm]
 \hspace*{1.3cm} $\texttt{atMostOneInLowerDiagonal}(k,\ n) := \texttt{atMostOne}(\{\ Q_{x,y} :\ x,y \in \{1\ ..\ n\}\ |$
 \hspace*{11.5cm} $\ x - y = k\ \})$
 
 \paragraph{queensClauses}
-With the functions above, we finally can define the \textit{N-Queens Problem} for a given number $n$ as a propositional logic formula in form of a set of clauses $K$.
+With the functions above, we finally can define the complete propositional formula for the \textit{N-Queens Problem} for a given number $n$ in form of a set of clauses $K$. Here a set of clauses that express that only one queen can be placed per column is not needed, because that one has to be placed in combination with only one per row implies that only one per column is placed.
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{queensClauses}:  N \to K$
+\hspace*{1.3cm} $\texttt{queensClauses}: \mathcal{N} \to 2^{\mathcal{K}}$
 \\[0.2cm]
 \hspace*{1.3cm} $\texttt{queensClauses}(n) := \bigcup\limits_{i=1}^{n}(\texttt{atMostOneInRow}(i, n)\ \cup\ $
 %\\[0.1cm]

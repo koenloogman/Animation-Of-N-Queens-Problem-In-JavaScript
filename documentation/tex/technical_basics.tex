@@ -28,7 +28,7 @@ In order to better understand why the use of a module bundling tool makes sense 
 
 Generally speaking, the Node.js Feature module bundling is the merging of a group of modules with their dependencies into a single file. The advantage, especially in web development, is that not every single file in the central HTML file has to be inserted by script tag, but only a single large file. The loading time of the website is significantly improved and it increases maintainability during and after the development process. Even the development itself with object-oriented programming is made easier. But now a suitable tool has to be found \cite{Kasireddy2016}. 
 
-Parcel is such a module bundling tool to integrate several modules into one file. This makes it possible to send multiple modules to the browser in a single bundle. This library offers some very useful functions, which simplify the implementation considerably. Parcel uses worker processes to enable multicore compilation and has a file system cache to enable very fast rebuilds. Thus Parcel is especially designed for performance in the browser. To further increase performance, Parcel splits the output bundles so that only the required parts are loaded at initial startup. In addition, this library has automatic support for languages such as JavaScript and CSS, so no plugins are required. The program code and the Node.js modules are also transformed automatically. This is very important for this project because it works with Node.js and Pack dependencies. Another interesting feature of Parcel is the automatic update of the modules in the browser, if changes have to be applied by the development. This makes the work process dynamic and faster. The clear and understandable error logging additionally facilitates the implementation \cite{Govett2019}. 
+Parcel is such a module bundling tool to integrate several modules into one file. This makes it possible to send multiple modules to the browser in a single bundle. This library offers some very useful functions, which simplify the implementation considerably. Parcel uses worker processes to enable multicore compilation and has a file system cache to enable very fast rebuilds. Thus Parcel is especially designed for performance in the browser. To further increase performance, Parcel splits the output bundles so that only the required parts are loaded at initial startup. In addition, this library has automatic support for languages such as JavaScript and CSS, so no plugins are required. The program code and the Node.js modules are also transformed automatically. This is very important for this project because it works with Node.js and dependencies. Another interesting feature of Parcel is the automatic update of the modules in the browser, if changes have to be applied by the development. This makes the work process dynamic and faster. The clear and understandable error logging additionally facilitates the implementation \cite{Govett2019}. 
 
 \subsection{Current Alternatives to Parcel}
 \label{sec:tecParcelAlt}
@@ -62,7 +62,22 @@ Also after this comparison the decision was made to use Parcel, because Rollup l
 % cSpell:enable
 \section{Immutable.js}
 \label{sec:tecImmutable}
-In the later implementation of the Davis-Putnam algorithm, a known problem will occur when using JavaScript. This is the comparison between sets. The native set compares objects via Object by Object Reference. Comparisons with mutable objects are usually very difficult, because when an object changes, the location of the object in a collection also changes. The Immutable.js library enables the creation of immutable objects that cannot be changed once they have been created. It also provides several persistent immutable data structures such as stack, set and range for developers. Thus this library solves the problem of comparisons between objects \cite{Immutable.jsAuthors2019}, \cite{Rauschmayer2015}. 
+In the later implementation of the Davis-Putnam algorithm, a known problem will occur when using JavaScript. This is the comparison between sets. The native set compares objects via Object by Object Reference. Comparisons with mutable objects are usually very difficult, because when an object changes, the location of the object in a collection also changes. The Immutable.js library enables the creation of immutable objects that cannot be changed once they have been created. It also provides several persistent immutable data structures such as stack, set and range for developers. Thus this library solves the problem of comparisons between objects \cite{Immutable.jsAuthors2019}, \cite{Rauschmayer2015}.
+
+\begin{listing}[h!]
+\begin{minted}{javascript}
+// plain JavaScript
+let set1 = new Set(['1', '2']); // {'1', '2'}
+let set2 = new Set(['1', '2']); // {'1', '2'}
+
+// same object twice
+var set = new Set([set1, set1]); // {{'1', '2'}}
+// different objects with same entries
+var set = new Set([set1, set2]); // {{'1', '2'}, {'1', '2'}}
+\end{minted}
+    \caption{Set of sets in plain JavaScript}
+    \label{code:jsPlainSets}
+\end{listing}
 
 % cSpell:disable
 %\section{Two.js}

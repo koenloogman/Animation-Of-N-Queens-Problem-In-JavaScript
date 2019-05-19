@@ -200,7 +200,7 @@ With the components of the calculation thread finished, we are only missing thos
 
 \section{Implementing N-Qeens Problem}
 \label{sec:impQueens}
-To be able to solve a problem with the \textit{Davis-Putnam algorithm}, one needs to be defined. Therefor we will create a function to return for a given number $n$ a set of clauses that defines a the \textit{N-Queens Problem} for said $n$. The queens will be represented by a literal of the form ``row,col'' and the negated literal will mean that no queen can be placed there. Lets say for example we have $\texttt{row} := 3 \land \texttt{col} := 4$ then the literal for the queen would be as follows ``3,4'' and the negation would be ``!3,4''. This makes it easy to transform the string back into coordinates for the chessboard.
+To be able to solve a problem with the \textit{Davis-Putnam algorithm}, a propositional formula needs to be defined in JavaScript. Therefore we will create a function to return for a given number $n$ a set of clauses that express the \textit{N-Queens Problem} for said $n$. The queens will be represented by a literal of the form ``row,col'' and the negated literal will mean that no queen can be placed there. Lets say for example we have $\texttt{row} := 3 \land \texttt{col} := 4$ then the literal for the queen would be as follows ``3,4'' and the negation would be ``!3,4''. This makes it easy to transform the string back into coordinates for the chessboard.
 
 \subsection{Queens Clauses Function}
 \label{sub:impQueensClauses}
