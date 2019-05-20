@@ -15,17 +15,35 @@ This chapter summarizes the fundamental knowledge that is needed in order to cre
 \label{sec:sciProLogic}
 Before the algorithm can be examined in more detail, a few mathematical terms must first be briefly explained.
 
+\paragraph{Literal}
+A propositional logic formula $f$ is called a literal, if one of the following cases is true.
+
+\paragraph{Clause}
+A propositional logic formula $C$ is called a clause if it has the following structure.
+\\[0.2cm]
+\hspace*{1.3cm} $C = l_1 \vee \cdots \vee l_r$ \\[0.2cm] Here, $l_i$ is a literal for every value $i \in \{1,\; ...,\; r\}$.
+
+%TODO Set of prop. Formulars \mathcal{F}
+
+\paragraph{Conjunctive normal form} A formula $F$ is in conjunctive normal form if and only if $F$ is a conjunction of clauses:
+\\[0.2cm]
+\hspace*{1.3cm} $F = K_1 \land \cdots \land K_n$, \\[0.2cm]
+where $K_i$ is a clause for all $i = 1, \cdots, n$.
+
+%TODO Set of propositional logic formulas: Keine Ahnung woher ich das finden soll
+
+%TODO Menge P
+
 \paragraph{Propositional logic interpretation}
 The function $\mathcal{I}:\mathcal{P} \rightarrow \mathbb{B}$ is called propositional logic interpretation, which assigns a true value $\mathcal{I}(p) \in \mathbb{B}$ to each proposition-logical variable $p\in \mathcal{P}$
 
 \paragraph{Satisfiable}
-There is a set of propositional logic formulas. If there is an interpretation $I$ so that all formulas are satisfied and the formula $\mathcal{I}(f) = \texttt{True}$ \quad for all propositional logic formulas in the set is given, so this set is satisfiable. If this is not the case, then this set is not satisfiable.
+There is a set of propositional logic formulas. If there is an interpretation $I$ so that all formulas are satisfied and the formula $\mathcal{I}(f) = \texttt{True}$ for all propositional logic formulas in the set is given, so this set is satisfiable. If this is not the case, then this set is not satisfiable.
+
+%TODO Notation of Solution
 
 \paragraph{Tautology}
 A propositional logic formula $f$ is a tautology if and only if $\mathcal{I}(f) = \texttt{True}$ for every interpretation $\mathcal{I}$. In this case it is written as $\models f$.
-
-\paragraph{Literal}
-A propositional logic formula $f$ is called a literal, if one of the following cases is true.
 
 \begin{enumerate}
   \item $f = \top$ or $f = \bot$
@@ -33,11 +51,7 @@ A propositional logic formula $f$ is called a literal, if one of the following c
   \item $f = \neg p$, where $p$ is a propositional variable. Then it is called a negative literal.
 \end{enumerate}
 
-\paragraph{Clause}
-A propositional logic formula $C$ is called a clause if it has the following structure.
-\\[0.2cm]
-\hspace*{1.3cm} $C = l_1 \vee \cdots \vee l_r$ \\[0.2cm] Here, $l_i$ is a literal for every value $i \in \{1,\; ...,\; r\}$.
-
+%TODO Somewhere: Menge L und Menge K
 \section{The Algorithm of Davis-Putnam}
 \label{sec:sciDavisPutnam}
 % cSpell:disable
