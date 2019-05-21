@@ -28,6 +28,7 @@ The set of all literals is called $\mathcal{L}$.
 A propositional logic formula $C$ is called a clause if it has the following structure.
 \\[0.2cm]
 \hspace*{1.3cm} $C = l_1 \vee \cdots \vee l_r$ \\[0.2cm] Here, $l_i$ is a literal for every value $i \in \{1,\; ...,\; r\}$.
+\\[0.2cm]
 The set of all clauses is called $\mathcal{K}$.
 
 \paragraph{Set of propositional logical formulas}
@@ -56,17 +57,20 @@ where $K_i$ is a clause for all $i = 1, \cdots, n$.
 
 \paragraph{Set of propositional logical variables}
 A set $\mathcal{P}$ is defined as the Set of propositional logical variables. Typically the set consists of small types from the Latin alphabet, which also may be indexed.\\
-For example: $\mathcal{P}:=\{p,q,r,p_1,p_2,p_3\}$ 
+For example: $\mathcal{P} := \{\ p,\ q,\ r,\ p_1,\ p_2,\ p_3\ \}$ 
 
 \paragraph{Propositional logic interpretation}
-The function $\mathcal{I}:\mathcal{P} \rightarrow \mathbb{B}$ is called propositional logic interpretation, which assigns a true value $\mathcal{I}(p) \in \mathbb{B}$ to each proposition-logical variable $p\in \mathcal{P}$
-%TODO Notation of Solution \mathcal{I} --> don't know which Notation
+The function $\mathcal{I} : \mathcal{P} \rightarrow \mathbb{B}$ is called propositional logic interpretation, which assigns a true value $\mathcal{I}(p) \in \mathbb{B}$ to each proposition-logical variable $p\in \mathcal{P}$
 
 \paragraph{Satisfiable}
-There is M as set of propositional logic formulas. If there is an interpretation $I$ so that all formulas of the set M are satisfied and the formula $\mathcal{I}(f) = \texttt{True}$ for all propositional logic formulas f $\in$ M is given, so set M is satisfiable. If this is not the case, then set M is not satisfiable.
+There is set of propositional logic formulas $K$. If there is an interpretation $K$ so that all formulas of the set $K$ are satisfied and the formula $\mathcal{I}(f) = \texttt{True}$ for all propositional logic formulas $f \in K$ is given, so set $K$ is satisfiable. If this is not the case, then set $K$ is not satisfiable.
 
 \paragraph{Tautology}
 A propositional logic formula $f$ is a tautology if and only if $\mathcal{I}(f) = \texttt{True}$ for every interpretation $\mathcal{I}$. In this case it is written as $\models f$.
+
+\paragraph{Solution}
+If there is an interpretation $\mathcal{I}$ that satisfies a set of propositional logic formulas $K$, then $\mathcal{I}$ is a possible solution of $K$.
+%TODO Notation of Solution \mathcal{I} --> don't know which Notation
 
 \section{The Algorithm of Davis-Putnam}
 \label{sec:sciDavisPutnam}
