@@ -49,6 +49,8 @@ pids
 *.mtc1
 *.out
 *.synctex.gz
+*.fls
+*.fdb_latexmk
 
 
 # For useage of JabRef
