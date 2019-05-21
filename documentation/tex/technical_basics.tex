@@ -62,7 +62,7 @@ Also after this comparison the decision was made to use Parcel, because Rollup l
 % cSpell:enable
 \section{Immutable.js}
 \label{sec:tecImmutable}
-In the later implementation of the Davis-Putnam algorithm, a known problem will occur when using JavaScript. This is the comparison between sets. The native set compares objects via Object by Object Reference. Comparisons with mutable objects are usually very difficult, because when an object changes, the location of the object in a collection also changes. The Immutable.js library enables the creation of immutable objects that cannot be changed once they have been created. It also provides several persistent immutable data structures such as stack, set and range for developers. Thus this library solves the problem of comparisons between objects \cite{Immutable.jsAuthors2019}, \cite{Rauschmayer2015}.
+In the later implementation of the Davis-Putnam algorithm, a known problem will occur when using JavaScript. This is the comparison between sets. The native set compares objects via Object by Object Reference as shown in listing \ref{code:jsPlainSets}. Comparisons with mutable objects are usually very difficult, because when an object changes, the location of the object in a collection also changes. The Immutable.js library enables the creation of immutable objects that cannot be changed once they have been created. It also provides several persistent immutable data structures such as stack, set and range for developers. Thus this library solves the problem of comparisons between objects \cite{Immutable.jsAuthors2019}, \cite{Rauschmayer2015}.
 
 \begin{listing}[h!]
 \begin{minted}{javascript}
