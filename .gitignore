@@ -48,6 +48,7 @@ pids
 *.mtc
 *.mtc1
 *.out
+*.synctex
 *.synctex.gz
 *.fls
 *.fdb_latexmk
