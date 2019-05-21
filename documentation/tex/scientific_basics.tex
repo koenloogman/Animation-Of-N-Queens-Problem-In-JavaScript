@@ -308,8 +308,8 @@ This function returns a set of clauses $K$ that express the fact that only one q
 \\[0.2cm]
 This works because for an upper diagonal when increasing x by one we reduce y by one and vice versa. So if we create the sum of x and y the result will be the same for each tile of the same diagonal.
 \\[0.2cm]
-$x + y = x + 1 + y - 1$\\
-$x + y = x - 1 + y + 1$
+\hspace*{1.3cm} $x + y = x + 1 + y - 1$\\
+\hspace*{1.3cm} $x + y = x - 1 + y + 1$
 \\[0.2cm]
 Starting with $k = 3$, because $Q_{1,2}$ and $Q_{2,1}$ are the first upper diagonal, and ending with $k = 2 * n - 1$, because $Q_{n - 1, n}$ and $Q_{n, n - 1}$ form the last diagonal.
 
@@ -324,8 +324,8 @@ This function returns a set of clauses $K$ that express the fact that only one q
 \\[0.2cm]
 Here it is similar to the upper diagonals, but with the change that both x and y either increase or decrease by one. Now the difference between x and y is the same for each tile of the same diagonal.
 \\[0.2cm]
-$x - y = x + 1 - y - 1 = (x + 1) - (y + 1)$\\
-$x - y = x - 1 - y + 1 = (x - 1) - (y - 1)$
+\hspace*{1.3cm} $x - y = x + 1 - y - 1 = (x + 1) - (y + 1)$\\
+\hspace*{1.3cm} $x - y = x - 1 - y + 1 = (x - 1) - (y - 1)$
 \\[0.2cm]
 Starting with $k = -(n - 2)$, because $Q_{1,n - 1}$ and $Q_{2,n}$ are the first lower diagonal, and ending with $k = n - 2$, because $Q_{n - 1, 1}$ and $Q_{n, 2}$ form the last diagonal.
 
