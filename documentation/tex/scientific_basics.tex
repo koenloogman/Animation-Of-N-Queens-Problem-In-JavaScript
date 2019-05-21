@@ -23,24 +23,40 @@ A propositional logic formula $C$ is called a clause if it has the following str
 \\[0.2cm]
 \hspace*{1.3cm} $C = l_1 \vee \cdots \vee l_r$ \\[0.2cm] Here, $l_i$ is a literal for every value $i \in \{1,\; ...,\; r\}$.
 
-%TODO Set of prop. Formulars \mathcal{F}
+\paragraph{Set of propositional logical formulas}
+Propositional logical formulas are words, which are created from the alphabet $\mathcal{A}:= \mathcal{P} \cup \{\top,\bot,\neg,\vee,\land,\rightarrow,\leftrightarrow,(,)\}$ \\
+The set of propositional logical formulas $\mathcal{F}$ is defined by induction: 
+\begin{enumerate}
+\item $\top \in \mathcal{F}$ and $\bot \in \mathcal{F}$ \\
+Here, $\top$ is called Verum and stands for the formula, which is always true. $\bot$ is called Falsum and stands for the formula, which is always false.
+\item If $p \in \mathcal{P}$, then $p \in \mathcal{F}$ also applies. \\
+Every propositional logical variable is also a propositional logical formula.
+\item If $f \in \mathcal{F}$, then $\neg f \in \mathcal{F}$ also applies. \\
+The formula $\neg f$ is called the negation of $f$.
+\item If $f_1, f_2 \in \mathcal{F}$, then \\
+$(f_1 \vee f_2) \in \mathcal{F}$ (Disjunction of $f_1$ and $f_2$) \\
+$(f_1 \land f_2) \in \mathcal{F}$ (Conjunction of $f_1$ and $f_2$) \\
+$(f_1 \rightarrow f_2) \in \mathcal{F}$ (Implication of $f_1$ and $f_2$) \\
+$(f_1 \leftrightarrow f_2) \in \mathcal{F}$ (Biconditional of $f_1$ and $f_2$)
+also applies.
+\end{enumerate}
+The set $\mathcal{F}$ is the smallest subset of words created from alphabet $\mathcal{A}$, which has the previous listed characteristics.
 
 \paragraph{Conjunctive normal form} A formula $F$ is in conjunctive normal form if and only if $F$ is a conjunction of clauses:
 \\[0.2cm]
 \hspace*{1.3cm} $F = K_1 \land \cdots \land K_n$, \\[0.2cm]
 where $K_i$ is a clause for all $i = 1, \cdots, n$.
 
-%TODO Set of propositional logic formulas: Keine Ahnung woher ich das finden soll
-
-%TODO Menge P
+\paragraph{Set of propositional logical variables}
+A set $\mathcal{P}$ is defined as the Set of propositional logical variables. Typically the set consists of small types from the Latin alphabet, which also may be indexed.\\
+For example: $\mathcal{P}:=\{p,q,r,p_1,p_2,p_3\}$ 
 
 \paragraph{Propositional logic interpretation}
 The function $\mathcal{I}:\mathcal{P} \rightarrow \mathbb{B}$ is called propositional logic interpretation, which assigns a true value $\mathcal{I}(p) \in \mathbb{B}$ to each proposition-logical variable $p\in \mathcal{P}$
+%TODO Notation of Solution \mathcal{I} --> don't know which Notation
 
 \paragraph{Satisfiable}
-There is a set of propositional logic formulas. If there is an interpretation $I$ so that all formulas are satisfied and the formula $\mathcal{I}(f) = \texttt{True}$ for all propositional logic formulas in the set is given, so this set is satisfiable. If this is not the case, then this set is not satisfiable.
-
-%TODO Notation of Solution
+There is M as set of propositional logic formulas. If there is an interpretation $I$ so that all formulas of the set M are satisfied and the formula $\mathcal{I}(f) = \texttt{True}$ for all propositional logic formulas f $\in$ M is given, so set M is satisfiable. If this is not the case, then set M is not satisfiable.
 
 \paragraph{Tautology}
 A propositional logic formula $f$ is a tautology if and only if $\mathcal{I}(f) = \texttt{True}$ for every interpretation $\mathcal{I}$. In this case it is written as $\models f$.
