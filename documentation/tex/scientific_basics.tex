@@ -306,7 +306,7 @@ This function returns a set of clauses $K$ that express the fact that only one q
 \\
 \hspace*{2.6cm} $\texttt{atMostOne}(\{\ Q_{x,y} :\ x,y \in \{1\ ..\ n\}\ |\ x + y = k\ \})$
 \\[0.2cm]
-This works because for an upper diagonal when increasing x by one we reduce y by one and vice versa. So if we create the sum of x and y the result will be the same for each tile of the same diagonal.
+This works because for an upper diagonal when increasing x by one we reduce y by one and vice versa. So if we create the sum of x and y the result will be the same for each tile of the same diagonal as following equations show.
 \\[0.2cm]
 \hspace*{1.3cm} $x + y = x + 1 + y - 1$\\
 \hspace*{1.3cm} $x + y = x - 1 + y + 1$
@@ -322,7 +322,7 @@ This function returns a set of clauses $K$ that express the fact that only one q
 \\
 \hspace*{2.6cm} $\texttt{atMostOne}(\{\ Q_{x,y} :\ x,y \in \{1\ ..\ n\}\ |\ x - y = k\ \})$
 \\[0.2cm]
-Here it is similar to the upper diagonals, but with the change that both x and y either increase or decrease by one. Now the difference between x and y is the same for each tile of the same diagonal.
+Here it is similar to the upper diagonals, but with the change that both x and y either increase or decrease by one. Now the difference between x and y is the same for each tile of the same diagonal as following equations show.
 \\[0.2cm]
 \hspace*{1.3cm} $x - y = x + 1 - y - 1 = (x + 1) - (y + 1)$\\
 \hspace*{1.3cm} $x - y = x - 1 - y + 1 = (x - 1) - (y - 1)$
@@ -330,7 +330,7 @@ Here it is similar to the upper diagonals, but with the change that both x and y
 Starting with $k = -(n - 2)$, because $Q_{1,n - 1}$ and $Q_{2,n}$ are the first lower diagonal, and ending with $k = n - 2$, because $Q_{n - 1, 1}$ and $Q_{n, 2}$ form the last diagonal.
 
 \paragraph{queensClauses}
-With the functions above, we finally can define the complete propositional formula for the \textit{N-Queens Problem} for a given number $n$ in form of a set of clauses $K$. Here a set of clauses that express that only one queen can be placed per column is not needed, because that one has to be placed in combination with only one per row implies that only one per column is placed.
+With the functions above, we finally can define the complete propositional formula for the \textit{N-Queens Problem} for a given number $n$ in form of a set of clauses $K$. A set of clauses that express that only one queen can be placed per column is not needed in this case, because that one has to be placed in combination with only one per row implies that only one per column is placed.
 \\[0.2cm]
 \hspace*{1.3cm} $\texttt{queensClauses}: \mathcal{N} \to 2^{\mathcal{K}}$
 \\[0.2cm]
