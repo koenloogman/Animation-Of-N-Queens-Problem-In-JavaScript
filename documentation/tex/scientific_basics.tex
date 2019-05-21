@@ -17,6 +17,11 @@ Before the algorithm can be examined in more detail, a few mathematical terms mu
 
 \paragraph{Literal}
 A propositional logic formula $f$ is called a literal, if one of the following cases is true.
+\begin{enumerate}
+  \item $f = \top$ or $f = \bot$
+  \item $f = p$, where $p$ is a propositional variable. If this is the case, it is called a positive literal.
+  \item $f = \neg p$, where $p$ is a propositional variable. Then it is called a negative literal.
+\end{enumerate}
 
 \paragraph{Clause}
 A propositional logic formula $C$ is called a clause if it has the following structure.
@@ -60,12 +65,6 @@ There is M as set of propositional logic formulas. If there is an interpretation
 
 \paragraph{Tautology}
 A propositional logic formula $f$ is a tautology if and only if $\mathcal{I}(f) = \texttt{True}$ for every interpretation $\mathcal{I}$. In this case it is written as $\models f$.
-
-\begin{enumerate}
-  \item $f = \top$ or $f = \bot$
-  \item $f = p$, where $p$ is a propositional variable. If this is the case, it is called a positive literal.
-  \item $f = \neg p$, where $p$ is a propositional variable. Then it is called a negative literal.
-\end{enumerate}
 
 %TODO Somewhere: Menge L und Menge K
 \section{The Algorithm of Davis-Putnam}
