@@ -270,8 +270,10 @@ class DavisPutnam {
 
                 // check if cuts can be done before trying to do a unit cut
                 if (!this.cutable.isEmpty()) {
+                    // get size of smallest set
+                    let target_size = this.cutable.sortBy(set => set.size).first().size;
                     // do unit cut on one specific clause
-                    let target = this.rndElement(this.cutable);
+                    let target = this.rndElement(this.cutable.filter(set => set.size == target_size));
                     let result = target.remove(Util.negateLiteral(this.literal));
                     this._clauses = this._clauses.remove(target).add(result);
                     
