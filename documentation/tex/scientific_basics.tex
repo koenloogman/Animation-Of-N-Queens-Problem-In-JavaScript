@@ -15,28 +15,16 @@ This chapter summarizes the fundamental knowledge that is needed in order to cre
 \label{sec:sciProLogic}
 Before the algorithm can be examined in more detail, a few mathematical terms must first be briefly explained.
 
-\paragraph{Literal}
-A propositional logic formula $f$ is called a literal, if one of the following cases is true.
-\begin{enumerate}
-  \item $f = \top$ or $f = \bot$
-  \item $f = p$, where $p$ is a propositional variable. If this is the case, it is called a positive literal.
-  \item $f = \neg p$, where $p$ is a propositional variable. Then it is called a negative literal.
-\end{enumerate}
-The set of all literals is called $\mathcal{L}$.
-
-\paragraph{Clause}
-A propositional logic formula $C$ is called a clause if it has the following structure.
-\\[0.2cm]
-\hspace*{1.3cm} $C = l_1 \vee \cdots \vee l_r$ \\[0.2cm] Here, $l_i$ is a literal for every value $i \in \{1,\; ...,\; r\}$.
-\\[0.2cm]
-The set of all clauses is called $\mathcal{K}$.
+\paragraph{Set of propositional logical variables}
+A set $\mathcal{P}$ is defined as the \emph{Set of propositional logical variables}. Typically the set consists of small types from the Latin alphabet, which also may be indexed.\\
+For example: $\mathcal{P} := \{\ p,\ q,\ r,\ p_1,\ p_2,\ p_3\ \}$ 
 
 \paragraph{Set of propositional logical formulas}
 Propositional logical formulas are words, which are created from the alphabet $\mathcal{A}:= \mathcal{P} \cup \{\top,\bot,\neg,\vee,\land,\rightarrow,\leftrightarrow,(,)\}$ \\
-The set of propositional logical formulas $\mathcal{F}$ is defined by induction: 
+The \emph{set of propositional logical formulas} $\mathcal{F}$ is defined by induction: 
 \begin{enumerate}
   \item $\top \in \mathcal{F}$ and $\bot \in \mathcal{F}$ \\
-  Here, $\top$ is called Verum and stands for the formula, which is always true. $\bot$ is called Falsum and stands for the formula, which is always false.
+  Here, $\top$ is called Verum and stands for the formula, which is always true. $\bot$ is called Falsum and stands for the formula which is always false.
   \item If $p \in \mathcal{P}$, then $p \in \mathcal{F}$ also applies. \\
   Every propositional logical variable is also a propositional logical formula.
   \item If $f \in \mathcal{F}$, then $\neg f \in \mathcal{F}$ also applies. \\
@@ -50,26 +38,38 @@ The set of propositional logical formulas $\mathcal{F}$ is defined by induction:
 \end{enumerate}
 The set $\mathcal{F}$ is the smallest subset of words created from alphabet $\mathcal{A}$, which has the previous listed characteristics.
 
-\paragraph{Conjunctive normal form} A formula $F$ is in conjunctive normal form if and only if $F$ is a conjunction of clauses:
+\paragraph{Literal}
+A propositional logic formula $f$ is called a \emph{literal}, if one of the following cases is true.
+\begin{enumerate}
+  \item $f = \top$ or $f = \bot$
+  \item $f = p$, where $p$ is a propositional variable. If this is the case, it is called a positive literal.
+  \item $f = \neg p$, where $p$ is a propositional variable. Then it is called a negative literal.
+\end{enumerate}
+The set of all literals is called $\mathcal{L}$.
+
+\paragraph{Clause}
+A propositional logic formula $C$ is called a \emph{clause} if it has the following structure.
+\\[0.2cm]
+\hspace*{1.3cm} $C = l_1 \vee \cdots \vee l_r$ \\[0.2cm] Here, $l_i$ is a literal for every value $i \in \{1,\; ...,\; r\}$.
+\\[0.2cm]
+The set of all clauses is called $\mathcal{K}$.
+
+\paragraph{Conjunctive normal form} A formula $F$ is in \emph{conjunctive normal form} if and only if $F$ is a conjunction of clauses:
 \\[0.2cm]
 \hspace*{1.3cm} $F = K_1 \land \cdots \land K_n$, \\[0.2cm]
 where $K_i$ is a clause for all $i = 1, \cdots, n$.
 
-\paragraph{Set of propositional logical variables}
-A set $\mathcal{P}$ is defined as the Set of propositional logical variables. Typically the set consists of small types from the Latin alphabet, which also may be indexed.\\
-For example: $\mathcal{P} := \{\ p,\ q,\ r,\ p_1,\ p_2,\ p_3\ \}$ 
-
 \paragraph{Propositional logic interpretation}
-The function $\mathcal{I} : \mathcal{P} \rightarrow \mathbb{B}$ is called propositional logic interpretation, which assigns a true value $\mathcal{I}(p) \in \mathbb{B}$ to each proposition-logical variable $p\in \mathcal{P}$
+The function $\mathcal{I} : \mathcal{P} \rightarrow \mathbb{B}$ is called \emph{propositional logic interpretation}, which assigns a true value $\mathcal{I}(p) \in \mathbb{B}$ to each proposition-logical variable $p\in \mathcal{P}$
 
 \paragraph{Satisfiable}
-There is set of propositional logic formulas $K$. If there is an interpretation $K$ so that all formulas of the set $K$ are satisfied and the formula $\mathcal{I}(f) = \texttt{True}$ for all propositional logic formulas $f \in K$ is given, so set $K$ is satisfiable. If this is not the case, then set $K$ is not satisfiable.
+There is set of propositional logic formulas $K$. If there is an interpretation $K$ so that all formulas of the set $K$ are satisfied and the formula $\mathcal{I}(f) = \texttt{True}$ for all propositional logic formulas $f \in K$ is given, so set $K$ is \emph{satisfiable}. If this is not the case, then set $K$ is not satisfiable.
 
 \paragraph{Tautology}
-A propositional logic formula $f$ is a tautology if and only if $\mathcal{I}(f) = \texttt{True}$ for every interpretation $\mathcal{I}$. In this case it is written as $\models f$.
+A propositional logic formula $f$ is a \emph{tautology} if and only if $\mathcal{I}(f) = \texttt{True}$ for every interpretation $\mathcal{I}$. In this case it is written as $\models f$.
 
 \paragraph{Solution}
-If there is an interpretation $\mathcal{I}$ that satisfies a set of propositional logic formulas $K$, then $\mathcal{I}$ is a possible solution of $K$.
+If there is an interpretation $\mathcal{I}$ that satisfies a set of propositional logic formulas $K$, then $\mathcal{I}$ is a possible \emph{solution} of $K$.
 %TODO Notation of Solution \mathcal{I} --> don't know which Notation
 
 \section{The Algorithm of Davis-Putnam}
@@ -104,19 +104,19 @@ $r \land \bot \land t$.
 % cSpell:disable
 % Eine leere Klammer bedeutet in der Aussagelogik ein Falsum, wodurch $K_2$ unerfüllbar ist. Bei sehr großen Klauselmengen ist es meist nicht mehr auf dem ersten Blick zu sehen, so dass Algorithmen wie dieser eingesetzt werden. Doch um nun einen Schritt tiefer setzen zu können, müssen zwei Definitionen zuvor eingeführt werden.
 % cSpell:enable
-The empty set in the set of clauses $K_2$ is interpreted as a $\bot$ in the propositional logic, making it impossible to satisfy $K_2$. The set of clauses $K_1$ can easily be satisfied, since it only contains clauses with a single literal. Once the clauses of $K_1$ contain more literals it gets more complex to satisfy. For these algorithms like the \textit{Davis-Putnam algorithm} are used. But before we get to the details, two definitions have to be introduced first \cite{Zhang2000}. 
+The empty set in the set of clauses $K_2$ is interpreted as a $\bot$ in the propositional logic, making it impossible to satisfy $K_2$. The set of clauses $K_1$ can easily be satisfied, since it only contains clauses with a single literal which are different to each other. Once the clauses of $K_1$ contain more literals it gets more complex to satisfy. For these algorithms like the \textit{Davis-Putnam algorithm} are used. But before we get to the details, two definitions have to be introduced first \cite{Zhang2000}. 
 
 \paragraph{Unit clause}
 % cSpell:disable
 % Eine Klausel $C$ ist eine Unit-Klausel, wenn diese nur aus einem Literal, also aus einer Aussagevariablen besteht.
 % cSpell:enable
-A clause $C$ is a unit clause if it contains of only a single literal, i.e. a variable or a negated variable.
+A clause $C$ is a \emph{unit clause} if it contains of only a single literal, i.e. a variable or a negated variable.
 
 \paragraph{Trivial clause sets}
 % cSpell:disable
 % Eine triviale Klauselmenge kann nur vorkommen, wenn einer der beiden Fälle eintritt.
 % cSpell:enable
-A set of clauses is trivial if and only if one of the following two cases occurs.
+A set of clauses is \emph{trivial} if and only if one of the following two cases occurs.
 
 \begin{enumerate}
   % cSpell:disable
@@ -148,7 +148,7 @@ To simplify a set of clauses $K$ with $C_1 \cup \{\; p\; \}$, $C_2 \cup \{\; \ne
 \\[0.2cm]
 In this case the result clause will in general have more literals than $C_1 \cup \{\; p\; \}$ or $C_2 \cup \{\; \neg p\; \}$ alone. Because if the clause $C_1 \cup \{\; p\; \}$ contains $m + 1$ literals and $C_1 \cup \{\; p\; \}$ contains $n + 1$ literals, then the union $C_1 \cup C_2$ can have upto $m + n$ literals in total. In general $m + n$ may be bigger than $m + 1$ or $n + 1$. The clause can be smaller than previously if both sets contain the same literals, but it is only granted to be smaller if $m = 0 \lor n = 0$. This is the case for unit clauses. Therefore we will only allow the use of the cut rule if one of the clauses is a unit clause. These cuts will be called unit cuts. To be able to do those unit cuts with a unit clause $\{\; l\; \}$ on all clauses of a set of clauses $K$, we define the function
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{unitCut}: 2^{K} \times L \to 2^{K}$
+\hspace*{1.3cm} $\texttt{unitCut}: 2^{\mathcal{K}} \times L \to 2^{\mathcal{K}}$
 \\[0.2cm]
 so that for a set of clauses $K$ and a literal $l$ the function $\texttt{unitCut}(K,\; l)$ will simplify the set of clauses as much as possible by using unit cuts:
 \\[0.2cm]
@@ -160,7 +160,7 @@ The result set of clauses will have the same amount of clauses as $K$. Only the 
 \label{sub:sciDavisPutnamSubsumption}
 For further simplification of the set of clauses we will use subsumption. The idea is simple and can be shown with the following example:
 \\[0.2cm]
-\hspace*{1.3cm} $K = \{\; \{\; p,\; \neg q \;\},\; \{\; p\; \}\; \} \cup M$
+\hspace*{1.3cm} $K = \bigl\{\; \{\; p,\; \neg q \;\},\; \{\; p\; \}\;\bigr\} \cup M$
 \\[0.2cm]
 It is clear that the clause $\{\; p\; \}$ implies the clause $\{\; p,\; \neg q \;\}$, because if $\{\; p\; \}$ is satisfied, then $\{\; p,\; \neg q \;\}$ will be satisfied too. That's because
 \\[0.2cm]
@@ -168,11 +168,11 @@ It is clear that the clause $\{\; p\; \}$ implies the clause $\{\; p,\; \neg q \
 \\[0.2cm]
 is given. With that in mind we can say that we can subsume a clause $C$ with a unit clause $U$ if $U \subseteq C$. That means if we have a set of clauses $K$ with $C \in K \land U \in K$ and $U$ subsumes $C$, we can remove the clause $C$ from $K$ to reduce its size. We define a function
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{subsume}: 2^{K} \times L \to 2^{K}$
+\hspace*{1.3cm} $\texttt{subsume}: 2^{\mathcal{K}} \times L \to 2^{\mathcal{K}}$
 \\[0.2cm]
 that receives a set of clauses $K$ and a literal $l$. It will simplify $K$ by subsuming with the unit clause $\{\; l\; \}$:
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{subsume}(K,\; l) = \{\; C \in K\; |\; l \notin C\} \cup \{\{\; l\; \}\}$
+\hspace*{1.3cm} $\texttt{subsume}(K,\; l) = \{\; C \in K\; |\; l \notin C\} \cup \bigl\{\{\; l\; \bigr\}\}$
 \\[0.2cm]
 We have to add the unit clause to the set of clauses, because $l \in U$ is the case. Resulting in $U$ being removed from $K$ at first too \cite{Stroetman2019}. 
 
@@ -238,7 +238,7 @@ The theoretical foundation that was previously created now makes it possible to 
 % cSpell:disable
 % Das n Königinnen Problem ist das verallgemeinerte mathematische Problem bezogen auf ein Schachbrett, dass n \times n Felder besitzt. Ein spezielles Beispiel dazu wäre das 8 Damen Problem, welches auf dem standardisierten Schachbrett abgebildet wird. Allgemein handelt das Problem davon, n Damen auf einem n \times n Schachbrett so zu platzieren, dass keine in ihrem Zug behindert werden würde. Eine Königin in einem normalen Schachspiel kann sowohl diagonal, als auch vertikal und horizontal ihre Züge ziehen. Dieses Zugmuster kann in Figure \label{fig:queens-problem} genauer angeschaut werden. Zusammengefasst heißt dies also, dass immer nur eine Dame auf ihrer vertikalen, horizontalen und diagonalen Linie sein darf, um sich nicht gegenseitig zu behindern. Dabei wird in diesem Problem davon ausgegangen, dass jede Dame jede andere angreifen kann und die Feldfarben ignoriert werden. 
 % cSpell:enable
-The N-Queen problem is about how to place n queens on an $n \times n$ chessboard so that none would be obstructed in their turn. A special example would be the 8-Queens Problem, which is related to the standardized chessboard. A queen in a normal game of chess can move diagonally, vertically and horizontally. This move pattern can be seen in Figure \ref{fig:queens-problem}. In summary, this means that there is only one queen allowed on her vertical, horizontal and diagonal line at a time so that they do not interfere with each other. In this problem it is assumed that any queen can attack any other queen and the field colors are ignored. This problem can be solved by several algorithms such as the \textit{Davis-Putnam algorithm} \cite{OMCA2019}, \cite{GeeksGeeks2019} \cite{Stroetman2019}.
+The N-Queen problem is about how to place n queens on an $n \times n$ chessboard so that none would be obstructed in their turn. A special example would be the 8-Queens Problem, which is related to the standardized chessboard. A queen in a normal game of chess can move diagonally, vertically and horizontally. This move pattern can be seen in Figure \ref{fig:queens-problem}. In summary, this means that there is only one queen allowed on her vertical, horizontal and diagonal line at a time so that they do not interfere with each other. In this problem it is assumed that any queen can attack any other queen and the field colors are ignored. This problem can be solved by several backtracking algorithms such as the \textit{Davis-Putnam algorithm} \cite{OMCA2019}, \cite{GeeksGeeks2019} \cite{Stroetman2019}.
 
 \begin{figure}[!ht]
   \centering
@@ -279,7 +279,7 @@ The function atMostOne will receive a set of literals $L$ and return a set of cl
 \\[0.2cm]
 \hspace*{1.3cm}$\texttt{atMostOne}:\ \mathcal{L} \to 2^{\mathcal{K}}$
 \\[0.2cm]
-\hspace*{1.3cm}$\texttt{atMostOne}(L) := \{\ \{\ \neg l_1,\ \neg l_2 \}\ :\ l_1, l_2 \in L\ |\ l_1 \neq l_2\ \}$
+\hspace*{1.3cm}$\texttt{atMostOne}(L) := \bigl\{\ \{\ \neg l_1,\ \neg l_2 \}\ :\ l_1, l_2 \in L\ |\ l_1 \neq l_2\ \bigr\}$
 \\[0.2cm]
 This works, because if one variable is said to be true then the other variable must be false, since either one or the other needs to be false.
 
@@ -295,7 +295,7 @@ This function receives a number $n$ for the total amount of queens and a number 
 \\[0.2cm]
 \hspace*{1.3cm} $\texttt{oneInColumn}:\ \mathcal{N} \times \mathcal{N} \to 2^{\mathcal{K}}$
 \\[0.2cm]
-\hspace*{1.3cm} $\texttt{oneInColumn}(c,\ n) := \{\ \{\ Q_{i,c} :\ i \in \{1\ ..\ n\}\ \}\ \}$
+\hspace*{1.3cm} $\texttt{oneInColumn}(c,\ n) := \bigl\{\ \{\ Q_{i,c} :\ i \in \{1\ ..\ n\}\ \}\ \bigr\}$
 
 \paragraph{atMostOneInUpperDiagonal}
 This function returns a set of clauses $K$ that express the fact that only one queen can be placed in the upper diagonal, for a given number $n$ and $k \in \{3\ ..\ 2 * n - 1\}$. The number $k$ helps with calculating which combination of row and column is part of the diagonal.

@@ -13,7 +13,7 @@ Next we need to take a look at the mathematical part of the script. Because Java
 
 So for example the formula $(\; p\; \lor\; \neg q\; )\; \land\; (\; s\; \lor\; r\; )$ would be implemented as the following listing \ref{code:setOfClauses} with Set being the Set class of Immutable.js and not the native JavaScript one.
 
-\begin{listing}[h!]
+\begin{listing}[H]
 \begin{minted}{javascript}
 // (p or not q) and (s or r) as a set of clauses in JavaScript
 let set_of_clauses = new Set(new Set('p', '!q'), new Set('s', 'r'));
@@ -31,7 +31,7 @@ Because some functions like negating a literal will be used in multiple parts of
 It contains the function to negate a literal and functions for formatting sets and literals to HTML strings. It can be expanded further in future, but for now these will do.
 Because we are using strings for literals we can negate them by adding a ``!'' and applying a simple RegEx operation afterwards as shown in the following listing \ref{code:negateLiteral}.
 
-\begin{listing}[h!]
+\begin{listing}[H]
 \begin{minted}{javascript}
 Util.negateLiteral = (literal) => return ('!' + literal).replace(/^!!/, '');
 Util.negateLiteral('p');  // result: !p
@@ -258,7 +258,7 @@ For the layout we decided to use a grid based design, to be able to make it some
 
 \subsection{Frame Class}
 \label{sub:impFrame}
-To initialize the animation and all its needed components, we created a Frame class. This class contains all the functions for the user interaction, the worker for the calculations and the chessboard object for visualization. It creates all the listeners for the UI elements and handles the communication with the worker. To synchronize the animation with the worker the User Interface elements that should not be triggered will be disabled during the calculation process of the worker and enabled at the end of said calculation. This way we prevent unwanted behavior of the worker. Whenever the worker sends a message containing an important step of the calculation a new entry will be created for the calculation history. New entries will be added before the previous entries, so that the top entry is the latest and the bottom one the first calculation step.
+To initialize the animation and all its needed components, we created a Frame class. This class contains all the functions for the user interaction, the worker for the calculations and the chessboard object for visualization. It creates all the listeners for the UI elements and handles the communication with the worker. To synchronize the animation with the worker the user interface elements that should not be triggered will be disabled during the calculation process of the worker and enabled at the end of said calculation. This way we prevent unwanted behavior of the worker. Whenever the worker sends a message containing an important step of the calculation a new entry will be created for the calculation history. New entries will be added before the previous entries, so that the top entry is the latest and the bottom one the first calculation step.
 
 Each of the named possible user interactions receives their own listener, that handles the requested task. On top of those we need one more for the messages of the worker, because we will have a two way communication. This listener is very similar to the one for the worker as previously shown in listing \ref{code:workerListener}, only that it will handle all outgoing messages of the worker.
 
