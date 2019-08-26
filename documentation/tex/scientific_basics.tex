@@ -63,16 +63,16 @@ The set of all clauses is called $\mathcal{K}$.
 where $K_i$ is a clause for all $i = 1, \cdots, n$.
 
 \paragraph{Propositional logic interpretation}
-The function $\mathcal{I} : \mathcal{P} \rightarrow \mathbb{B}$ is called \emph{propositional logic interpretation}, which assigns a true value $\mathcal{I}(p) \in \mathbb{B}$ to each proposition-logical variable $p\in \mathcal{P}$
+The function $\mathcal{I} : \mathcal{P} \rightarrow \mathbb{B}$ is called \emph{propositional logic interpretation}, which assigns a truth value $\mathcal{I}(p) \in \mathbb{B}$ to each proposition-logical variable $p\in \mathcal{P}$
 
 \paragraph{Satisfiable}
-There is set of propositional logic formulas $K$. If there is an interpretation $K$ so that all formulas of the set $K$ are satisfied and the formula $\mathcal{I}(f) = \texttt{True}$ for all propositional logic formulas $f \in K$ is given, so set $K$ is \emph{satisfiable}. If this is not the case, then set $K$ is not satisfiable.
+There is set of propositional logic formulas $K$. If there is an interpretation $K$ so that all formulas of the set $K$ are satisfied so that $\mathcal{I}(f) = \texttt{True}$ for all propositional logic formulas $f \in K$, then the set $K$ is \emph{satisfiable}. If this is not the case, then the set $K$ is not satisfiable.
 
 \paragraph{Tautology}
-A propositional logic formula $f$ is a \emph{tautology} if and only if $\mathcal{I}(f) = \texttt{True}$ for every interpretation $\mathcal{I}$. In this case it is written as $\models f$.
+A propositional logic formula $f$ is a \emph{tautology} if and only if $\mathcal{I}(f) = \texttt{True}$ for every interpretation $\mathcal{I}$. This case is written as $\models f$.
 
 \paragraph{Solution}
-If there is an interpretation $\mathcal{I}$ that satisfies a set of propositional logic formulas $K$, then $\mathcal{I}$ is a possible \emph{solution} of $K$.
+If there is an interpretation $\mathcal{I}$ that satisfies a set of propositional logic formulas $K$, then $\mathcal{I}$ is a \emph{solution} of $K$.
 %TODO Notation of Solution \mathcal{I} --> don't know which Notation
 
 \section{The Algorithm of Davis-Putnam}
@@ -107,7 +107,7 @@ $r \land \bot \land t$.
 % cSpell:disable
 % Eine leere Klammer bedeutet in der Aussagelogik ein Falsum, wodurch $K_2$ unerfüllbar ist. Bei sehr großen Klauselmengen ist es meist nicht mehr auf dem ersten Blick zu sehen, so dass Algorithmen wie dieser eingesetzt werden. Doch um nun einen Schritt tiefer setzen zu können, müssen zwei Definitionen zuvor eingeführt werden.
 % cSpell:enable
-The empty set in the set of clauses $K_2$ is interpreted as a $\bot$ in the propositional logic, making it impossible to satisfy $K_2$. The set of clauses $K_1$ can easily be satisfied, since it only contains clauses with a single literal which are different to each other. Once the clauses of $K_1$ contain more literals it gets more complex to satisfy. For these algorithms like the \textit{Davis-Putnam algorithm} are used. But before we get to the details, two definitions have to be introduced first \cite{Zhang2000}. 
+The empty set in the set of clauses $K_2$ is interpreted as a $\bot$ in the propositional logic, making it impossible to satisfy $K_2$. The set of clauses $K_1$ can easily be satisfied, since it only contains clauses with a single literal. Once the clauses of $K_1$ contain more literals it gets more complex to satisfy. For these algorithms like the \textit{Davis-Putnam algorithm} are used. But before we get to the details, two definitions have to be introduced first \cite{Zhang2000}. 
 
 \paragraph{Unit clause}
 % cSpell:disable
@@ -282,7 +282,7 @@ The function atMostOne will receive a set of variables $P$ and return a set of c
 \\[0.2cm]
 \hspace*{1.3cm}$\texttt{atMostOne}:\ \mathcal{P} \to 2^{\mathcal{K}}$
 \\[0.2cm]
-\hspace*{1.3cm}$\texttt{atMostOne}(L) := \bigl\{\ \{\ \neg p_1,\ \neg p_2 \}\ :\ p_1, p_2 \in P\ |\ p_1 \neq p_2\ \bigr\}$
+\hspace*{1.3cm}$\texttt{atMostOne}(P) := \bigl\{\ \{\ \neg p_1,\ \neg p_2 \}\ :\ p_1, p_2 \in P\ |\ p_1 \neq p_2\ \bigr\}$
 \\[0.2cm]
 This works, because if one variable is said to be true then the other variable has to be false, since either one or the other needs to be false.
 
