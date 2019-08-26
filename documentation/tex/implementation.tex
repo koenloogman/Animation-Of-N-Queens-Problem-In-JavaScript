@@ -11,7 +11,7 @@ Next we need to take a look at the mathematical part of the script. Because Java
 % Object is https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
 % Immutable is https://immutable-js.github.io/immutable-js/docs/#/is
 
-So for example the formula $(\; p\; \lor\; \neg q\; )\; \land\; (\; s\; \lor\; r\; )$ would be implemented as the following listing \ref{code:setOfClauses} with Set being the Set class of Immutable.js and not the native JavaScript one.
+So for example the formula $(\; p\; \lor\; \neg q\; )\; \land\; (\; s\; \lor\; r\; )$ would be implemented as the following Listing \ref{code:setOfClauses} with \texttt{Set} being the Set class of Immutable.js and not the native JavaScript one.
 
 \begin{listing}[H]
 \begin{minted}{javascript}
@@ -29,7 +29,7 @@ Now that it is clear how a set of clauses will be implemented in JavaScript and 
 Because some functions like negating a literal will be used in multiple parts of the script, we will use an object to host these functions. This object will be called the Util Object. By doing so it can be imported when those functions are needed and prevent redundant code, making it easy to maintain or change.
 
 It contains the function to negate a literal and functions for formatting sets and literals to HTML strings. It can be expanded further in future, but for now these will do.
-Because we are using strings for literals we can negate them by adding a ``!'' and applying a simple RegEx operation afterwards as shown in the following listing \ref{code:negateLiteral}.
+Because we are using strings for literals we can negate them by adding a ``!'' and applying a simple RegEx operation afterwards as shown in the following Listing \ref{code:negateLiteral}.
 
 \begin{listing}[H]
 \begin{minted}{javascript}
@@ -52,13 +52,13 @@ One of the challenges here is the double recursive call of the algorithm and spl
 \begin{enumerate}
     \item The set of clauses describing the current state of the problem
     \item The literals it has guessed previously
-    \item The unit clauses it has already used for further satisfaction
+    \item The unit clauses it has already used for unit propagation
     \item The unit clause or literal that is currently in use for unit cuts
 \end{enumerate}
 
 The last point is important for the micro steps, because we need to do all possible unit cuts before using the next unit clause. Because it is possible to represent the state of the algorithm, we can also use this to simulate the double recursive call. By pushing the current state with the negation of the guessed literal to the stack and adding the guessed literal to the current state for further satisfaction, we can pop a state from the stack to continue from that point if the current state is not satisfiable.
 
-Because we will use an iterative implementation, we need to think about everything that needs to be done in one step of the iteration. Since we will have macro and micro steps, we will use two loops one for the macro steps and one for the micro steps, so that one macro step will execute all micro steps that it includes. Lets say we have a function step that receives a number of steps $n$ so that it will do $n$ micro or macro steps on the state. Then we need to reduce the step count when a guessed literal $L$ has been added to the state, in case of macro steps, or a unit cut has been calculated, for micro steps. The function step would look like the pseudo code of listing \ref{code:stepDavisPutnam}. Doing all micro steps at the start of a macro step results in checking if it is satisfied. If it is not satisfiable, it is followed by a backtrack and the guessing of a new literal.
+Because we will use an iterative implementation, we need to think about everything that needs to be done in one step of the iteration. Since we will have macro and micro steps, we will use two loops one for the macro steps and one for the micro steps, so that one macro step will execute all micro steps that it includes. Lets say we have a function step that receives a number of steps $n$ so that it will do $n$ micro or macro steps on the state. Then we need to reduce the step count when a guessed literal $L$ has been added to the state, in case of macro steps, or a unit cut has been calculated, for micro steps. The function step would look like the pseudo code of Listing \ref{code:stepDavisPutnam}. Doing all micro steps at the start of a macro step results in checking if it is satisfied. If it is not satisfiable, it is followed by a backtrack and the guessing of a new literal.
 
 \begin{listing}[h!]
     \textit{/* do step(s) on a state that contains a set of clauses $S$ */}\\
@@ -76,10 +76,10 @@ Because we will use an iterative implementation, we need to think about everythi
                 \hspace*{1.5cm} \textit{/* check if cuts can be done before trying to do a unit cut */}\\
                 \hspace*{1.5cm} \textbf{if} clauses in $S$ contain $\bar{L}$ \textbf{then}\\
                     \hspace*{1.5cm} \textit{/* single unit resolution */}\\
-                    \hspace*{2cm} choose a clause $C$ that contains $\bar{L}$\\
+                    \hspace*{2cm} choose one of the smallest clauses $C$ that contains $\bar{L}$\\
                     \hspace*{2cm} delete $\bar{L}$ from $C$\\
                     \hspace*{2cm} \textbf{if} it is a micro step \textbf{then}\\
-                        \hspace*{2.5cm} $n -= 1$\\
+                        \hspace*{2.5cm} $n \texttt{-=} 1$\\
                     \hspace*{2cm} \textbf{fi}\\
                 \hspace*{1.5cm} \textbf{fi}\\
             \hspace*{1.0cm} \textbf{until} all unit clauses have been used or $n = 0$\\
@@ -90,7 +90,7 @@ Because we will use an iterative implementation, we need to think about everythi
             \hspace*{1.0cm} \textbf{else if} $n = 0$ \textbf{then}\\
                 \hspace*{1.5cm} \textbf{continue}\\
             \hspace*{1.0cm} \textbf{fi}\\
-            \hspace*{1.0cm} $n -= 1$\\
+            \hspace*{1.0cm} $n \texttt{-=} 1$\\
             \hspace*{1.0cm} \textit{/* check if current state is not satisfiable */}\\
             \hspace*{1.0cm} \textbf{if} a clause becomes $\{\}$ in $S$ \textbf{then}\\
                 \hspace*{1.5cm} \textbf{if} stack is empty \textbf{then}\\
@@ -113,7 +113,7 @@ Because we will use an iterative implementation, we need to think about everythi
 
 \subsection{Davis-Putnam Class}
 \label{sub:impDavisPutnam}
-As previously explained we need a stack of states and a state to provide an iterative implementation of the \textit{Davis-Putnam algorithm}. For this purpose we create a Davis-Putnam class. Its primary features are that it contains a state, a stack of states and a function to execute a macro or micro step on the state. Because the algorithm is supposed to be animated we have to pass the operations on the set of clauses and the unit clauses of the set of clauses to represent the state. This can be done with event listeners, that are called on the important operations of the algorithm. Since there are a number of events we decided to use a class that contains functions to be called when those events happen. These events are as follows:
+As previously explained we need a stack of states to provide an iterative implementation of the \textit{Davis-Putnam algorithm}. For this purpose we create a Davis-Putnam class. Its primary features are that it contains a state, a stack of states and a function to execute a macro or micro step on the state. Because the algorithm is supposed to be animated we have to pass the operations on the set of clauses and the unit clauses of the set of clauses to represent the state. This can be done with event listeners, that are called on the important operations of the algorithm. Since there are a number of events we decided to use a class that contains functions to be called when those events happen. These events are as follows:
 
 \begin{enumerate}
     \item set of clauses satisfied
@@ -145,9 +145,9 @@ Those functions are basically placeholders, since the class is supposed to be ex
 
 \subsection{Davis-Putnam Worker Class}
 \label{sub:impDavisPutnamWorker}
-As said before we will have a worker for the calculations. This class initializes a worker for the main script to do all the calculations. It extends the Davis-Putnam Consumer from the previous chapter \ref{sub:impDavisPutnamConsumer}. It will create its own Davis-Putnam instance and add itself as a consumer, so that all events from said instance will call the functions of this class. When these functions are called the worker will send messages to the main script with all the information. In addition to those messages it will also tell the main script when it starts or stops calculating, because of the potential problem named previously in chapter \ref{ch:implementation}. These will be all outgoing messages. As for the incoming messages from the main script. We will accept requests for a new set of clauses, a seed for the Davis-Putnam class, switching between micro and macro steps and to calculate the next step.
+As said before we will have a worker for the calculations. This class initializes a worker for the main script to do all the calculations. It extends the Davis-Putnam Consumer from the previous chapter \ref{sub:impDavisPutnamConsumer}. It will create its own Davis-Putnam instance and add itself as a consumer, so that all events from said instance will call the functions of this class. When these functions are called the worker will send messages to the main script with all the information. In addition to those messages it will also tell the main script when it starts or stops calculating, because of the potential problem named previously in chapter \ref{ch:implementation}. These will be all outgoing messages. As for the incoming messages from the main script, we will accept requests for a new set of clauses, a seed for the Davis-Putnam class, switching between micro and macro steps, and to calculate the next step.
 
-Because the worker and main script communicate via messages only, there is only one listener for all those events. To be able to distinguish between the different requests we will define a default message structure as shown following listing \ref{code:workerMessage}.
+Because the worker and main script communicate via messages only, there is only one listener for all those events. To be able to distinguish between the different requests we will define a default message structure as shown in the following Listing \ref{code:workerMessage}.
 
 \begin{listing}[h!]
 \begin{minted}{javascript}
@@ -164,7 +164,7 @@ let message = {
     \label{code:workerMessage}
 \end{listing}
 
-The ``cmd'' value will indicate what kind of request it is and the ``options'' object will contain all the information needed to fulfill that request. This way the listener can be implemented with a simple switch-case to handle the requests as shown in following listing \ref{code:workerListener}.
+The ``cmd'' value will indicate what kind of request it is and the ``options'' object will contain all the information needed to fulfill that request. This way the listener can be implemented with a simple switch-case to handle the requests as shown in the following Listing \ref{code:workerListener}.
 
 \begin{listing}[h!]
 \begin{minted}{javascript}
@@ -198,13 +198,13 @@ self.addEventListener('message', event => {
 
 With the components of the calculation thread finished, we are only missing those of the animation thread.
 
-\section{Implementing N-Qeens Problem}
+\section{Implementing the N-Qeens Problem}
 \label{sec:impQueens}
 To be able to solve a problem with the \textit{Davis-Putnam algorithm}, a propositional formula needs to be defined in JavaScript. Therefore we will create a function to return for a given number $n$ a set of clauses that express the \textit{N-Queens Problem} for said $n$. The queens will be represented by a literal of the form ``row,col'' and the negated literal will mean that no queen can be placed there. Lets say for example we have $\texttt{row} := 3 \land \texttt{col} := 4$ then the literal for the queen would be as follows ``3,4'' and the negation would be ``!3,4''. This makes it easy to transform the string back into coordinates for the chessboard.
 
 \subsection{Queens Clauses Function}
 \label{sub:impQueensClauses}
-This function returns a set of clauses for the \textit{N-Queens Problem}, so that for a given $n$ the problem will be to place $n$ queens on a $n \times n$ board. To create this set of clauses following functions are used to help:
+This function returns a set of clauses for the \textit{N-Queens Problem}, so that for a given $n$ the problem will be to place $n$ queens on a $n \times n$ board. To create this set of clauses the following functions are used to help:
 
 \paragraph{atMostOne}
 Returns a set of clauses that allows only one of the given literals to be true, for a given set of literals.
@@ -225,7 +225,7 @@ Returns a set of clauses where only one in the lower diagonal can be true, for a
 \label{sub:impChessboard}
 To visualize the \textit{N-Queens Problem}, we will use Two.js as mentioned before in chapter \ref{sec:tecTwo}. The Chessboard class will receive a number $n$ and create a visual representation of a $n \times n$ chessboard. Since the state of the set of clauses will be represented by the literals of the unit clauses, we will need two different indicators per tile of the board. We decided to represent the queen by a green dot and a negative literal by a red cross.
 
-The chessboard will have four layers the first being the board itself, the second for the $n \times n$ tiles of the board, the third for the queens and the last for the crosses. This way we can initialize the board with all needed Two.js objects and add or remove them from their specific layers. To only add or remove changes of one state to the other, the chessboard will remember the state to be able to compare it with the new state. This will result in a smoother animation and less visual changes.
+The chessboard will have four layers the first being the board itself, the second for the $n \times n$ tiles of the board, the third for the queens and the last for the crosses. This way we can initialize the board with all needed Two.js objects and add or remove them from their specific layers. To only add or remove changes between two states, the chessboard will remember the state to be able to compare it with the new state. This will result in a smoother animation and less visual changes.
 
 As for scaling of the chessboard, we will scale the Two.js scene to fit the parent HTML container with a listener that gets called when the window resizes.
 
@@ -236,13 +236,13 @@ Now that we have the \textit{Davis-Putnam algorithm} and \textit{N-Queens Proble
 As for the interaction of the User with the animation, we will enable the user to do the following:
 
 \begin{enumerate}
-    \item Change the seed for the Davis-Putnam class
-    \item Change the number $n$ for the \textit{N-Queens Problem} affecting also the visualization
-    \item Toggle between micro and macro steps
-    \item Request the next step to be animated
-    \item Request to automatically animate all steps until requested to stop or no further steps can be done
-    \item Reset the whole animation to run it again from the start
-    \item Display previous calculated states of the shown steps
+    \item change the seed for the Davis-Putnam class,
+    \item change the number $n$ for the \textit{N-Queens Problem} affecting also the visualization,
+    \item toggle between micro and macro steps,
+    \item request the next step to be animated,
+    \item request to automatically animate all steps until requested to stop or no further steps can be done,
+    \item reset the whole animation to run it again from the start,
+    \item display previous calculated states of the shown steps.
 \end{enumerate}
 
 For all points except the last one we got corresponding elements for interaction incorporated into the design. To enable the user to display previous states, we decided to make the elements of the calculation history clickable.
@@ -260,8 +260,8 @@ For the layout we decided to use a grid based design, to be able to make it some
 \label{sub:impFrame}
 To initialize the animation and all its needed components, we created a Frame class. This class contains all the functions for the user interaction, the worker for the calculations and the chessboard object for visualization. It creates all the listeners for the UI elements and handles the communication with the worker. To synchronize the animation with the worker the user interface elements that should not be triggered will be disabled during the calculation process of the worker and enabled at the end of said calculation. This way we prevent unwanted behavior of the worker. Whenever the worker sends a message containing an important step of the calculation a new entry will be created for the calculation history. New entries will be added before the previous entries, so that the top entry is the latest and the bottom one the first calculation step.
 
-Each of the named possible user interactions receives their own listener, that handles the requested task. On top of those we need one more for the messages of the worker, because we will have a two way communication. This listener is very similar to the one for the worker as previously shown in listing \ref{code:workerListener}, only that it will handle all outgoing messages of the worker.
+Each of the named possible user interactions receives their own listener, that handles the requested task. On top of those we need one more for the messages of the worker, because we will have a two way communication. This listener is very similar to the one for the worker as previously shown in Listing \ref{code:workerListener}, only that it will handle all outgoing messages of the worker.
 
 \section{Result}
 \label{sub:impResult}
-The result of the implementation can be viewed and interacted with at \href{https://koenloogman.github.io/Animation-Of-N-Queens-Problem-In-JavaScript/}{GitHub Pages of koenloogman}. The animation is optimized for the latest version of Google Chrome or Firefox and maybe works on other browsers as well, but we recommend said two browsers for the best experience. If interested in the full source code, it can be seen at \href{https://github.com/koenloogman/Animation-Of-N-Queens-Problem-In-JavaScript}{GitHub of koenloogman}.
+The result of the implementation can be viewed and interacted with at \href{https://koenloogman.github.io/Animation-Of-N-Queens-Problem-In-JavaScript/}{GitHub Pages of koenloogman (https://koenloogman.github.io/Animation-Of-N-Queens-Problem-In-JavaScript/)}. The animation is optimized for the latest version of Google Chrome or Firefox and maybe works on other browsers as well, but we recommend said two browsers for the best experience. If interested in the full source code, it can be seen at \href{https://github.com/koenloogman/Animation-Of-N-Queens-Problem-In-JavaScript}{GitHub of koenloogman (https://github.com/koenloogman/Animation-Of-N-Queens-Problem-In-JavaScript)}.

@@ -120,6 +120,12 @@ class Frame {
 
         // only trigger on entries
         if (target.classList.contains('entry')) {
+            // remove old selected flag
+            let selected = this.log.querySelector('.selected');
+            if (selected) selected.classList.remove('selected');
+
+            // add new selected flag and retrieve the state
+            target.classList.add('selected');
             let state = JSON.parse(target.dataset.state);
             this.board.setState(state);
         }
@@ -160,6 +166,12 @@ class Frame {
                 return;
         }
         entry.innerHTML = text;
+
+        // remove old selected flag
+        let selected = this.log.querySelector('.selected');
+        if (selected) selected.classList.remove('selected');
+        // add new selected flag
+        entry.classList.add('selected');
 
         // prepend entry
         this.log.insertBefore(entry, this.log.firstChild);
