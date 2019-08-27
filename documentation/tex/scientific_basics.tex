@@ -19,19 +19,19 @@ Before the algorithm can be examined in more detail, a few mathematical terms ha
 \paragraph{Propositional Variable}
 \emph{Propositional Variables} are atomic propositions, which can be used with the following junctures.
 \begin{enumerate}
-\item $\neg a$ \quad\quad\ represents \quad \textsl{nicht} $a$ 
+\item $\neg a$ \quad\quad\ represents \quad \textsl{not} $a$ 
       \vspace*{-0.2cm}
 
-\item $a \wedge b$ \,\quad\ represents  \quad $a$ \textsl{und} $b$
+\item $a \wedge b$ \,\quad\ represents  \quad $a$ \textsl{and} $b$
       \vspace*{-0.2cm}
 
-\item $a \vee b$ \,\quad\ represents \quad $a$ \textsl{oder} $b$
+\item $a \vee b$ \,\quad\ represents \quad $a$ \textsl{or} $b$
       \vspace*{-0.2cm}
 
-\item $a \rightarrow b$   \quad represents \quad \textsl{wenn} $a$, \textsl{dann} $b$
+\item $a \rightarrow b$   \quad represents \quad \textsl{if} $a$ \textsl{then} $b$
       \vspace*{-0.2cm}
 
-\item $a \leftrightarrow b$ \quad represents \quad  $a$ \textsl{genau dann, wenn} $b$
+\item $a \leftrightarrow b$ \quad represents \quad  $a$ \textsl{if and only if} $b$
 \end{enumerate}
 
 \paragraph{Set of propositional logical variables}
@@ -349,7 +349,8 @@ Here it is similar to the upper diagonals, but with the change that both x and y
 Starting with $k = -(n - 2)$, because $Q_{1,n - 1}$ and $Q_{2,n}$ are the first lower diagonal, and ending with $k = n - 2$, because $Q_{n - 1, 1}$ and $Q_{n, 2}$ form the last diagonal.
 
 \paragraph{queensClauses}
-With the functions above, we finally can define the complete propositional formula for the \textit{N-Queens Problem} for a given number $n$ in form of a set of clauses $K$. A set of clauses that express that only one queen can be placed per column is not needed in this case, because that one has to be placed in combination with only one per row implies that only one per column is placed.
+With the functions above, we finally can define the complete propositional formula for the \textit{N-Queens Problem} for a given number $n$ in form of a set of clauses $K$.
+Since at least one queen has to be placed in every column and only one is allowed per row, exactly one queen will be placed per column and a set of clauses that express that only one queen can be placed per column is not needed.
 \\[0.2cm]
 \hspace*{1.3cm} $\texttt{queensClauses}: \mathcal{N} \to 2^{\mathcal{K}}$
 \\[0.2cm]

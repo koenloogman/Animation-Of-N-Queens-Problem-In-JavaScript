@@ -62,7 +62,7 @@ Also after this comparison the decision was made to use Parcel, because Rollup l
 % cSpell:enable
 \section{Immutable.js}
 \label{sec:tecImmutable}
-In the later implementation of the Davis-Putnam algorithm, a known problem will occur when using JavaScript. This is the comparison between sets. The native set compares objects via Object by Object Reference as shown in listing \ref{code:jsPlainSets}. Comparisons with mutable objects are usually very difficult, because when an object changes, the location of the object in a collection also changes. The \href{https://immutable-js.github.io/immutable-js/}{Immutable.js} library enables the creation of immutable objects that cannot be changed once they have been created. It also provides several persistent immutable data structures such as stack, set and range for developers. Thus this library solves the problem of comparisons between objects \cite{Immutable.jsAuthors2019}, \cite{Rauschmayer2015}.
+In the later implementation of the Davis-Putnam algorithm, a known problem will occur when using JavaScript. This is the comparison between sets. The native set compares objects via Object by Object Reference as shown in the following Listing \ref{code:jsPlainSets}. Comparisons with mutable objects are usually very difficult, because when an object changes, the location of the object in a collection also changes. The \href{https://immutable-js.github.io/immutable-js/}{Immutable.js} library enables the creation of immutable objects that cannot be changed once they have been created. It also provides several persistent immutable data structures such as stack, set and range for developers. Thus this library solves the problem of comparisons between objects as shown in the following Listing \ref{code:jsImmutableSets} \cite{Immutable.jsAuthors2019}, \cite{Rauschmayer2015}.
 
 \begin{listing}[h!]
 \begin{minted}{javascript}
@@ -77,6 +77,23 @@ var set = new Set([set1, set2]); // {{'1', '2'}, {'1', '2'}}
 \end{minted}
     \caption{Set of sets in plain JavaScript}
     \label{code:jsPlainSets}
+\end{listing}
+
+\begin{listing}[h!]
+\begin{minted}{javascript}
+// import immutable.js Set class
+const { Set } = require('immutable');
+
+let set1 = new Set(['1', '2']); // {'1', '2'}
+let set2 = new Set(['1', '2']); // {'1', '2'}
+
+// same object twice
+var set = new Set([set1, set1]); // {{'1', '2'}}
+// different objects with same entries
+var set = new Set([set1, set2]); // {{'1', '2'}}
+\end{minted}
+    \caption{Set of sets with Immutable.js}
+    \label{code:jsImmutableSets}
 \end{listing}
 
 % cSpell:disable
